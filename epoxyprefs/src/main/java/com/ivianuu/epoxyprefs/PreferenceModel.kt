@@ -64,8 +64,8 @@ abstract class PreferenceModel(
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var changeListener: ChangeListener? = null
 
     @EpoxyAttribute var sharedPreferencesName: String? = null
-
     @EpoxyAttribute var useCommit: Boolean = EpoxyPrefsPlugins.getUseCommit()
+    @EpoxyAttribute var persistent: Boolean = true
 
     @EpoxyAttribute var layoutRes: Int = R.layout.item_preference
         set(value) {
@@ -208,6 +208,10 @@ abstract class PreferenceModel(
         return changeListener?.onPreferenceChange(this, newValue) ?: true
     }
 
+    protected fun shouldPersist(): Boolean {
+        return persistent && key != null
+    }
+
     protected fun getPersistedBoolean(
         key: String,
         fallback: Boolean = defaultValue as? Boolean? ?: false
@@ -249,39 +253,53 @@ abstract class PreferenceModel(
 
     @SuppressLint("ApplySharedPref")
     protected fun editSharedPreferences(edit: SharedPreferences.Editor.() -> Unit) {
-        sharedPreferences.edit()
-            .also(edit)
-            .run {
-                if (useCommit) {
-                    commit()
-                } else {
-                    apply()
+        if (shouldPersist()) {
+            sharedPreferences.edit()
+                .also(edit)
+                .run {
+                    if (useCommit) {
+                        commit()
+                    } else {
+                        apply()
+                    }
                 }
-            }
+        }
     }
 
     protected fun persistBoolean(key: String, value: Boolean) {
-        editSharedPreferences { putBoolean(key, value) }
+        if (shouldPersist()) {
+            editSharedPreferences { putBoolean(key, value) }
+        }
     }
 
     protected fun persistFloat(key: String, value: Float) {
-        editSharedPreferences { putFloat(key, value) }
+        if (shouldPersist()) {
+            editSharedPreferences { putFloat(key, value) }
+        }
     }
 
     protected fun persistInt(key: String, value: Int) {
-        editSharedPreferences { putInt(key, value) }
+        if (shouldPersist()) {
+            editSharedPreferences { putInt(key, value) }
+        }
     }
 
     protected fun persistLong(key: String, value: Long) {
-        editSharedPreferences { putLong(key, value) }
+        if (shouldPersist()) {
+            editSharedPreferences { putLong(key, value) }
+        }
     }
 
     protected fun persistString(key: String, value: String) {
-        editSharedPreferences { putString(key, value) }
+        if (shouldPersist()) {
+            editSharedPreferences { putString(key, value) }
+        }
     }
 
     protected fun persistStringSet(key: String, value: MutableSet<String>) {
-        editSharedPreferences { putStringSet(key, value) }
+        if (shouldPersist()) {
+            editSharedPreferences { putStringSet(key, value) }
+        }
     }
 
     private fun startListeningForChanges() {
@@ -378,6 +396,10 @@ open class PreferenceModelBuilder_(open val model: PreferenceModel) {
 
     fun useCommit(useCommit: Boolean) {
         model.useCommit = useCommit
+    }
+
+    fun persistent(persistent: Boolean) {
+        model.persistent = persistent
     }
 
     fun layoutRes(layoutRes: Int) {
