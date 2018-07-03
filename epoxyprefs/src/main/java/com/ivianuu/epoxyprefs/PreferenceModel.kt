@@ -216,39 +216,63 @@ abstract class PreferenceModel(
         key: String,
         fallback: Boolean = defaultValue as? Boolean? ?: false
     ): Boolean {
-        return sharedPreferences.getBoolean(key, fallback)
+        return if (shouldPersist()) {
+            sharedPreferences.getBoolean(key, fallback)
+        } else {
+            fallback
+        }
     }
 
     protected fun getPersistedFloat(
         key: String,
         fallback: Float = defaultValue as? Float? ?: 0f
     ): Float {
-        return sharedPreferences.getFloat(key, fallback)
+        return if (shouldPersist()) {
+            sharedPreferences.getFloat(key, fallback)
+        } else {
+            fallback
+        }
     }
 
     protected fun getPersistedInt(key: String, fallback: Int = defaultValue as? Int? ?: 0): Int {
-        return sharedPreferences.getInt(key, fallback)
+        return if (shouldPersist()) {
+            sharedPreferences.getInt(key, fallback)
+        } else {
+            fallback
+        }
     }
 
     protected fun getPersistedLong(
         key: String,
         fallback: Long = defaultValue as? Long? ?: 0L
     ): Long {
-        return sharedPreferences.getLong(key, fallback)
+        return if (shouldPersist()) {
+            sharedPreferences.getLong(key, fallback)
+        } else {
+            fallback
+        }
     }
 
     protected fun getPersistedString(
         key: String,
         fallback: String = defaultValue as? String? ?: ""
     ): String {
-        return sharedPreferences.getString(key, fallback)
+        return if (shouldPersist()) {
+            sharedPreferences.getString(key, fallback)
+        } else {
+            fallback
+        }
     }
 
     protected fun getPersistedStringSet(
         key: String,
         fallback: MutableSet<String> = defaultValue as? MutableSet<String>? ?: mutableSetOf()
     ): MutableSet<String> {
-        return sharedPreferences.getStringSet(key, fallback)
+        return if (shouldPersist()) {
+            sharedPreferences.getStringSet(key, fallback)
+        } else {
+            fallback
+        }
     }
 
     @SuppressLint("ApplySharedPref")
