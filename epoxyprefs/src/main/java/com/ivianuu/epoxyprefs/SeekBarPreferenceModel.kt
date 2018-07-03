@@ -75,22 +75,6 @@ abstract class SeekBarPreferenceModel(
         syncView()
     }
 
-    fun min(min: Int) {
-        this.min = min
-    }
-
-    fun max(max: Int) {
-        this.max = max
-    }
-
-    fun incValue(incValue: Int) {
-        this.incValue = incValue
-    }
-
-    fun valueTextProvider(valueTextProvider: ValueTextProvider) {
-        this.valueTextProvider = valueTextProvider
-    }
-
     private fun syncView() {
         val seekBar = currentHolder?.seekBar ?: return
         val seekBarValue = currentHolder?.seekBarValue ?: return
@@ -121,13 +105,37 @@ abstract class SeekBarPreferenceModel(
     }
 }
 
-fun EpoxyController.seekBarPreference(context: Context, init: SeekBarPreferenceModel.() -> Unit) {
+open class SeekBarPreferenceModelBuilder_(override val model: SeekBarPreferenceModel) :
+    PreferenceModelBuilder_(model) {
+
+    open fun min(min: Int) {
+        model.min = min
+    }
+
+    open fun max(max: Int) {
+        model.max = max
+    }
+
+    open fun incValue(incValue: Int) {
+        model.incValue = incValue
+    }
+
+    open fun valueTextProvider(valueTextProvider: SeekBarPreferenceModel.ValueTextProvider) {
+        model.valueTextProvider = valueTextProvider
+    }
+
+}
+
+fun EpoxyController.seekBarPreference(
+    context: Context,
+    init: SeekBarPreferenceModelBuilder_.() -> Unit
+) {
     val model = SeekBarPreferenceModel_(context)
-    init.invoke(model)
+    init.invoke(SeekBarPreferenceModelBuilder_(model))
     model.addTo(this)
 }
 
-fun SeekBarPreferenceModel.valueTextProvider(getText: (Int) -> String) {
+fun SeekBarPreferenceModelBuilder_.valueTextProvider(getText: (Int) -> String) {
     valueTextProvider(object : SeekBarPreferenceModel.ValueTextProvider {
         override fun getText(value: Int) = getText(value)
     })

@@ -25,24 +25,27 @@ import com.airbnb.epoxy.EpoxyAttribute
 abstract class ListPreferenceModel(
     context: Context
 ) : DialogPreferenceModel(context) {
-
     @EpoxyAttribute var entries: Array<CharSequence>? = null
     @EpoxyAttribute var entryValues: Array<CharSequence>? = null
+}
 
-    fun entries(entries: Array<CharSequence>?) {
-        this.entries = entries
+abstract class ListPreferenceModelBuilder_(override val model: ListPreferenceModel) :
+    DialogPreferenceModelBuilder_(model) {
+
+    open fun entries(entries: Array<CharSequence>?) {
+        model.entries = entries
     }
 
-    fun entryValues(entryValues: Array<CharSequence>?) {
-        this.entryValues = entryValues
+    open fun entryValues(entryValues: Array<CharSequence>?) {
+        model.entryValues = entryValues
     }
 
 }
 
-fun ListPreferenceModel.entriesRes(entriesRes: Int) {
-    entries(context.resources.getTextArray(entriesRes))
+fun ListPreferenceModelBuilder_.entriesRes(entriesRes: Int) {
+    entries(model.context.resources.getTextArray(entriesRes))
 }
 
-fun ListPreferenceModel.entryValuesRes(entryValuesRes: Int) {
-    entryValues(context.resources.getTextArray(entryValuesRes))
+fun ListPreferenceModelBuilder_.entryValuesRes(entryValuesRes: Int) {
+    entryValues(model.context.resources.getTextArray(entryValuesRes))
 }

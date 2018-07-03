@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.widget_preference_checkbox.*
  */
 @EpoxyModelClass
 abstract class CheckboxPreferenceModel(context: Context) :
-    CompoundButtonPreference(context) {
+    CompoundButtonPreferenceModel(context) {
 
     override val Holder.compoundButton: CompoundButton?
         get() = checkbox
@@ -37,8 +37,14 @@ abstract class CheckboxPreferenceModel(context: Context) :
     }
 }
 
-fun EpoxyController.checkboxPreference(context: Context, init: CheckboxPreferenceModel.() -> Unit) {
+open class CheckboxPreferenceModelBuilder_(override val model: CheckboxPreferenceModel) :
+    CompoundButtonPreferenceModelBuilder_(model)
+
+fun EpoxyController.checkboxPreference(
+    context: Context,
+    init: CheckboxPreferenceModelBuilder_.() -> Unit
+) {
     val model = CheckboxPreferenceModel_(context)
-    init.invoke(model)
+    init.invoke(CheckboxPreferenceModelBuilder_(model))
     model.addTo(this)
 }

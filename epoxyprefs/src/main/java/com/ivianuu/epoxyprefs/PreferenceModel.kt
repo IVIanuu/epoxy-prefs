@@ -185,62 +185,6 @@ abstract class PreferenceModel(
         return view
     }
 
-    fun key(key: String?) {
-        this.key = key
-    }
-
-    fun title(title: CharSequence?) {
-        this.title = title
-    }
-
-    fun summary(summary: CharSequence?) {
-        this.summary = summary
-    }
-
-    fun icon(icon: Drawable?) {
-        this.icon = icon
-    }
-
-    fun defaultValue(defaultValue: Any?) {
-        this.defaultValue = defaultValue
-    }
-
-    fun enabled(enabled: Boolean) {
-        this.enabled = enabled
-    }
-
-    fun dependencyKey(dependencyKey: String?) {
-        this.dependencyKey = dependencyKey
-    }
-
-    fun dependencyValue(dependencyValue: Any?) {
-        this.dependencyValue = dependencyValue
-    }
-
-    fun clickListener(clickListener: ClickListener?) {
-        this.clickListener = clickListener
-    }
-
-    fun changeListener(changeListener: ChangeListener?) {
-        this.changeListener = changeListener
-    }
-
-    fun sharedPreferencesName(sharedPreferencesName: String?) {
-        this.sharedPreferencesName = sharedPreferencesName
-    }
-
-    fun useCommit(useCommit: Boolean) {
-        this.useCommit = useCommit
-    }
-
-    fun layoutRes(layoutRes: Int) {
-        this.layoutRes = layoutRes
-    }
-
-    fun widgetLayoutRes(widgetLayoutRes: Int) {
-        this.widgetLayoutRes = widgetLayoutRes
-    }
-
     protected open fun onClick() {
     }
 
@@ -386,30 +330,90 @@ abstract class PreferenceModel(
     }
 }
 
-fun EpoxyController.preference(context: Context, init: PreferenceModel.() -> Unit) {
+open class PreferenceModelBuilder_(open val model: PreferenceModel) {
+
+    fun key(key: String?) {
+        model.key = key
+    }
+
+    fun title(title: CharSequence?) {
+        model.title = title
+    }
+
+    fun summary(summary: CharSequence?) {
+        model.summary = summary
+    }
+
+    fun icon(icon: Drawable?) {
+        model.icon = icon
+    }
+
+    fun defaultValue(defaultValue: Any?) {
+        model.defaultValue = defaultValue
+    }
+
+    fun enabled(enabled: Boolean) {
+        model.enabled = enabled
+    }
+
+    fun dependencyKey(dependencyKey: String?) {
+        model.dependencyKey = dependencyKey
+    }
+
+    fun dependencyValue(dependencyValue: Any?) {
+        model.dependencyValue = dependencyValue
+    }
+
+    fun clickListener(clickListener: PreferenceModel.ClickListener?) {
+        model.clickListener = clickListener
+    }
+
+    fun changeListener(changeListener: PreferenceModel.ChangeListener?) {
+        model.changeListener = changeListener
+    }
+
+    fun sharedPreferencesName(sharedPreferencesName: String?) {
+        model.sharedPreferencesName = sharedPreferencesName
+    }
+
+    fun useCommit(useCommit: Boolean) {
+        model.useCommit = useCommit
+    }
+
+    fun layoutRes(layoutRes: Int) {
+        model.layoutRes = layoutRes
+    }
+
+    fun widgetLayoutRes(widgetLayoutRes: Int) {
+        model.widgetLayoutRes = widgetLayoutRes
+    }
+
+}
+
+fun EpoxyController.preference(context: Context, init: PreferenceModelBuilder_.() -> Unit) {
     val model = PreferenceModel_(context)
-    init.invoke(model)
+    init.invoke(PreferenceModelBuilder_(model))
     model.addTo(this)
 }
 
-fun PreferenceModel.titleRes(titleRes: Int) {
-    title(context.getString(titleRes))
+fun PreferenceModelBuilder_.titleRes(titleRes: Int) {
+    title(model.context.getString(titleRes))
 }
 
-fun PreferenceModel.summaryRes(summaryRes: Int) {
-    summary(context.getString(summaryRes))
+fun PreferenceModelBuilder_.summaryRes(summaryRes: Int) {
+    summary(model.context.getString(summaryRes))
 }
 
-fun PreferenceModel.iconRes(iconRes: Int) {
-    icon(ContextCompat.getDrawable(context, iconRes))
+fun PreferenceModelBuilder_.iconRes(iconRes: Int) {
+    icon(ContextCompat.getDrawable(model.context, iconRes))
 }
 
-fun PreferenceModel.dependency(key: String?, value: Any?) {
+fun PreferenceModelBuilder_.dependency(key: String?, value: Any?) {
     dependencyKey(key)
     dependencyValue(value)
 }
 
-fun PreferenceModel.clickListener(clickListener: (PreferenceModel) -> Boolean) {
+fun PreferenceModelBuilder_.clickListener(clickListener: (PreferenceModel) -> Boolean) {
     clickListener(object : PreferenceModel.ClickListener {
         override fun onPreferenceClicked(preference: PreferenceModel): Boolean {
             return clickListener.invoke(preference)
@@ -417,7 +421,7 @@ fun PreferenceModel.clickListener(clickListener: (PreferenceModel) -> Boolean) {
     })
 }
 
-fun PreferenceModel.changeListener(changeListener: (PreferenceModel, Any) -> Boolean) {
+fun PreferenceModelBuilder_.changeListener(changeListener: (PreferenceModel, Any) -> Boolean) {
     changeListener(object : PreferenceModel.ChangeListener {
         override fun onPreferenceChange(preference: PreferenceModel, newValue: Any): Boolean {
             return changeListener.invoke(preference, newValue)
@@ -425,18 +429,18 @@ fun PreferenceModel.changeListener(changeListener: (PreferenceModel, Any) -> Boo
     })
 }
 
-fun PreferenceModel.intentClickListener(intent: Intent) {
+fun PreferenceModelBuilder_.intentClickListener(intent: Intent) {
     clickListener(IntentPreferenceModelClickListener(intent))
 }
 
-fun PreferenceModel.intentClickListener(intent: (PreferenceModel) -> Intent?) {
+fun PreferenceModelBuilder_.intentClickListener(intent: (PreferenceModel) -> Intent?) {
     clickListener(IntentPreferenceModelClickListener(intent))
 }
 
-fun PreferenceModel.urlClickListener(url: String) {
+fun PreferenceModelBuilder_.urlClickListener(url: String) {
     clickListener(UrlPreferenceModelClickListener(url))
 }
 
-fun PreferenceModel.urlClickListener(url: (PreferenceModel) -> String?) {
+fun PreferenceModelBuilder_.urlClickListener(url: (PreferenceModel) -> String?) {
     clickListener(UrlPreferenceModelClickListener(url))
 }

@@ -43,26 +43,6 @@ abstract class DialogPreferenceModel(
         showDialog()
     }
 
-    fun dialogTitle(dialogTitle: CharSequence?) {
-        this.dialogTitle = dialogTitle
-    }
-
-    fun dialogMessage(dialogMessage: CharSequence?) {
-        this.dialogMessage = dialogMessage
-    }
-
-    fun dialogIcon(dialogIcon: Drawable?) {
-        this.dialogIcon = dialogIcon
-    }
-
-    fun positiveButtonText(positiveButtonText: CharSequence?) {
-        this.positiveButtonText = positiveButtonText
-    }
-
-    fun negativeButtonText(negativeButtonText: CharSequence?) {
-        this.negativeButtonText = negativeButtonText
-    }
-
     protected abstract fun showDialog()
 
     protected open fun MaterialDialog.Builder.applyDialogSettings(): MaterialDialog.Builder {
@@ -75,22 +55,47 @@ abstract class DialogPreferenceModel(
     }
 }
 
-fun DialogPreferenceModel.dialogTitleRes(dialogTitleRes: Int) {
-    dialogTitle(context.getString(dialogTitleRes))
+abstract class DialogPreferenceModelBuilder_(override val model: DialogPreferenceModel) :
+    PreferenceModelBuilder_(model) {
+
+    fun dialogTitle(dialogTitle: CharSequence?) {
+        model.dialogTitle = dialogTitle
+    }
+
+    fun dialogMessage(dialogMessage: CharSequence?) {
+        model.dialogMessage = dialogMessage
+    }
+
+    fun dialogIcon(dialogIcon: Drawable?) {
+        model.dialogIcon = dialogIcon
+    }
+
+    fun positiveButtonText(positiveButtonText: CharSequence?) {
+        model.positiveButtonText = positiveButtonText
+    }
+
+    fun negativeButtonText(negativeButtonText: CharSequence?) {
+        model.negativeButtonText = negativeButtonText
+    }
+
 }
 
-fun DialogPreferenceModel.dialogMessageRes(dialogMessageRes: Int) {
-    dialogTitle(context.getString(dialogMessageRes))
+fun DialogPreferenceModelBuilder_.dialogTitleRes(dialogTitleRes: Int) {
+    dialogTitle(model.context.getString(dialogTitleRes))
 }
 
-fun DialogPreferenceModel.dialogIconRes(dialogIconRes: Int) {
-    dialogIcon(ContextCompat.getDrawable(context, dialogIconRes))
+fun DialogPreferenceModelBuilder_.dialogMessageRes(dialogMessageRes: Int) {
+    dialogTitle(model.context.getString(dialogMessageRes))
 }
 
-fun DialogPreferenceModel.positiveButtonText(positiveButtonTextRes: Int) {
-    positiveButtonText(context.getString(positiveButtonTextRes))
+fun DialogPreferenceModelBuilder_.dialogIconRes(dialogIconRes: Int) {
+    dialogIcon(ContextCompat.getDrawable(model.context, dialogIconRes))
 }
 
-fun DialogPreferenceModel.negativeButtonText(negativeButtonTextRes: Int) {
-    negativeButtonText(context.getText(negativeButtonTextRes))
+fun DialogPreferenceModelBuilder_.positiveButtonTextRes(positiveButtonTextRes: Int) {
+    positiveButtonText(model.context.getString(positiveButtonTextRes))
+}
+
+fun DialogPreferenceModelBuilder_.negativeButtonTextRes(negativeButtonTextRes: Int) {
+    negativeButtonText(model.context.getText(negativeButtonTextRes))
 }

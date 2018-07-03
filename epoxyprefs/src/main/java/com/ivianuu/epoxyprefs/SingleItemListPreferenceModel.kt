@@ -54,11 +54,14 @@ abstract class SingleItemListPreferenceModel(
     }
 }
 
+open class SingleItemListPreferenceModelBuilder_(override val model: SingleItemListPreferenceModel) :
+    ListPreferenceModelBuilder_(model)
+
 fun EpoxyController.singleItemListPreference(
     context: Context,
-    init: SingleItemListPreferenceModel.() -> Unit
+    init: SingleItemListPreferenceModelBuilder_.() -> Unit
 ) {
     val model = SingleItemListPreferenceModel_(context)
-    init.invoke(model)
+    init.invoke(SingleItemListPreferenceModelBuilder_(model))
     model.addTo(this)
 }

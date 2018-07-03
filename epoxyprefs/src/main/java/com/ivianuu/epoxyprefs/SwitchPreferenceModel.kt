@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.widget_preference_switch.*
  */
 @EpoxyModelClass
 abstract class SwitchPreferenceModel(context: Context) :
-    CompoundButtonPreference(context) {
+    CompoundButtonPreferenceModel(context) {
 
     override val Holder.compoundButton: CompoundButton?
         get() = switchWidget
@@ -37,8 +37,14 @@ abstract class SwitchPreferenceModel(context: Context) :
     }
 }
 
-fun EpoxyController.switchPreference(context: Context, init: SwitchPreferenceModel_.() -> Unit) {
+open class SwitchPreferenceModelBuilder_(override val model: SwitchPreferenceModel) :
+    CompoundButtonPreferenceModelBuilder_(model)
+
+fun EpoxyController.switchPreference(
+    context: Context,
+    init: SwitchPreferenceModelBuilder_.() -> Unit
+) {
     val model = SwitchPreferenceModel_(context)
-    init.invoke(model)
+    init.invoke(SwitchPreferenceModelBuilder_(model))
     model.addTo(this)
 }

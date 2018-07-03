@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.widget_preference_radio.*
  */
 @EpoxyModelClass
 abstract class RadioButtonPreferenceModel(context: Context) :
-    CompoundButtonPreference(context) {
+    CompoundButtonPreferenceModel(context) {
 
     override val Holder.compoundButton: CompoundButton?
         get() = radio
@@ -19,14 +19,16 @@ abstract class RadioButtonPreferenceModel(context: Context) :
     init {
         widgetLayoutRes = R.layout.widget_preference_radio
     }
-
 }
+
+open class RadioButtonPreferenceModelBuilder_(override val model: RadioButtonPreferenceModel) :
+    CompoundButtonPreferenceModelBuilder_(model)
 
 fun EpoxyController.radioButtonPreference(
     context: Context,
-    init: RadioButtonPreferenceModel.() -> Unit
+    init: RadioButtonPreferenceModelBuilder_.() -> Unit
 ) {
     val model = RadioButtonPreferenceModel_(context)
-    init.invoke(model)
+    init.invoke(RadioButtonPreferenceModelBuilder_(model))
     model.addTo(this)
 }

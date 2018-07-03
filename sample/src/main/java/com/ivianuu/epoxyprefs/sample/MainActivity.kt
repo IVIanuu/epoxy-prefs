@@ -57,15 +57,14 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                checkboxPreference(this@MainActivity) {
                    key("my_checkbox_$i")
                    title("CheckBox")
-                   //    dependency("my_switch_$i", true)
+                   dependency("my_switch_$i", true)
                    summary("Oh a checkbox")
-
                }
 
                radioButtonPreference(this@MainActivity) {
                    key("my_radio_$i")
                    title("Radio")
-                   //  dependency("my_switch_$i", true)
+                   dependency("my_switch_$i", true)
                    summary("A radio button")
                }
 
@@ -74,7 +73,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                    title("SeekBar")
                    max(100)
                    summary("Hey there im a seekbar")
-                   //dependency("my_switch_$i", true)
+                   dependency("my_switch_$i", true)
                }
 
                singleItemListPreference(this@MainActivity) {

@@ -51,22 +51,30 @@ abstract class EditTextPreferenceModel(
             }
             .show()
     }
-
-    fun dialogHint(dialogHint: CharSequence?) {
-        this.dialogHint = dialogHint
-    }
-
-    fun allowEmptyInput(allowEmptyInput: Boolean) {
-        this.allowEmptyInput = allowEmptyInput
-    }
 }
 
-fun EpoxyController.editTextPreference(context: Context, init: EditTextPreferenceModel.() -> Unit) {
+open class EditTextPreferenceModelBuilder_(override val model: EditTextPreferenceModel) :
+    DialogPreferenceModelBuilder_(model) {
+
+    open fun dialogHint(dialogHint: CharSequence?) {
+        model.dialogHint = dialogHint
+    }
+
+    open fun allowEmptyInput(allowEmptyInput: Boolean) {
+        model.allowEmptyInput = allowEmptyInput
+    }
+
+}
+
+fun EpoxyController.editTextPreference(
+    context: Context,
+    init: EditTextPreferenceModelBuilder_.() -> Unit
+) {
     val model = EditTextPreferenceModel_(context)
-    init.invoke(model)
+    init.invoke(EditTextPreferenceModelBuilder_(model))
     model.addTo(this)
 }
 
-fun EditTextPreferenceModel.dialogHintRes(dialogHintRes: Int) {
-    dialogHint(context.getString(dialogHintRes))
+fun EditTextPreferenceModelBuilder_.dialogHintRes(dialogHintRes: Int) {
+    dialogHint(model.context.getString(dialogHintRes))
 }

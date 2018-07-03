@@ -22,7 +22,7 @@ import android.widget.CompoundButton
 /**
  * A preference for compound buttons
  */
-abstract class CompoundButtonPreference(
+abstract class CompoundButtonPreferenceModel(
     context: Context
 ) : PreferenceModel(context) {
 
@@ -70,3 +70,6 @@ abstract class CompoundButtonPreference(
     }
 
 }
+
+abstract class CompoundButtonPreferenceModelBuilder_(override val model: CompoundButtonPreferenceModel) :
+    PreferenceModelBuilder_(model)
