@@ -51,10 +51,12 @@ abstract class CompoundButtonPreferenceModel(
 
     override fun onClick() {
         super.onClick()
-        val newValue = !getPersistedBoolean(key)
+        val newValue = currentHolder?.compoundButton?.isChecked?.not() ?: getPersistedBoolean(key)
         if (callChangeListener(newValue)) {
             persistBoolean(key, newValue)
         }
+
+        syncValueWithCompoundButton(newValue)
     }
 
     override fun onChange() {
@@ -62,8 +64,8 @@ abstract class CompoundButtonPreferenceModel(
         syncValueWithCompoundButton()
     }
 
-    private fun syncValueWithCompoundButton() {
-        currentHolder?.compoundButton?.isChecked = getPersistedBoolean(key)
+    private fun syncValueWithCompoundButton(value: Boolean = getPersistedBoolean(key)) {
+        currentHolder?.compoundButton?.isChecked = value
     }
 
 }
