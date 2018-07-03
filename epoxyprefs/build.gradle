@@ -46,8 +46,6 @@ android {
 dependencies {
     api Deps.epoxy
     kapt Deps.epoxyProcessor
-    api Deps.epoxyExtensions
-    kapt Deps.epoxyExtensionsProcessor
 
     api Deps.kotlinStdLib
     api Deps.materialDialogs

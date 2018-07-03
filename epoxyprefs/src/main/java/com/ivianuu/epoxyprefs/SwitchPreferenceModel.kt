@@ -18,6 +18,7 @@ package com.ivianuu.epoxyprefs
 
 import android.content.Context
 import android.widget.CompoundButton
+import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModelClass
 import kotlinx.android.synthetic.main.widget_preference_switch.*
 
@@ -34,4 +35,10 @@ abstract class SwitchPreferenceModel(context: Context) :
     init {
         widgetLayoutRes = R.layout.widget_preference_switch
     }
+}
+
+fun EpoxyController.switchPreference(context: Context, init: SwitchPreferenceModel_.() -> Unit) {
+    val model = SwitchPreferenceModel_(context)
+    init.invoke(model)
+    model.addTo(this)
 }

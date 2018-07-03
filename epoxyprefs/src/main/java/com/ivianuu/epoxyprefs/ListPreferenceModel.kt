@@ -29,4 +29,20 @@ abstract class ListPreferenceModel(
     @EpoxyAttribute var entries: Array<CharSequence>? = null
     @EpoxyAttribute var entryValues: Array<CharSequence>? = null
 
+    fun entries(entries: Array<CharSequence>?) {
+        this.entries = entries
+    }
+
+    fun entryValues(entryValues: Array<CharSequence>?) {
+        this.entryValues = entryValues
+    }
+
+}
+
+fun ListPreferenceModel.entriesRes(entriesRes: Int) {
+    entries(context.resources.getTextArray(entriesRes))
+}
+
+fun ListPreferenceModel.entryValuesRes(entryValuesRes: Int) {
+    entryValues(context.resources.getTextArray(entryValuesRes))
 }

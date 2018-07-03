@@ -13,7 +13,6 @@ object Versions {
     const val butterknife = "9.0.0-SNAPSHOT"
 
     const val epoxy = "2.12.0"
-    const val epoxyExtensions = "e7048f4d3e"
 
     const val kotlin = "1.2.41"
 
@@ -31,9 +30,6 @@ object Deps {
 
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
     const val epoxyProcessor = "com.airbnb.android:epoxy-processor:${Versions.epoxy}"
-
-    const val epoxyExtensions = "com.github.IVIanuu.EpoxyExtensions:epoxyextensions:${Versions.epoxyExtensions}"
-    const val epoxyExtensionsProcessor = "com.github.IVIanuu.EpoxyExtensions:epoxyextensions-processor:${Versions.epoxyExtensions}"
 
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jre7:${Versions.kotlin}"

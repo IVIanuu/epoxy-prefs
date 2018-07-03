@@ -27,11 +27,6 @@ android {
         targetSdkVersion Versions.targetSdk
         versionCode Versions.versionCode
         versionName Versions.versionName
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = ['disableEpoxyKotlinExtensionGeneration': 'true']
-            }
-        }
     }
     androidExtensions {
         experimental = true
@@ -49,5 +44,4 @@ dependencies {
     implementation Deps.supportAppCompat
     implementation project(':epoxyprefs')
     kapt Deps.epoxyProcessor
-    kapt Deps.epoxyExtensionsProcessor
 }

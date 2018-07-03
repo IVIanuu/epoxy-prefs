@@ -1,19 +1,25 @@
 package com.ivianuu.epoxyprefs.sample
 
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.ivianuu.epoxyprefs.*
-import com.ivianuu.epoxyprefs.ext.dependency
-import com.ivianuu.epoxyprefs.ext.urlClickListener
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+
+    private val sharedPreferences by lazy(LazyThreadSafetyMode.NONE) {
+        PreferenceManager.getDefaultSharedPreferences(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
 
         list.buildModelsWith2 {
            for (i in 0 until 100) {
@@ -28,12 +34,16 @@ class MainActivity : AppCompatActivity() {
                    summary("Nice a switch")
                }
 
-               editTextPreference(this@MainActivity) {
-                   key("my_edit_text_$i")
-                   title("Edit text")
-                   summary("Edit text")
-                   dialogHint("Hello lets type something")
-                   dependency("my_switch_$i", true)
+               if (PreferenceManager.getDefaultSharedPreferences(this@MainActivity).getBoolean(
+                       "my_switch_$i",
+                       false
+                   )) {
+                   editTextPreference(this@MainActivity) {
+                       key("my_edit_text_$i")
+                       title("Edit text")
+                       summary("Edit text")
+                       dialogHint("Hello lets type something")
+                   }
                }
 
                preference(this@MainActivity) {
@@ -47,14 +57,15 @@ class MainActivity : AppCompatActivity() {
                checkboxPreference(this@MainActivity) {
                    key("my_checkbox_$i")
                    title("CheckBox")
-                   dependency("my_switch_$i", true)
+                   //    dependency("my_switch_$i", true)
                    summary("Oh a checkbox")
+
                }
 
                radioButtonPreference(this@MainActivity) {
                    key("my_radio_$i")
                    title("Radio")
-                   dependency("my_switch_$i", true)
+                   //  dependency("my_switch_$i", true)
                    summary("A radio button")
                }
 
@@ -63,7 +74,7 @@ class MainActivity : AppCompatActivity() {
                    title("SeekBar")
                    max(100)
                    summary("Hey there im a seekbar")
-                   dependency("my_switch_$i", true)
+                   //dependency("my_switch_$i", true)
                }
 
                singleItemListPreference(this@MainActivity) {
@@ -93,6 +104,15 @@ class MainActivity : AppCompatActivity() {
                }
            }
         }
+    }
+
+    override fun onDestroy() {
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+        super.onDestroy()
+    }
+
+    override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String) {
+        list.requestModelBuild()
     }
 
     private fun EpoxyRecyclerView.buildModelsWith2(callback: EpoxyController.() -> Unit) {

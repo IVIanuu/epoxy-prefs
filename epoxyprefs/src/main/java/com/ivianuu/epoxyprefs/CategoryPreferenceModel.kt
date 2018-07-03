@@ -17,6 +17,7 @@
 package com.ivianuu.epoxyprefs
 
 import android.content.Context
+import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModelClass
 
 /**
@@ -27,4 +28,10 @@ abstract class CategoryPreferenceModel(context: Context) : PreferenceModel(conte
     init {
         layoutRes = R.layout.item_preference_category
     }
+}
+
+fun EpoxyController.categoryPreference(context: Context, init: CategoryPreferenceModel.() -> Unit) {
+    val model = CategoryPreferenceModel_(context)
+    init.invoke(model)
+    model.addTo(this)
 }

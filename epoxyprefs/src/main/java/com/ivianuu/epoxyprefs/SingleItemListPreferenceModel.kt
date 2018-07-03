@@ -19,6 +19,7 @@ package com.ivianuu.epoxyprefs
 import android.content.Context
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
+import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModelClass
 
 /**
@@ -51,4 +52,13 @@ abstract class SingleItemListPreferenceModel(
             }
             .show()
     }
+}
+
+fun EpoxyController.singleItemListPreference(
+    context: Context,
+    init: SingleItemListPreferenceModel.() -> Unit
+) {
+    val model = SingleItemListPreferenceModel_(context)
+    init.invoke(model)
+    model.addTo(this)
 }

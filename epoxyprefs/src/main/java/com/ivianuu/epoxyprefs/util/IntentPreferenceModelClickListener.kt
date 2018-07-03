@@ -16,7 +16,6 @@
 
 package com.ivianuu.epoxyprefs.util
 
-import android.app.Activity
 import android.content.Intent
 import com.ivianuu.epoxyprefs.PreferenceModel
 

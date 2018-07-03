@@ -18,6 +18,7 @@ package com.ivianuu.epoxyprefs
 
 import android.content.Context
 import android.widget.CompoundButton
+import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModelClass
 import kotlinx.android.synthetic.main.widget_preference_checkbox.*
 
@@ -34,5 +35,10 @@ abstract class CheckboxPreferenceModel(context: Context) :
     init {
         widgetLayoutRes = R.layout.widget_preference_checkbox
     }
+}
 
+fun EpoxyController.checkboxPreference(context: Context, init: CheckboxPreferenceModel.() -> Unit) {
+    val model = CheckboxPreferenceModel_(context)
+    init.invoke(model)
+    model.addTo(this)
 }

@@ -19,6 +19,7 @@ package com.ivianuu.epoxyprefs
 import android.content.Context
 import com.afollestad.materialdialogs.MaterialDialog
 import com.airbnb.epoxy.EpoxyAttribute
+import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModelClass
 
 /**
@@ -50,4 +51,22 @@ abstract class EditTextPreferenceModel(
             }
             .show()
     }
+
+    fun dialogHint(dialogHint: CharSequence?) {
+        this.dialogHint = dialogHint
+    }
+
+    fun allowEmptyInput(allowEmptyInput: Boolean) {
+        this.allowEmptyInput = allowEmptyInput
+    }
+}
+
+fun EpoxyController.editTextPreference(context: Context, init: EditTextPreferenceModel.() -> Unit) {
+    val model = EditTextPreferenceModel_(context)
+    init.invoke(model)
+    model.addTo(this)
+}
+
+fun EditTextPreferenceModel.dialogHintRes(dialogHintRes: Int) {
+    dialogHint(context.getString(dialogHintRes))
 }

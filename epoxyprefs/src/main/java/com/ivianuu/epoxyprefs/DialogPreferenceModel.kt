@@ -18,6 +18,7 @@ package com.ivianuu.epoxyprefs
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.support.v4.content.ContextCompat
 import com.afollestad.materialdialogs.MaterialDialog
 import com.airbnb.epoxy.EpoxyAttribute
 
@@ -42,6 +43,26 @@ abstract class DialogPreferenceModel(
         showDialog()
     }
 
+    fun dialogTitle(dialogTitle: CharSequence?) {
+        this.dialogTitle = dialogTitle
+    }
+
+    fun dialogMessage(dialogMessage: CharSequence?) {
+        this.dialogMessage = dialogMessage
+    }
+
+    fun dialogIcon(dialogIcon: Drawable?) {
+        this.dialogIcon = dialogIcon
+    }
+
+    fun positiveButtonText(positiveButtonText: CharSequence?) {
+        this.positiveButtonText = positiveButtonText
+    }
+
+    fun negativeButtonText(negativeButtonText: CharSequence?) {
+        this.negativeButtonText = negativeButtonText
+    }
+
     protected abstract fun showDialog()
 
     protected open fun MaterialDialog.Builder.applyDialogSettings(): MaterialDialog.Builder {
@@ -52,4 +73,24 @@ abstract class DialogPreferenceModel(
         negativeButtonText?.let(this::negativeText)
         return this
     }
+}
+
+fun DialogPreferenceModel.dialogTitleRes(dialogTitleRes: Int) {
+    dialogTitle(context.getString(dialogTitleRes))
+}
+
+fun DialogPreferenceModel.dialogMessageRes(dialogMessageRes: Int) {
+    dialogTitle(context.getString(dialogMessageRes))
+}
+
+fun DialogPreferenceModel.dialogIconRes(dialogIconRes: Int) {
+    dialogIcon(ContextCompat.getDrawable(context, dialogIconRes))
+}
+
+fun DialogPreferenceModel.positiveButtonText(positiveButtonTextRes: Int) {
+    positiveButtonText(context.getString(positiveButtonTextRes))
+}
+
+fun DialogPreferenceModel.negativeButtonText(negativeButtonTextRes: Int) {
+    negativeButtonText(context.getText(negativeButtonTextRes))
 }

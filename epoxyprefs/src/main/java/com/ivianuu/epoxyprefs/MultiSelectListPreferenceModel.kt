@@ -18,6 +18,7 @@ package com.ivianuu.epoxyprefs
 
 import android.content.Context
 import com.afollestad.materialdialogs.MaterialDialog
+import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModelClass
 
 /**
@@ -57,4 +58,13 @@ abstract class MultiSelectListPreferenceModel(
             }
             .show()
     }
+}
+
+fun EpoxyController.multiSelectListPreference(
+    context: Context,
+    init: MultiSelectListPreferenceModel.() -> Unit
+) {
+    val model = MultiSelectListPreferenceModel_(context)
+    init.invoke(model)
+    model.addTo(this)
 }

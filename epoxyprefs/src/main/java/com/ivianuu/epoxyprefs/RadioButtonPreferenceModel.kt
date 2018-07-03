@@ -2,7 +2,7 @@ package com.ivianuu.epoxyprefs
 
 import android.content.Context
 import android.widget.CompoundButton
-import android.widget.RadioButton
+import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModelClass
 import kotlinx.android.synthetic.main.widget_preference_radio.*
 
@@ -20,4 +20,13 @@ abstract class RadioButtonPreferenceModel(context: Context) :
         widgetLayoutRes = R.layout.widget_preference_radio
     }
 
+}
+
+fun EpoxyController.radioButtonPreference(
+    context: Context,
+    init: RadioButtonPreferenceModel.() -> Unit
+) {
+    val model = RadioButtonPreferenceModel_(context)
+    init.invoke(model)
+    model.addTo(this)
 }

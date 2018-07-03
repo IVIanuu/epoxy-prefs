@@ -20,6 +20,7 @@ import android.content.Context
 import android.widget.SeekBar
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
+import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyModelClass
 import kotlinx.android.synthetic.main.item_preference_seekbar.*
 
@@ -74,6 +75,22 @@ abstract class SeekBarPreferenceModel(
         syncView()
     }
 
+    fun min(min: Int) {
+        this.min = min
+    }
+
+    fun max(max: Int) {
+        this.max = max
+    }
+
+    fun incValue(incValue: Int) {
+        this.incValue = incValue
+    }
+
+    fun valueTextProvider(valueTextProvider: ValueTextProvider) {
+        this.valueTextProvider = valueTextProvider
+    }
+
     private fun syncView() {
         val seekBar = currentHolder?.seekBar ?: return
         val seekBarValue = currentHolder?.seekBarValue ?: return
@@ -102,4 +119,16 @@ abstract class SeekBarPreferenceModel(
     interface ValueTextProvider {
         fun getText(value: Int): String
     }
+}
+
+fun EpoxyController.seekBarPreference(context: Context, init: SeekBarPreferenceModel.() -> Unit) {
+    val model = SeekBarPreferenceModel_(context)
+    init.invoke(model)
+    model.addTo(this)
+}
+
+fun SeekBarPreferenceModel.valueTextProvider(getText: (Int) -> String) {
+    valueTextProvider(object : SeekBarPreferenceModel.ValueTextProvider {
+        override fun getText(value: Int) = getText(value)
+    })
 }
