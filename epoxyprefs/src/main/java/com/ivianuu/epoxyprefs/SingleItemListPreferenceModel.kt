@@ -31,9 +31,8 @@ abstract class SingleItemListPreferenceModel(
 ) : ListPreferenceModel(context) {
 
     override fun showDialog() {
-        val key = key ?: return
-        val entries = entries ?: return
-        val entryValues = entryValues ?: return
+        val entries = entries ?: emptyArray()
+        val entryValues = entryValues ?: emptyArray()
 
         val currentValue = getPersistedString(key)
         val selectedIndex = entryValues.indexOf(currentValue)

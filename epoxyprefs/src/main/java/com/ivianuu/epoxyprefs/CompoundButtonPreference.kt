@@ -31,8 +31,6 @@ abstract class CompoundButtonPreferenceModel(
     override fun bind(holder: PreferenceModel.Holder) {
         super.bind(holder)
 
-        val key = key ?: return
-
         holder.compoundButton?.let { compoundButton ->
             compoundButton.setOnCheckedChangeListener { _, checked ->
                 if (callChangeListener(checked)) {
@@ -53,7 +51,6 @@ abstract class CompoundButtonPreferenceModel(
 
     override fun onClick() {
         super.onClick()
-        val key = key ?: return
         val newValue = !getPersistedBoolean(key)
         if (callChangeListener(newValue)) {
             persistBoolean(key, newValue)
@@ -66,7 +63,6 @@ abstract class CompoundButtonPreferenceModel(
     }
 
     private fun syncValueWithCompoundButton() {
-        val key = key ?: return
         currentHolder?.compoundButton?.isChecked = getPersistedBoolean(key)
     }
 

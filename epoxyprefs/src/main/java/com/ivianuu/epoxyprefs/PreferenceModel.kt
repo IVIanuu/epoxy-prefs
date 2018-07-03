@@ -146,7 +146,6 @@ abstract class PreferenceModel(
             }
         }
 
-
         startListeningForChanges()
     }
 
@@ -214,7 +213,7 @@ abstract class PreferenceModel(
     }
 
     protected fun getPersistedBoolean(
-        key: String,
+        key: String?,
         fallback: Boolean = defaultValue as? Boolean? ?: false
     ): Boolean {
         return if (shouldPersist()) {
@@ -225,7 +224,7 @@ abstract class PreferenceModel(
     }
 
     protected fun getPersistedFloat(
-        key: String,
+        key: String?,
         fallback: Float = defaultValue as? Float? ?: 0f
     ): Float {
         return if (shouldPersist()) {
@@ -235,7 +234,7 @@ abstract class PreferenceModel(
         }
     }
 
-    protected fun getPersistedInt(key: String, fallback: Int = defaultValue as? Int? ?: 0): Int {
+    protected fun getPersistedInt(key: String?, fallback: Int = defaultValue as? Int? ?: 0): Int {
         return if (shouldPersist()) {
             sharedPreferences.getInt(key, fallback)
         } else {
@@ -244,7 +243,7 @@ abstract class PreferenceModel(
     }
 
     protected fun getPersistedLong(
-        key: String,
+        key: String?,
         fallback: Long = defaultValue as? Long? ?: 0L
     ): Long {
         return if (shouldPersist()) {
@@ -255,7 +254,7 @@ abstract class PreferenceModel(
     }
 
     protected fun getPersistedString(
-        key: String,
+        key: String?,
         fallback: String = defaultValue as? String? ?: ""
     ): String {
         return if (shouldPersist()) {
@@ -266,7 +265,7 @@ abstract class PreferenceModel(
     }
 
     protected fun getPersistedStringSet(
-        key: String,
+        key: String?,
         fallback: MutableSet<String> = defaultValue as? MutableSet<String>? ?: mutableSetOf()
     ): MutableSet<String> {
         return if (shouldPersist()) {
@@ -291,38 +290,44 @@ abstract class PreferenceModel(
         }
     }
 
-    protected fun persistBoolean(key: String, value: Boolean) {
+    protected fun persistBoolean(key: String?, value: Boolean) {
         if (shouldPersist()) {
+            if (key == null) throw IllegalArgumentException("key == null")
             editSharedPreferences { putBoolean(key, value) }
         }
     }
 
-    protected fun persistFloat(key: String, value: Float) {
+    protected fun persistFloat(key: String?, value: Float) {
         if (shouldPersist()) {
+            if (key == null) throw IllegalArgumentException("key == null")
             editSharedPreferences { putFloat(key, value) }
         }
     }
 
-    protected fun persistInt(key: String, value: Int) {
+    protected fun persistInt(key: String?, value: Int) {
         if (shouldPersist()) {
+            if (key == null) throw IllegalArgumentException("key == null")
             editSharedPreferences { putInt(key, value) }
         }
     }
 
-    protected fun persistLong(key: String, value: Long) {
+    protected fun persistLong(key: String?, value: Long) {
         if (shouldPersist()) {
+            if (key == null) throw IllegalArgumentException("key == null")
             editSharedPreferences { putLong(key, value) }
         }
     }
 
-    protected fun persistString(key: String, value: String) {
+    protected fun persistString(key: String?, value: String) {
         if (shouldPersist()) {
+            if (key == null) throw IllegalArgumentException("key == null")
             editSharedPreferences { putString(key, value) }
         }
     }
 
-    protected fun persistStringSet(key: String, value: MutableSet<String>) {
+    protected fun persistStringSet(key: String?, value: MutableSet<String>) {
         if (shouldPersist()) {
+            if (key == null) throw IllegalArgumentException("key == null")
             editSharedPreferences { putStringSet(key, value) }
         }
     }

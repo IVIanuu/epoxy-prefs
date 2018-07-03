@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                    dependency("my_switch_$i", true)
                    summary("Oh a checkbox")
                    defaultValue(true)
+                   persistent(false)
                }
 
                radioButtonPreference(this@MainActivity) {

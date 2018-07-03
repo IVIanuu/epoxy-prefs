@@ -49,7 +49,6 @@ abstract class SeekBarPreferenceModel(
 
     override fun bind(holder: PreferenceModel.Holder) {
         super.bind(holder)
-        val key = key ?: return
         val seekBar = holder.seekBar ?: return
 
         internalValue = getPersistedInt(key)

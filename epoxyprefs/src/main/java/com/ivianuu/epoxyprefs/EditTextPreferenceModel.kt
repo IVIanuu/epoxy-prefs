@@ -34,8 +34,6 @@ abstract class EditTextPreferenceModel(
     @EpoxyAttribute var allowEmptyInput: Boolean = true
 
     override fun showDialog() {
-        val key = key ?: return
-
         val prefill = getPersistedString(key)
 
         MaterialDialog.Builder(context)
