@@ -27,7 +27,7 @@ class UrlPreferenceModelClickListener : IntentPreferenceModelClickListener {
 
     constructor(url: String) : super(buildIntentForUrl(url)!!)
 
-    constructor(url: (PreferenceModel) -> String?) : super({
+    constructor(url: (preference: PreferenceModel) -> String?) : super({
         buildIntentForUrl(url.invoke(it))
     })
 

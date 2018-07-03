@@ -32,7 +32,7 @@ open class IntentPreferenceModelClickListener : PreferenceModel.ClickListener {
         this.intentProvider = null
     }
 
-    constructor(intent: (PreferenceModel) -> Intent?) {
+    constructor(intent: (preference: PreferenceModel) -> Intent?) {
         this.intent = null
         this.intentProvider = intent
     }

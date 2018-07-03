@@ -413,7 +413,7 @@ fun PreferenceModelBuilder_.dependency(key: String?, value: Any?) {
     dependencyValue(value)
 }
 
-fun PreferenceModelBuilder_.clickListener(clickListener: (PreferenceModel) -> Boolean) {
+fun PreferenceModelBuilder_.clickListener(clickListener: (preference: PreferenceModel) -> Boolean) {
     clickListener(object : PreferenceModel.ClickListener {
         override fun onPreferenceClicked(preference: PreferenceModel): Boolean {
             return clickListener.invoke(preference)
@@ -421,7 +421,7 @@ fun PreferenceModelBuilder_.clickListener(clickListener: (PreferenceModel) -> Bo
     })
 }
 
-fun PreferenceModelBuilder_.changeListener(changeListener: (PreferenceModel, Any) -> Boolean) {
+fun PreferenceModelBuilder_.changeListener(changeListener: (preference: PreferenceModel, newValue: Any) -> Boolean) {
     changeListener(object : PreferenceModel.ChangeListener {
         override fun onPreferenceChange(preference: PreferenceModel, newValue: Any): Boolean {
             return changeListener.invoke(preference, newValue)
@@ -433,7 +433,7 @@ fun PreferenceModelBuilder_.intentClickListener(intent: Intent) {
     clickListener(IntentPreferenceModelClickListener(intent))
 }
 
-fun PreferenceModelBuilder_.intentClickListener(intent: (PreferenceModel) -> Intent?) {
+fun PreferenceModelBuilder_.intentClickListener(intent: (preference: PreferenceModel) -> Intent?) {
     clickListener(IntentPreferenceModelClickListener(intent))
 }
 
@@ -441,6 +441,6 @@ fun PreferenceModelBuilder_.urlClickListener(url: String) {
     clickListener(UrlPreferenceModelClickListener(url))
 }
 
-fun PreferenceModelBuilder_.urlClickListener(url: (PreferenceModel) -> String?) {
+fun PreferenceModelBuilder_.urlClickListener(url: (preference: PreferenceModel) -> String?) {
     clickListener(UrlPreferenceModelClickListener(url))
 }
