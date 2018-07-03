@@ -23,9 +23,7 @@ import com.airbnb.epoxy.EpoxyModelClass
  * A category preference
  */
 @EpoxyModelClass
-abstract class CategoryPreferenceModel(
-    context: Context
-) : PreferenceModel(context) {
+abstract class CategoryPreferenceModel(context: Context) : PreferenceModel(context) {
     init {
         layoutRes = R.layout.item_preference_category
     }

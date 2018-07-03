@@ -1,7 +1,6 @@
 package com.ivianuu.epoxyprefs.sample
 
 import android.os.Bundle
-import android.preference.Preference
 import android.support.v7.app.AppCompatActivity
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyRecyclerView
@@ -50,6 +49,13 @@ class MainActivity : AppCompatActivity() {
                    title("CheckBox")
                    dependency("my_switch_$i", true)
                    summary("Oh a checkbox")
+               }
+
+               radioButtonPreference(this@MainActivity) {
+                   key("my_radio_$i")
+                   title("Radio")
+                   dependency("my_switch_$i", true)
+                   summary("A radio button")
                }
 
                seekBarPreference(this@MainActivity) {

@@ -44,13 +44,13 @@ abstract class PreferenceModel(
             field = value
             id("pref_$value")
         }
+
     @EpoxyAttribute var title: CharSequence? = null
     @EpoxyAttribute var summary: CharSequence? = null
     @EpoxyAttribute var icon: Drawable? = null
 
     @EpoxyAttribute var defaultValue: Any? = null
 
-    @EpoxyAttribute var visible: Boolean = true
     @EpoxyAttribute var enabled: Boolean = true
 
     @EpoxyAttribute var dependencyKey: String? = null
@@ -61,7 +61,7 @@ abstract class PreferenceModel(
 
     @EpoxyAttribute var sharedPreferencesName: String? = null
 
-    @EpoxyAttribute var useCommit: Boolean = EpoxyPrefs.getUseCommit()
+    @EpoxyAttribute var useCommit: Boolean = EpoxyPrefsPlugins.getUseCommit()
 
     @EpoxyAttribute var layoutRes: Int = R.layout.item_preference
         set(value) {
@@ -76,7 +76,7 @@ abstract class PreferenceModel(
 
     protected val sharedPreferences: SharedPreferences by lazy(LazyThreadSafetyMode.NONE) {
         val sharedPreferencesName = sharedPreferencesName
-                ?: EpoxyPrefs.getDefaultSharedPreferencesName(context)
+                ?: EpoxyPrefsPlugins.getDefaultSharedPreferencesName(context)
         context.getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
     }
 
@@ -316,7 +316,6 @@ abstract class PreferenceModel(
         @CallSuper
         override fun bindView(view: View) {
             containerView = view
-
         }
     }
 }

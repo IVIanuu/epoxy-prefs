@@ -21,7 +21,7 @@ import android.content.Context
 /**
  * Global config
  */
-object EpoxyPrefs {
+object EpoxyPrefsPlugins {
 
     private var defaultSharedPreferencesName: String? = null
     private var useCommit = false

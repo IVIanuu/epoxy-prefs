@@ -40,11 +40,6 @@ open class IntentPreferenceModelClickListener : PreferenceModel.ClickListener {
 
     override fun onPreferenceClicked(preference: PreferenceModel): Boolean {
         val intent = intent ?: intentProvider?.invoke(preference) ?: return false
-
-        if (preference.context !is Activity) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-
         preference.context.startActivity(intent)
         return true
     }

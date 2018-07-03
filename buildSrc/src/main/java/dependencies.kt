@@ -9,8 +9,6 @@ object Versions {
     const val versionName = "1.0"
 
     const val androidGradlePlugin = "3.1.3"
-    const val autoCommon = "0.8"
-    const val autoService = "1.0-rc3"
 
     const val butterknife = "9.0.0-SNAPSHOT"
 
@@ -18,7 +16,6 @@ object Versions {
     const val epoxyExtensions = "e7048f4d3e"
 
     const val kotlin = "1.2.41"
-    const val kotlinPoet = "0.7.0"
 
     const val materialDialogs = "0.9.6.0"
 
@@ -30,9 +27,6 @@ object Versions {
 object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
 
-    const val autoCommon = "com.google.auto:auto-common:${Versions.autoCommon}"
-    const val autoService = "com.google.auto.service:auto-service:${Versions.autoService}"
-
     const val butterknifeGradlePlugin = "com.jakewharton:butterknife-gradle-plugin:${Versions.butterknife}"
 
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
@@ -43,11 +37,8 @@ object Deps {
 
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jre7:${Versions.kotlin}"
-    const val kotlinReflect = "org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlinPoet}"
 
     const val materialDialogs = "com.afollestad.material-dialogs:core:${Versions.materialDialogs}"
-
-    const val kotlinPoet = "com.squareup:kotlinpoet:${Versions.kotlinPoet}"
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"
 
