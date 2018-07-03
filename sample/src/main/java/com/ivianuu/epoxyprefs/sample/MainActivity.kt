@@ -21,6 +21,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
 
+        list.addItemDecoration(PreferenceDividerDecoration(this))
+
         list.buildModelsWith2 {
            for (i in 0 until 100) {
                categoryPreference(this@MainActivity) {

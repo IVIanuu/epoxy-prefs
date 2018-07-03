@@ -121,6 +121,9 @@ abstract class PreferenceModel(
 
         holder.icon?.let {
             it.setImageDrawable(icon)
+        }
+
+        holder.icon_frame?.let {
             it.visibility = if (icon != null) View.VISIBLE else View.GONE
         }
 
