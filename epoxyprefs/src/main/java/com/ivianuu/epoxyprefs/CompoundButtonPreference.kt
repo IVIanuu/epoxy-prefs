@@ -30,6 +30,7 @@ abstract class CompoundButtonPreferenceModel(
 
     override fun bind(holder: PreferenceModel.Holder) {
         super.bind(holder)
+
         val key = key ?: return
 
         holder.compoundButton?.let { compoundButton ->
