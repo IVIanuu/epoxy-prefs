@@ -40,11 +40,17 @@ abstract class CheckboxPreferenceModel(context: Context) :
 open class CheckboxPreferenceModelBuilder_(override val model: CheckboxPreferenceModel) :
     CompoundButtonPreferenceModelBuilder_(model)
 
-fun EpoxyController.checkboxPreference(
+inline fun EpoxyController.checkboxPreference(
     context: Context,
     init: CheckboxPreferenceModelBuilder_.() -> Unit
 ) {
     val model = CheckboxPreferenceModel_(context)
     init.invoke(CheckboxPreferenceModelBuilder_(model))
     model.addTo(this)
+}
+
+inline fun PreferenceEpoxyController.checkboxPreference(
+    init: CheckboxPreferenceModelBuilder_.() -> Unit
+) {
+    checkboxPreference(context, init)
 }

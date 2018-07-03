@@ -64,13 +64,19 @@ open class EditTextPreferenceModelBuilder_(override val model: EditTextPreferenc
 
 }
 
-fun EpoxyController.editTextPreference(
+inline fun EpoxyController.editTextPreference(
     context: Context,
     init: EditTextPreferenceModelBuilder_.() -> Unit
 ) {
     val model = EditTextPreferenceModel_(context)
     init.invoke(EditTextPreferenceModelBuilder_(model))
     model.addTo(this)
+}
+
+inline fun PreferenceEpoxyController.editTextPreference(
+    init: EditTextPreferenceModelBuilder_.() -> Unit
+) {
+    editTextPreference(context, init)
 }
 
 fun EditTextPreferenceModelBuilder_.dialogHintRes(dialogHintRes: Int) {

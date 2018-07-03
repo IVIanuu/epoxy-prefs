@@ -62,11 +62,17 @@ abstract class MultiSelectListPreferenceModel(
 open class MultiSelectListPreferenceModelBuilder_(override val model: MultiSelectListPreferenceModel) :
     ListPreferenceModelBuilder_(model)
 
-fun EpoxyController.multiSelectListPreference(
+inline fun EpoxyController.multiSelectListPreference(
     context: Context,
     init: MultiSelectListPreferenceModelBuilder_.() -> Unit
 ) {
     val model = MultiSelectListPreferenceModel_(context)
     init.invoke(MultiSelectListPreferenceModelBuilder_(model))
     model.addTo(this)
+}
+
+inline fun PreferenceEpoxyController.multiSelectListPreference(
+    init: MultiSelectListPreferenceModelBuilder_.() -> Unit
+) {
+    multiSelectListPreference(context, init)
 }

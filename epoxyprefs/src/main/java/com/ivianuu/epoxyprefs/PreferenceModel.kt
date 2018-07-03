@@ -445,10 +445,14 @@ open class PreferenceModelBuilder_(open val model: PreferenceModel) {
 
 }
 
-fun EpoxyController.preference(context: Context, init: PreferenceModelBuilder_.() -> Unit) {
+inline fun EpoxyController.preference(context: Context, init: PreferenceModelBuilder_.() -> Unit) {
     val model = PreferenceModel_(context)
     init.invoke(PreferenceModelBuilder_(model))
     model.addTo(this)
+}
+
+inline fun PreferenceEpoxyController.preference(init: PreferenceModelBuilder_.() -> Unit) {
+    preference(context, init)
 }
 
 fun PreferenceModelBuilder_.titleRes(titleRes: Int) {

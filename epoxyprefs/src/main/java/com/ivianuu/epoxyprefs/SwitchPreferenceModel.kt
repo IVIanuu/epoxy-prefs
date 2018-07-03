@@ -48,3 +48,9 @@ fun EpoxyController.switchPreference(
     init.invoke(SwitchPreferenceModelBuilder_(model))
     model.addTo(this)
 }
+
+fun PreferenceEpoxyController.switchPreference(
+    init: SwitchPreferenceModelBuilder_.() -> Unit
+) {
+    switchPreference(context, init)
+}

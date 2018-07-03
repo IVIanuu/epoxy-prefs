@@ -125,13 +125,19 @@ open class SeekBarPreferenceModelBuilder_(override val model: SeekBarPreferenceM
 
 }
 
-fun EpoxyController.seekBarPreference(
+inline fun EpoxyController.seekBarPreference(
     context: Context,
     init: SeekBarPreferenceModelBuilder_.() -> Unit
 ) {
     val model = SeekBarPreferenceModel_(context)
     init.invoke(SeekBarPreferenceModelBuilder_(model))
     model.addTo(this)
+}
+
+inline fun PreferenceEpoxyController.seekBarPreference(
+    init: SeekBarPreferenceModelBuilder_.() -> Unit
+) {
+    seekBarPreference(context, init)
 }
 
 fun SeekBarPreferenceModelBuilder_.valueTextProvider(getText: (Int) -> String) {
