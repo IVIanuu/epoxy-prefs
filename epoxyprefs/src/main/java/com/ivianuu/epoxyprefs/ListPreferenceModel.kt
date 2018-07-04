@@ -27,25 +27,25 @@ abstract class ListPreferenceModel(
 ) : DialogPreferenceModel(context) {
     @EpoxyAttribute var entries: Array<CharSequence>? = null
     @EpoxyAttribute var entryValues: Array<CharSequence>? = null
+
+    abstract class Builder(override val model: ListPreferenceModel) :
+        DialogPreferenceModel.Builder(model) {
+
+        open fun entries(entries: Array<CharSequence>?) {
+            model.entries = entries
+        }
+
+        open fun entryValues(entryValues: Array<CharSequence>?) {
+            model.entryValues = entryValues
+        }
+
+    }
 }
 
-abstract class ListPreferenceModelBuilder_(override val model: ListPreferenceModel) :
-    DialogPreferenceModelBuilder_(model) {
-
-    open fun entries(entries: Array<CharSequence>?) {
-        model.entries = entries
-    }
-
-    open fun entryValues(entryValues: Array<CharSequence>?) {
-        model.entryValues = entryValues
-    }
-
-}
-
-fun ListPreferenceModelBuilder_.entriesRes(entriesRes: Int) {
+fun ListPreferenceModel.Builder.entriesRes(entriesRes: Int) {
     entries(model.context.resources.getTextArray(entriesRes))
 }
 
-fun ListPreferenceModelBuilder_.entryValuesRes(entryValuesRes: Int) {
+fun ListPreferenceModel.Builder.entryValuesRes(entryValuesRes: Int) {
     entryValues(model.context.resources.getTextArray(entryValuesRes))
 }

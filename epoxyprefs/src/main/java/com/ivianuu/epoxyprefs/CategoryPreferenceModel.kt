@@ -28,22 +28,22 @@ abstract class CategoryPreferenceModel(context: Context) : PreferenceModel(conte
     init {
         layoutRes = R.layout.item_preference_category
     }
-}
 
-open class CategoryPreferenceModelBuilder_(override val model: CategoryPreferenceModel) :
-    PreferenceModelBuilder_(model)
+    open class Builder(override val model: CategoryPreferenceModel) :
+        PreferenceModel.Builder(model)
+}
 
 inline fun EpoxyController.categoryPreference(
     context: Context,
-    init: CategoryPreferenceModelBuilder_.() -> Unit
+    init: CategoryPreferenceModel.Builder.() -> Unit
 ) {
     val model = CategoryPreferenceModel_(context)
-    init.invoke(CategoryPreferenceModelBuilder_(model))
+    init.invoke(CategoryPreferenceModel.Builder(model))
     model.addTo(this)
 }
 
 inline fun PreferenceEpoxyController.categoryPreference(
-    init: CategoryPreferenceModelBuilder_.() -> Unit
+    init: CategoryPreferenceModel.Builder.() -> Unit
 ) {
     categoryPreference(context, init)
 }

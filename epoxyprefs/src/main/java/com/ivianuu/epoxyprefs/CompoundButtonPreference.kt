@@ -68,7 +68,6 @@ abstract class CompoundButtonPreferenceModel(
         currentHolder?.compoundButton?.isChecked = value
     }
 
+    abstract class Builder(override val model: CompoundButtonPreferenceModel) :
+        PreferenceModel.Builder(model)
 }
-
-abstract class CompoundButtonPreferenceModelBuilder_(override val model: CompoundButtonPreferenceModel) :
-    PreferenceModelBuilder_(model)

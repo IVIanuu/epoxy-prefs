@@ -49,36 +49,36 @@ abstract class EditTextPreferenceModel(
             }
             .show()
     }
-}
 
-open class EditTextPreferenceModelBuilder_(override val model: EditTextPreferenceModel) :
-    DialogPreferenceModelBuilder_(model) {
+    open class Builder(override val model: EditTextPreferenceModel) :
+        DialogPreferenceModel.Builder(model) {
 
-    open fun dialogHint(dialogHint: CharSequence?) {
-        model.dialogHint = dialogHint
+        open fun dialogHint(dialogHint: CharSequence?) {
+            model.dialogHint = dialogHint
+        }
+
+        open fun allowEmptyInput(allowEmptyInput: Boolean) {
+            model.allowEmptyInput = allowEmptyInput
+        }
+
     }
-
-    open fun allowEmptyInput(allowEmptyInput: Boolean) {
-        model.allowEmptyInput = allowEmptyInput
-    }
-
 }
 
 inline fun EpoxyController.editTextPreference(
     context: Context,
-    init: EditTextPreferenceModelBuilder_.() -> Unit
+    init: EditTextPreferenceModel.Builder.() -> Unit
 ) {
     val model = EditTextPreferenceModel_(context)
-    init.invoke(EditTextPreferenceModelBuilder_(model))
+    init.invoke(EditTextPreferenceModel.Builder(model))
     model.addTo(this)
 }
 
 inline fun PreferenceEpoxyController.editTextPreference(
-    init: EditTextPreferenceModelBuilder_.() -> Unit
+    init: EditTextPreferenceModel.Builder.() -> Unit
 ) {
     editTextPreference(context, init)
 }
 
-fun EditTextPreferenceModelBuilder_.dialogHintRes(dialogHintRes: Int) {
+fun EditTextPreferenceModel.Builder.dialogHintRes(dialogHintRes: Int) {
     dialogHint(model.context.getString(dialogHintRes))
 }

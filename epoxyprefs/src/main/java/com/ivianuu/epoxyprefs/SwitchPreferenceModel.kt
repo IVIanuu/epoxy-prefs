@@ -35,22 +35,22 @@ abstract class SwitchPreferenceModel(context: Context) :
     init {
         widgetLayoutRes = R.layout.widget_preference_switch
     }
-}
 
-open class SwitchPreferenceModelBuilder_(override val model: SwitchPreferenceModel) :
-    CompoundButtonPreferenceModelBuilder_(model)
+    open class Builder(override val model: SwitchPreferenceModel) :
+        CompoundButtonPreferenceModel.Builder(model)
+}
 
 fun EpoxyController.switchPreference(
     context: Context,
-    init: SwitchPreferenceModelBuilder_.() -> Unit
+    init: SwitchPreferenceModel.Builder.() -> Unit
 ) {
     val model = SwitchPreferenceModel_(context)
-    init.invoke(SwitchPreferenceModelBuilder_(model))
+    init.invoke(SwitchPreferenceModel.Builder(model))
     model.addTo(this)
 }
 
 fun PreferenceEpoxyController.switchPreference(
-    init: SwitchPreferenceModelBuilder_.() -> Unit
+    init: SwitchPreferenceModel.Builder.() -> Unit
 ) {
     switchPreference(context, init)
 }

@@ -102,45 +102,45 @@ abstract class SeekBarPreferenceModel(
     interface ValueTextProvider {
         fun getText(value: Int): String
     }
-}
 
-open class SeekBarPreferenceModelBuilder_(override val model: SeekBarPreferenceModel) :
-    PreferenceModelBuilder_(model) {
+    open class Builder(override val model: SeekBarPreferenceModel) :
+        PreferenceModel.Builder(model) {
 
-    open fun min(min: Int) {
-        model.min = min
+        open fun min(min: Int) {
+            model.min = min
+        }
+
+        open fun max(max: Int) {
+            model.max = max
+        }
+
+        open fun incValue(incValue: Int) {
+            model.incValue = incValue
+        }
+
+        open fun valueTextProvider(valueTextProvider: SeekBarPreferenceModel.ValueTextProvider) {
+            model.valueTextProvider = valueTextProvider
+        }
+
     }
-
-    open fun max(max: Int) {
-        model.max = max
-    }
-
-    open fun incValue(incValue: Int) {
-        model.incValue = incValue
-    }
-
-    open fun valueTextProvider(valueTextProvider: SeekBarPreferenceModel.ValueTextProvider) {
-        model.valueTextProvider = valueTextProvider
-    }
-
 }
 
 inline fun EpoxyController.seekBarPreference(
     context: Context,
-    init: SeekBarPreferenceModelBuilder_.() -> Unit
+    init: SeekBarPreferenceModel.Builder.() -> Unit
 ) {
     val model = SeekBarPreferenceModel_(context)
-    init.invoke(SeekBarPreferenceModelBuilder_(model))
+    init.invoke(SeekBarPreferenceModel.Builder(model))
     model.addTo(this)
 }
 
 inline fun PreferenceEpoxyController.seekBarPreference(
-    init: SeekBarPreferenceModelBuilder_.() -> Unit
+    init: SeekBarPreferenceModel.Builder.() -> Unit
 ) {
     seekBarPreference(context, init)
 }
 
-fun SeekBarPreferenceModelBuilder_.valueTextProvider(getText: (Int) -> String) {
+fun SeekBarPreferenceModel.Builder.valueTextProvider(getText: (Int) -> String) {
     valueTextProvider(object : SeekBarPreferenceModel.ValueTextProvider {
         override fun getText(value: Int) = getText(value)
     })

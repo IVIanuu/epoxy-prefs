@@ -19,22 +19,22 @@ abstract class RadioButtonPreferenceModel(context: Context) :
     init {
         widgetLayoutRes = R.layout.widget_preference_radio
     }
-}
 
-open class RadioButtonPreferenceModelBuilder_(override val model: RadioButtonPreferenceModel) :
-    CompoundButtonPreferenceModelBuilder_(model)
+    open class Builder(override val model: RadioButtonPreferenceModel) :
+        CompoundButtonPreferenceModel.Builder(model)
+}
 
 inline fun EpoxyController.radioButtonPreference(
     context: Context,
-    init: RadioButtonPreferenceModelBuilder_.() -> Unit
+    init: RadioButtonPreferenceModel.Builder.() -> Unit
 ) {
     val model = RadioButtonPreferenceModel_(context)
-    init.invoke(RadioButtonPreferenceModelBuilder_(model))
+    init.invoke(RadioButtonPreferenceModel.Builder(model))
     model.addTo(this)
 }
 
 inline fun PreferenceEpoxyController.radioButtonPreference(
-    init: RadioButtonPreferenceModelBuilder_.() -> Unit
+    init: RadioButtonPreferenceModel.Builder.() -> Unit
 ) {
     radioButtonPreference(context, init)
 }
