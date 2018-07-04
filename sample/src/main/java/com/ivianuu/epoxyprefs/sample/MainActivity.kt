@@ -72,7 +72,6 @@ class MainActivity : AppCompatActivity() {
                     title("Single item list")
                     entries(arrayOf("1", "2", "3"))
                     entryValues(arrayOf("1", "2", "3"))
-                    negativeButtonText("Cancel")
                     dependency("my_switch_$i", true)
                 }
 
@@ -81,8 +80,6 @@ class MainActivity : AppCompatActivity() {
                     title("Multi select list")
                     entries(arrayOf("A", "B", "C"))
                     entryValues(arrayOf("A", "B", "C"))
-                    positiveButtonText("OK")
-                    negativeButtonText("Cancel")
                     dependency("my_switch_$i", true)
                 }
 

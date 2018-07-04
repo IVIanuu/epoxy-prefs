@@ -35,8 +35,11 @@ abstract class DialogPreferenceModel(
         }
     @EpoxyAttribute var dialogMessage: CharSequence? = null
     @EpoxyAttribute var dialogIcon: Drawable? = null
-    @EpoxyAttribute var positiveButtonText: CharSequence? = null
-    @EpoxyAttribute var negativeButtonText: CharSequence? = null
+    @EpoxyAttribute var positiveButtonText: CharSequence? =
+        context.getString(android.R.string.ok)
+
+    @EpoxyAttribute var negativeButtonText: CharSequence? =
+        context.getString(android.R.string.cancel)
 
     override fun onClick() {
         super.onClick()
@@ -45,12 +48,18 @@ abstract class DialogPreferenceModel(
 
     protected abstract fun showDialog()
 
-    protected open fun MaterialDialog.Builder.applyDialogSettings(): MaterialDialog.Builder {
-        dialogTitle?.let(this::title)
-        dialogMessage?.let(this::content)
-        dialogIcon?.let(this::icon)
-        positiveButtonText?.let(this::positiveText)
-        negativeButtonText?.let(this::negativeText)
+    protected open fun MaterialDialog.Builder.applyDialogSettings(
+        applyTitle: Boolean = true,
+        applyMessage: Boolean = true,
+        applyIcon: Boolean = true,
+        applyPositiveButtonText: Boolean = true,
+        applyNegativeButtonText: Boolean = true
+    ): MaterialDialog.Builder {
+        if (applyTitle) dialogTitle?.let(this::title)
+        if (applyMessage) dialogMessage?.let(this::content)
+        if (applyIcon) dialogIcon?.let(this::icon)
+        if (applyPositiveButtonText) positiveButtonText?.let(this::positiveText)
+        if (applyNegativeButtonText) negativeButtonText?.let(this::negativeText)
         return this
     }
 

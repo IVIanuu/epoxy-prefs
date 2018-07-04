@@ -38,7 +38,7 @@ abstract class SingleItemListPreferenceModel(
         val selectedIndex = entryValues.indexOf(currentValue)
 
         MaterialDialog.Builder(context)
-            .applyDialogSettings()
+            .applyDialogSettings(applyPositiveButtonText = false)
             .items(entries.toList())
             .itemsCallbackSingleChoice(selectedIndex) { _: MaterialDialog, _: View, position: Int, _: CharSequence ->
                 val newValue = entryValues.toList()[position].toString()

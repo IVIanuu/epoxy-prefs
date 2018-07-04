@@ -40,7 +40,7 @@ abstract class PreferenceModel(
     val context: Context
 ) : EpoxyModelWithHolder<PreferenceModel.Holder>() {
 
-    @EpoxyAttribute var key: String? = null
+    @EpoxyAttribute open var key: String? = null
         set(value) {
             field = value
             try {
@@ -49,7 +49,7 @@ abstract class PreferenceModel(
             }
         }
 
-    @EpoxyAttribute var title: CharSequence? = null
+    @EpoxyAttribute open var title: CharSequence? = null
     @EpoxyAttribute var summary: CharSequence? = null
     @EpoxyAttribute var icon: Drawable? = null
 
