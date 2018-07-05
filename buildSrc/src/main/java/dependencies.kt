@@ -10,8 +10,6 @@ object Versions {
 
     const val androidGradlePlugin = "3.1.3"
 
-    const val butterknife = "9.0.0-SNAPSHOT"
-
     const val epoxy = "2.12.0"
 
     const val kotlin = "1.2.41"
@@ -25,8 +23,6 @@ object Versions {
 
 object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
-
-    const val butterknifeGradlePlugin = "com.jakewharton:butterknife-gradle-plugin:${Versions.butterknife}"
 
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
 
