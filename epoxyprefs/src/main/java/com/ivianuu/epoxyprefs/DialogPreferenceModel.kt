@@ -20,26 +20,17 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
 import com.afollestad.materialdialogs.MaterialDialog
-import com.airbnb.epoxy.EpoxyAttribute
 
 /**
  * A dialog preference
  */
-abstract class DialogPreferenceModel(
-    context: Context
-) : PreferenceModel(context) {
+abstract class DialogPreferenceModel(builder: Builder) : PreferenceModel(builder) {
 
-    @EpoxyAttribute var dialogTitle: CharSequence? = null
-        get() {
-            return field ?: title // try to use the title if the field is null
-        }
-    @EpoxyAttribute var dialogMessage: CharSequence? = null
-    @EpoxyAttribute var dialogIcon: Drawable? = null
-    @EpoxyAttribute var positiveButtonText: CharSequence? =
-        context.getString(android.R.string.ok)
-
-    @EpoxyAttribute var negativeButtonText: CharSequence? =
-        context.getString(android.R.string.cancel)
+    open val dialogTitle = builder.dialogTitle ?: title
+    open val dialogMessage = builder.dialogMessage
+    open val dialogIcon = builder.dialogIcon
+    open val positiveButtonText = builder.positiveButtonText
+    open val negativeButtonText = builder.negativeButtonText
 
     override fun onClick() {
         super.onClick()
@@ -63,48 +54,56 @@ abstract class DialogPreferenceModel(
         return this
     }
 
-    abstract class Builder(override val model: DialogPreferenceModel) :
-        PreferenceModel.Builder(model) {
+    abstract class Builder(context: Context) : PreferenceModel.Builder(context) {
 
-        fun dialogTitle(dialogTitle: CharSequence?) {
-            model.dialogTitle = dialogTitle
+        open var dialogTitle: CharSequence? = null
+        open var dialogMessage: CharSequence? = null
+        open var dialogIcon: Drawable? = null
+        open var positiveButtonText: CharSequence? =
+            context.getString(android.R.string.ok)
+
+        open var negativeButtonText: CharSequence? =
+            context.getString(android.R.string.cancel)
+
+        open fun dialogTitle(dialogTitle: CharSequence?) {
+            this.dialogTitle = dialogTitle
         }
 
-        fun dialogMessage(dialogMessage: CharSequence?) {
-            model.dialogMessage = dialogMessage
+        open fun dialogMessage(dialogMessage: CharSequence?) {
+            this.dialogMessage = dialogMessage
         }
 
-        fun dialogIcon(dialogIcon: Drawable?) {
-            model.dialogIcon = dialogIcon
+        open fun dialogIcon(dialogIcon: Drawable?) {
+            this.dialogIcon = dialogIcon
         }
 
-        fun positiveButtonText(positiveButtonText: CharSequence?) {
-            model.positiveButtonText = positiveButtonText
+        open fun positiveButtonText(positiveButtonText: CharSequence?) {
+            this.positiveButtonText = positiveButtonText
         }
 
-        fun negativeButtonText(negativeButtonText: CharSequence?) {
-            model.negativeButtonText = negativeButtonText
+        open fun negativeButtonText(negativeButtonText: CharSequence?) {
+            this.negativeButtonText = negativeButtonText
         }
 
     }
 }
 
 fun DialogPreferenceModel.Builder.dialogTitleRes(dialogTitleRes: Int) {
-    dialogTitle(model.context.getString(dialogTitleRes))
+    dialogTitle(context.getString(dialogTitleRes))
 }
 
 fun DialogPreferenceModel.Builder.dialogMessageRes(dialogMessageRes: Int) {
-    dialogTitle(model.context.getString(dialogMessageRes))
+    dialogTitle(context.getString(dialogMessageRes))
 }
 
 fun DialogPreferenceModel.Builder.dialogIconRes(dialogIconRes: Int) {
-    dialogIcon(ContextCompat.getDrawable(model.context, dialogIconRes))
+    dialogIcon(ContextCompat.getDrawable(context, dialogIconRes))
 }
 
 fun DialogPreferenceModel.Builder.positiveButtonTextRes(positiveButtonTextRes: Int) {
-    positiveButtonText(model.context.getString(positiveButtonTextRes))
+    positiveButtonText(context.getString(positiveButtonTextRes))
 }
 
 fun DialogPreferenceModel.Builder.negativeButtonTextRes(negativeButtonTextRes: Int) {
-    negativeButtonText(model.context.getText(negativeButtonTextRes))
+    negativeButtonText(context.getText(negativeButtonTextRes))
 }

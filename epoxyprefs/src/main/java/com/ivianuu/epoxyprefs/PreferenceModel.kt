@@ -26,63 +26,36 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.epoxy.*
+import com.airbnb.epoxy.EpoxyController
+import com.airbnb.epoxy.EpoxyHolder
+import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.ivianuu.epoxyprefs.util.IntentPreferenceModelClickListener
 import com.ivianuu.epoxyprefs.util.UrlPreferenceModelClickListener
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_preference.*
+import java.util.*
 
 /**
  * Base preference
  */
-@EpoxyModelClass
-abstract class PreferenceModel(
-    val context: Context
-) : EpoxyModelWithHolder<PreferenceModel.Holder>() {
+open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceModel.Holder>() {
 
-    @EpoxyAttribute open var key: String? = null
-        set(value) {
-            field = value
-            try {
-                id("pref_$value")
-            } catch (e: Exception) {
-            }
-        }
-
-    @EpoxyAttribute open var title: CharSequence? = null
-    @EpoxyAttribute var summary: CharSequence? = null
-    @EpoxyAttribute var icon: Drawable? = null
-
-    @EpoxyAttribute var defaultValue: Any? = null
-
-    @EpoxyAttribute var enabled: Boolean = true
-
-    @EpoxyAttribute var dependencyKey: String? = null
-    @EpoxyAttribute var dependencyValue: Any? = null
-
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var clickListener: ClickListener? = null
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var changeListener: ChangeListener? = null
-
-    @EpoxyAttribute var sharedPreferencesName: String? = null
-    @EpoxyAttribute var useCommit: Boolean = EpoxyPrefsPlugins.getUseCommit()
-    @EpoxyAttribute var persistent: Boolean = true
-
-    @EpoxyAttribute var layoutRes: Int = R.layout.item_preference
-        set(value) {
-            field = value
-            try {
-                layout(field + widgetLayoutRes)
-            } catch (e: Exception) {
-            }
-        }
-    @EpoxyAttribute var widgetLayoutRes: Int = 0
-        set(value) {
-            field = value
-            try {
-                layout(layoutRes + field)
-            } catch (e: Exception) {
-            }
-        }
+    open val context = builder.context
+    open val key = builder.key
+    open val title = builder.title
+    open val summary = builder.summary
+    open val icon = builder.icon
+    open val defaultValue = builder.defaultValue
+    open val enabled = builder.enabled
+    open val dependencyKey = builder.dependencyKey
+    open val dependencyValue = builder.dependencyValue
+    open val clickListener = builder.clickListener
+    open val changeListener = builder.changeListener
+    open val sharedPreferencesName = builder.sharedPreferencesName
+    open val useCommit = builder.useCommit
+    open val persistent = builder.persistent
+    open val layoutRes = builder.layoutRes
+    open val widgetLayoutRes = builder.widgetLayoutRes
 
     protected val sharedPreferences: SharedPreferences by lazy(LazyThreadSafetyMode.NONE) {
         val sharedPreferencesName = sharedPreferencesName
@@ -102,6 +75,11 @@ abstract class PreferenceModel(
         }
 
     private var listeningForChanges = false
+
+    init {
+        id(key ?: UUID.randomUUID().toString())
+        layout(layoutRes + widgetLayoutRes)
+    }
 
     @CallSuper
     override fun bind(holder: Holder) {
@@ -380,91 +358,107 @@ abstract class PreferenceModel(
         }
     }
 
-    open class Builder(open val model: PreferenceModel) {
+    open class Builder(val context: Context) {
 
-        fun key(key: String?) {
-            model.key = key
+        open var key: String? = null
+        open var title: CharSequence? = null
+        open var summary: CharSequence? = null
+        open var icon: Drawable? = null
+        open var defaultValue: Any? = null
+        open var enabled: Boolean = true
+        open var dependencyKey: String? = null
+        open var dependencyValue: Any? = null
+        open var clickListener: ClickListener? = null
+        open var changeListener: ChangeListener? = null
+        open var sharedPreferencesName: String? = null
+        open var useCommit: Boolean = EpoxyPrefsPlugins.getUseCommit()
+        open var persistent: Boolean = true
+        open var layoutRes: Int = R.layout.item_preference
+        open var widgetLayoutRes: Int = 0
+
+        open fun key(key: String) {
+            this.key = key
         }
 
-        fun title(title: CharSequence?) {
-            model.title = title
+        open fun title(title: CharSequence?) {
+            this.title = title
         }
 
-        fun summary(summary: CharSequence?) {
-            model.summary = summary
+        open fun summary(summary: CharSequence?) {
+            this.summary = summary
         }
 
-        fun icon(icon: Drawable?) {
-            model.icon = icon
+        open fun icon(icon: Drawable?) {
+            this.icon = icon
         }
 
-        fun defaultValue(defaultValue: Any?) {
-            model.defaultValue = defaultValue
+        open fun defaultValue(defaultValue: Any?) {
+            this.defaultValue = defaultValue
         }
 
-        fun enabled(enabled: Boolean) {
-            model.enabled = enabled
+        open fun enabled(enabled: Boolean) {
+            this.enabled = enabled
         }
 
-        fun dependencyKey(dependencyKey: String?) {
-            model.dependencyKey = dependencyKey
+        open fun dependencyKey(dependencyKey: String?) {
+            this.dependencyKey = dependencyKey
         }
 
-        fun dependencyValue(dependencyValue: Any?) {
-            model.dependencyValue = dependencyValue
+        open fun dependencyValue(dependencyValue: Any?) {
+            this.dependencyValue = dependencyValue
         }
 
-        fun clickListener(clickListener: PreferenceModel.ClickListener?) {
-            model.clickListener = clickListener
+        open fun clickListener(clickListener: PreferenceModel.ClickListener?) {
+            this.clickListener = clickListener
         }
 
-        fun changeListener(changeListener: PreferenceModel.ChangeListener?) {
-            model.changeListener = changeListener
+        open fun changeListener(changeListener: PreferenceModel.ChangeListener?) {
+            this.changeListener = changeListener
         }
 
-        fun sharedPreferencesName(sharedPreferencesName: String?) {
-            model.sharedPreferencesName = sharedPreferencesName
+        open fun sharedPreferencesName(sharedPreferencesName: String?) {
+            this.sharedPreferencesName = sharedPreferencesName
         }
 
-        fun useCommit(useCommit: Boolean) {
-            model.useCommit = useCommit
+        open fun useCommit(useCommit: Boolean) {
+            this.useCommit = useCommit
         }
 
-        fun persistent(persistent: Boolean) {
-            model.persistent = persistent
+        open fun persistent(persistent: Boolean) {
+            this.persistent = persistent
         }
 
-        fun layoutRes(layoutRes: Int) {
-            model.layoutRes = layoutRes
+        open fun layoutRes(layoutRes: Int) {
+            this.layoutRes = layoutRes
         }
 
-        fun widgetLayoutRes(widgetLayoutRes: Int) {
-            model.widgetLayoutRes = widgetLayoutRes
+        open fun widgetLayoutRes(widgetLayoutRes: Int) {
+            this.widgetLayoutRes = widgetLayoutRes
         }
 
+        open fun build() = PreferenceModel(this)
     }
 }
 
-inline fun EpoxyController.preference(context: Context, init: PreferenceModel.Builder.() -> Unit) {
-    val model = PreferenceModel_(context)
-    init.invoke(PreferenceModel.Builder(model))
-    model.addTo(this)
-}
+inline fun EpoxyController.preference(context: Context, init: PreferenceModel.Builder.() -> Unit) =
+    PreferenceModel.Builder(context)
+        .apply(init)
+        .build()
+        .also { it.addTo(this) }
 
-inline fun PreferenceEpoxyController.preference(init: PreferenceModel.Builder.() -> Unit) {
+inline fun PreferenceEpoxyController.preference(init: PreferenceModel.Builder.() -> Unit) =
     preference(context, init)
-}
 
 fun PreferenceModel.Builder.titleRes(titleRes: Int) {
-    title(model.context.getString(titleRes))
+    title(context.getString(titleRes))
 }
 
 fun PreferenceModel.Builder.summaryRes(summaryRes: Int) {
-    summary(model.context.getString(summaryRes))
+    summary(context.getString(summaryRes))
 }
 
 fun PreferenceModel.Builder.iconRes(iconRes: Int) {
-    icon(ContextCompat.getDrawable(model.context, iconRes))
+    icon(ContextCompat.getDrawable(context, iconRes))
 }
 
 fun PreferenceModel.Builder.dependency(key: String?, value: Any?) {

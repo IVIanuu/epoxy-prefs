@@ -29,23 +29,14 @@ android {
     defaultConfig {
         minSdkVersion Versions.minSdk
         targetSdkVersion Versions.targetSdk
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = ['disableEpoxyKotlinExtensionGeneration': 'true']
-            }
-        }
     }
     androidExtensions {
         experimental = true
-    }
-    kapt {
-        correctErrorTypes = true
     }
 }
 
 dependencies {
     api Deps.epoxy
-    kapt Deps.epoxyProcessor
 
     api Deps.kotlinStdLib
     api Deps.materialDialogs

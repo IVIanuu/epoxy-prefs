@@ -19,33 +19,24 @@ package com.ivianuu.epoxyprefs
 import android.content.Context
 import android.widget.SeekBar
 import android.widget.TextView
-import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyController
-import com.airbnb.epoxy.EpoxyModelClass
 import kotlinx.android.synthetic.main.item_preference_seekbar.*
 
 /**
  * Abstract seek bar preference model
  */
-@EpoxyModelClass
-abstract class SeekBarPreferenceModel(
-    context: Context
-) : PreferenceModel(context) {
+open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
 
-    @EpoxyAttribute var min: Int = 0
-    @EpoxyAttribute var max: Int = 0
-    @EpoxyAttribute var incValue: Int = 1
+    open val min = builder.min
+    open val max = builder.max
+    open val incValue = builder.incValue
 
-    @EpoxyAttribute var valueTextProvider: ValueTextProvider? = null
+    open val valueTextProvider = builder.valueTextProvider
 
     protected open val PreferenceModel.Holder.seekBar: SeekBar? get() = seekbar
     protected open val PreferenceModel.Holder.seekBarValue: TextView? get() = seekbar_value
 
-    private var internalValue: Int = 0
-
-    init {
-        layoutRes = R.layout.item_preference_seekbar
-    }
+    private var internalValue = 0
 
     override fun bind(holder: PreferenceModel.Holder) {
         super.bind(holder)
@@ -103,42 +94,49 @@ abstract class SeekBarPreferenceModel(
         fun getText(value: Int): String
     }
 
-    open class Builder(override val model: SeekBarPreferenceModel) :
-        PreferenceModel.Builder(model) {
+    open class Builder(context: Context) : PreferenceModel.Builder(context) {
+
+        open var min: Int = 0
+        open var max: Int = 0
+        open var incValue: Int = 1
+
+        open var valueTextProvider: ValueTextProvider? = null
+
+        init {
+            layoutRes(R.layout.item_preference_seekbar)
+        }
 
         open fun min(min: Int) {
-            model.min = min
+            this.min = min
         }
 
         open fun max(max: Int) {
-            model.max = max
+            this.max = max
         }
 
         open fun incValue(incValue: Int) {
-            model.incValue = incValue
+            this.incValue = incValue
         }
 
         open fun valueTextProvider(valueTextProvider: SeekBarPreferenceModel.ValueTextProvider) {
-            model.valueTextProvider = valueTextProvider
+            this.valueTextProvider = valueTextProvider
         }
 
+        override fun build() = SeekBarPreferenceModel(this)
     }
 }
 
 inline fun EpoxyController.seekBarPreference(
     context: Context,
     init: SeekBarPreferenceModel.Builder.() -> Unit
-) {
-    val model = SeekBarPreferenceModel_(context)
-    init.invoke(SeekBarPreferenceModel.Builder(model))
-    model.addTo(this)
-}
+) = SeekBarPreferenceModel.Builder(context)
+    .apply(init)
+    .build()
+    .also { it.addTo(this) }
 
 inline fun PreferenceEpoxyController.seekBarPreference(
     init: SeekBarPreferenceModel.Builder.() -> Unit
-) {
-    seekBarPreference(context, init)
-}
+) = seekBarPreference(context, init)
 
 fun SeekBarPreferenceModel.Builder.valueTextProvider(getText: (Int) -> String) {
     valueTextProvider(object : SeekBarPreferenceModel.ValueTextProvider {

@@ -18,20 +18,15 @@ package com.ivianuu.epoxyprefs
 
 import android.content.Context
 import com.afollestad.materialdialogs.MaterialDialog
-import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyController
-import com.airbnb.epoxy.EpoxyModelClass
 
 /**
  * A edit text preference
  */
-@EpoxyModelClass
-abstract class EditTextPreferenceModel(
-    context: Context
-) : DialogPreferenceModel(context) {
+open class EditTextPreferenceModel(builder: Builder) : DialogPreferenceModel(builder) {
 
-    @EpoxyAttribute var dialogHint: CharSequence? = null
-    @EpoxyAttribute var allowEmptyInput: Boolean = true
+    open val dialogHint = builder.dialogHint
+    open val allowEmptyInput = builder.allowEmptyInput
 
     override fun showDialog() {
         val prefill = getPersistedString(key)
@@ -50,35 +45,35 @@ abstract class EditTextPreferenceModel(
             .show()
     }
 
-    open class Builder(override val model: EditTextPreferenceModel) :
-        DialogPreferenceModel.Builder(model) {
+    open class Builder(context: Context) : DialogPreferenceModel.Builder(context) {
+
+        open var dialogHint: CharSequence? = null
+        open var allowEmptyInput = true
 
         open fun dialogHint(dialogHint: CharSequence?) {
-            model.dialogHint = dialogHint
+            this.dialogHint = dialogHint
         }
 
         open fun allowEmptyInput(allowEmptyInput: Boolean) {
-            model.allowEmptyInput = allowEmptyInput
+            this.allowEmptyInput = allowEmptyInput
         }
 
+        override fun build() = EditTextPreferenceModel(this)
     }
 }
 
 inline fun EpoxyController.editTextPreference(
     context: Context,
     init: EditTextPreferenceModel.Builder.() -> Unit
-) {
-    val model = EditTextPreferenceModel_(context)
-    init.invoke(EditTextPreferenceModel.Builder(model))
-    model.addTo(this)
-}
+) = EditTextPreferenceModel.Builder(context)
+    .apply(init)
+    .build()
+    .also { it.addTo(this) }
 
 inline fun PreferenceEpoxyController.editTextPreference(
     init: EditTextPreferenceModel.Builder.() -> Unit
-) {
-    editTextPreference(context, init)
-}
+) = editTextPreference(context, init)
 
 fun EditTextPreferenceModel.Builder.dialogHintRes(dialogHintRes: Int) {
-    dialogHint(model.context.getString(dialogHintRes))
+    dialogHint(context.getString(dialogHintRes))
 }

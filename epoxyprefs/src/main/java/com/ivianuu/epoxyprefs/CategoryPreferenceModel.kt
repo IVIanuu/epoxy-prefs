@@ -18,32 +18,29 @@ package com.ivianuu.epoxyprefs
 
 import android.content.Context
 import com.airbnb.epoxy.EpoxyController
-import com.airbnb.epoxy.EpoxyModelClass
 
 /**
  * A category preference
  */
-@EpoxyModelClass
-abstract class CategoryPreferenceModel(context: Context) : PreferenceModel(context) {
-    init {
-        layoutRes = R.layout.item_preference_category
-    }
+open class CategoryPreferenceModel(builder: Builder) : PreferenceModel(builder) {
+    open class Builder(context: Context) : PreferenceModel.Builder(context) {
 
-    open class Builder(override val model: CategoryPreferenceModel) :
-        PreferenceModel.Builder(model)
+        init {
+            layoutRes(R.layout.item_preference_category)
+        }
+
+        override fun build() = CategoryPreferenceModel(this)
+    }
 }
 
 inline fun EpoxyController.categoryPreference(
     context: Context,
     init: CategoryPreferenceModel.Builder.() -> Unit
-) {
-    val model = CategoryPreferenceModel_(context)
-    init.invoke(CategoryPreferenceModel.Builder(model))
-    model.addTo(this)
-}
+) = CategoryPreferenceModel.Builder(context)
+    .apply(init)
+    .build()
+    .also { it.addTo(this) }
 
 inline fun PreferenceEpoxyController.categoryPreference(
     init: CategoryPreferenceModel.Builder.() -> Unit
-) {
-    categoryPreference(context, init)
-}
+) = categoryPreference(context, init)

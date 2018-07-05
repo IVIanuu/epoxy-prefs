@@ -20,15 +20,11 @@ import android.content.Context
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.airbnb.epoxy.EpoxyController
-import com.airbnb.epoxy.EpoxyModelClass
 
 /**
  * A single item preference
  */
-@EpoxyModelClass
-abstract class SingleItemListPreferenceModel(
-    context: Context
-) : ListPreferenceModel(context) {
+open class SingleItemListPreferenceModel(builder: Builder) : ListPreferenceModel(builder) {
 
     override fun showDialog() {
         val entries = entries ?: emptyArray()
@@ -52,21 +48,19 @@ abstract class SingleItemListPreferenceModel(
             .show()
     }
 
-    open class Builder(override val model: SingleItemListPreferenceModel) :
-        ListPreferenceModel.Builder(model)
+    open class Builder(context: Context) : ListPreferenceModel.Builder(context) {
+        override fun build() = SingleItemListPreferenceModel(this)
+    }
 }
 
 inline fun EpoxyController.singleItemListPreference(
     context: Context,
     init: SingleItemListPreferenceModel.Builder.() -> Unit
-) {
-    val model = SingleItemListPreferenceModel_(context)
-    init.invoke(SingleItemListPreferenceModel.Builder(model))
-    model.addTo(this)
-}
+) = SingleItemListPreferenceModel.Builder(context)
+    .apply(init)
+    .build()
+    .also { it.addTo(this) }
 
 inline fun PreferenceEpoxyController.singleItemListPreference(
     init: SingleItemListPreferenceModel.Builder.() -> Unit
-) {
-    singleItemListPreference(context, init)
-}
+) = singleItemListPreference(context, init)

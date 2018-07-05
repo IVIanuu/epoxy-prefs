@@ -29,7 +29,6 @@ object Deps {
     const val butterknifeGradlePlugin = "com.jakewharton:butterknife-gradle-plugin:${Versions.butterknife}"
 
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
-    const val epoxyProcessor = "com.airbnb.android:epoxy-processor:${Versions.epoxy}"
 
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jre7:${Versions.kotlin}"

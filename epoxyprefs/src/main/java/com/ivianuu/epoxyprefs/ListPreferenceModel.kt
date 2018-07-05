@@ -17,35 +17,35 @@
 package com.ivianuu.epoxyprefs
 
 import android.content.Context
-import com.airbnb.epoxy.EpoxyAttribute
 
 /**
  * A list preference model
  */
-abstract class ListPreferenceModel(
-    context: Context
-) : DialogPreferenceModel(context) {
-    @EpoxyAttribute var entries: Array<CharSequence>? = null
-    @EpoxyAttribute var entryValues: Array<CharSequence>? = null
+abstract class ListPreferenceModel(builder: Builder) : DialogPreferenceModel(builder) {
 
-    abstract class Builder(override val model: ListPreferenceModel) :
-        DialogPreferenceModel.Builder(model) {
+    open val entries = builder.entries
+    open val entryValues = builder.entryValues
+
+    abstract class Builder(context: Context) : DialogPreferenceModel.Builder(context) {
+
+        open var entries: Array<CharSequence>? = null
+        open var entryValues: Array<CharSequence>? = null
 
         open fun entries(entries: Array<CharSequence>?) {
-            model.entries = entries
+            this.entries = entries
         }
 
         open fun entryValues(entryValues: Array<CharSequence>?) {
-            model.entryValues = entryValues
+            this.entryValues = entryValues
         }
 
     }
 }
 
 fun ListPreferenceModel.Builder.entriesRes(entriesRes: Int) {
-    entries(model.context.resources.getTextArray(entriesRes))
+    entries(context.resources.getTextArray(entriesRes))
 }
 
 fun ListPreferenceModel.Builder.entryValuesRes(entryValuesRes: Int) {
-    entryValues(model.context.resources.getTextArray(entryValuesRes))
+    entryValues(context.resources.getTextArray(entryValuesRes))
 }

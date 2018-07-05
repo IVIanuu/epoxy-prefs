@@ -19,15 +19,11 @@ package com.ivianuu.epoxyprefs
 import android.content.Context
 import com.afollestad.materialdialogs.MaterialDialog
 import com.airbnb.epoxy.EpoxyController
-import com.airbnb.epoxy.EpoxyModelClass
 
 /**
  * A multi select list preference
  */
-@EpoxyModelClass
-abstract class MultiSelectListPreferenceModel(
-    context: Context
-) : ListPreferenceModel(context) {
+open class MultiSelectListPreferenceModel(builder: Builder) : ListPreferenceModel(builder) {
 
     override fun showDialog() {
         val entries = entries ?: emptyArray()
@@ -58,21 +54,19 @@ abstract class MultiSelectListPreferenceModel(
             .show()
     }
 
-    open class Builder(override val model: MultiSelectListPreferenceModel) :
-        ListPreferenceModel.Builder(model)
+    open class Builder(context: Context) : ListPreferenceModel.Builder(context) {
+        override fun build() = MultiSelectListPreferenceModel(this)
+    }
 }
 
 inline fun EpoxyController.multiSelectListPreference(
     context: Context,
     init: MultiSelectListPreferenceModel.Builder.() -> Unit
-) {
-    val model = MultiSelectListPreferenceModel_(context)
-    init.invoke(MultiSelectListPreferenceModel.Builder(model))
-    model.addTo(this)
-}
+) = MultiSelectListPreferenceModel.Builder(context)
+    .apply(init)
+    .build()
+    .also { it.addTo(this) }
 
 inline fun PreferenceEpoxyController.multiSelectListPreference(
     init: MultiSelectListPreferenceModel.Builder.() -> Unit
-) {
-    multiSelectListPreference(context, init)
-}
+) = multiSelectListPreference(context, init)

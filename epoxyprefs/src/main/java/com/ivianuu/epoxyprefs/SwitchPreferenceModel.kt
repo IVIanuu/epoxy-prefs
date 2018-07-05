@@ -19,38 +19,34 @@ package com.ivianuu.epoxyprefs
 import android.content.Context
 import android.widget.CompoundButton
 import com.airbnb.epoxy.EpoxyController
-import com.airbnb.epoxy.EpoxyModelClass
 import kotlinx.android.synthetic.main.widget_preference_switch.*
 
 /**
  * A switch preference
  */
-@EpoxyModelClass
-abstract class SwitchPreferenceModel(context: Context) :
-    CompoundButtonPreferenceModel(context) {
+open class SwitchPreferenceModel(builder: Builder) : CompoundButtonPreferenceModel(builder) {
 
     override val Holder.compoundButton: CompoundButton?
         get() = switchWidget
 
-    init {
-        widgetLayoutRes = R.layout.widget_preference_switch
-    }
+    open class Builder(context: Context) : CompoundButtonPreferenceModel.Builder(context) {
 
-    open class Builder(override val model: SwitchPreferenceModel) :
-        CompoundButtonPreferenceModel.Builder(model)
+        init {
+            widgetLayoutRes(R.layout.widget_preference_switch)
+        }
+
+        override fun build() = SwitchPreferenceModel(this)
+    }
 }
 
 fun EpoxyController.switchPreference(
     context: Context,
     init: SwitchPreferenceModel.Builder.() -> Unit
-) {
-    val model = SwitchPreferenceModel_(context)
-    init.invoke(SwitchPreferenceModel.Builder(model))
-    model.addTo(this)
-}
+) = SwitchPreferenceModel.Builder(context)
+    .apply(init)
+    .build()
+    .also { it.addTo(this) }
 
 fun PreferenceEpoxyController.switchPreference(
     init: SwitchPreferenceModel.Builder.() -> Unit
-) {
-    switchPreference(context, init)
-}
+) = switchPreference(context, init)
