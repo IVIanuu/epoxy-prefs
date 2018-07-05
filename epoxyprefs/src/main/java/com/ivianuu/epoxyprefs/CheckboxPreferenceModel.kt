@@ -37,6 +37,14 @@ open class CheckboxPreferenceModel(builder: Builder) : CompoundButtonPreferenceM
 
         override fun build() = CheckboxPreferenceModel(this)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is CheckboxPreferenceModel) return false
+        if (!super.equals(other)) return false
+        return true
+    }
+
 }
 
 inline fun EpoxyController.checkboxPreference(

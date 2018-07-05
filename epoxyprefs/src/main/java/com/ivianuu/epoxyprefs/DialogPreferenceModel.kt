@@ -54,6 +54,30 @@ abstract class DialogPreferenceModel(builder: Builder) : PreferenceModel(builder
         return this
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is DialogPreferenceModel) return false
+        if (!super.equals(other)) return false
+
+        if (dialogTitle != other.dialogTitle) return false
+        if (dialogMessage != other.dialogMessage) return false
+        if (dialogIcon != other.dialogIcon) return false
+        if (positiveButtonText != other.positiveButtonText) return false
+        if (negativeButtonText != other.negativeButtonText) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + (dialogTitle?.hashCode() ?: 0)
+        result = 31 * result + (dialogMessage?.hashCode() ?: 0)
+        result = 31 * result + (dialogIcon?.hashCode() ?: 0)
+        result = 31 * result + (positiveButtonText?.hashCode() ?: 0)
+        result = 31 * result + (negativeButtonText?.hashCode() ?: 0)
+        return result
+    }
+
     abstract class Builder(context: Context) : PreferenceModel.Builder(context) {
 
         open var dialogTitle: CharSequence? = null

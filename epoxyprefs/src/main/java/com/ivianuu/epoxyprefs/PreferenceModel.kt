@@ -331,6 +331,46 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         }
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is PreferenceModel) return false
+        if (!super.equals(other)) return false
+
+        if (key != other.key) return false
+        if (title != other.title) return false
+        if (summary != other.summary) return false
+        if (icon != other.icon) return false
+        if (defaultValue != other.defaultValue) return false
+        if (enabled != other.enabled) return false
+        if (dependencyKey != other.dependencyKey) return false
+        if (dependencyValue != other.dependencyValue) return false
+        if (sharedPreferencesName != other.sharedPreferencesName) return false
+        if (useCommit != other.useCommit) return false
+        if (persistent != other.persistent) return false
+        if (layoutRes != other.layoutRes) return false
+        if (widgetLayoutRes != other.widgetLayoutRes) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + (key?.hashCode() ?: 0)
+        result = 31 * result + (title?.hashCode() ?: 0)
+        result = 31 * result + (summary?.hashCode() ?: 0)
+        result = 31 * result + (icon?.hashCode() ?: 0)
+        result = 31 * result + (defaultValue?.hashCode() ?: 0)
+        result = 31 * result + enabled.hashCode()
+        result = 31 * result + (dependencyKey?.hashCode() ?: 0)
+        result = 31 * result + (dependencyValue?.hashCode() ?: 0)
+        result = 31 * result + (sharedPreferencesName?.hashCode() ?: 0)
+        result = 31 * result + useCommit.hashCode()
+        result = 31 * result + persistent.hashCode()
+        result = 31 * result + layoutRes
+        result = 31 * result + widgetLayoutRes
+        return result
+    }
+
     /**
      * A click listener for [PreferenceModel]'s
      */

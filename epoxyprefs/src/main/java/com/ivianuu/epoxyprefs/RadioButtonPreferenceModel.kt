@@ -22,6 +22,14 @@ open class RadioButtonPreferenceModel(builder: Builder) : CompoundButtonPreferen
         override fun build() = RadioButtonPreferenceModel(this)
 
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is RadioButtonPreferenceModel) return false
+        if (!super.equals(other)) return false
+        return true
+    }
+
 }
 
 inline fun EpoxyController.radioButtonPreference(

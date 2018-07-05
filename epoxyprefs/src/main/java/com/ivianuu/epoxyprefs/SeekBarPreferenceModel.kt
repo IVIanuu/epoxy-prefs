@@ -90,6 +90,30 @@ open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
         seekBarValue.text = text
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is SeekBarPreferenceModel) return false
+        if (!super.equals(other)) return false
+
+        if (min != other.min) return false
+        if (max != other.max) return false
+        if (incValue != other.incValue) return false
+        if (valueTextProvider != other.valueTextProvider) return false
+        if (internalValue != other.internalValue) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + min
+        result = 31 * result + max
+        result = 31 * result + incValue
+        result = 31 * result + (valueTextProvider?.hashCode() ?: 0)
+        result = 31 * result + internalValue
+        return result
+    }
+
     interface ValueTextProvider {
         fun getText(value: Int): String
     }

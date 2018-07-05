@@ -31,6 +31,14 @@ open class CategoryPreferenceModel(builder: Builder) : PreferenceModel(builder) 
 
         override fun build() = CategoryPreferenceModel(this)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is CategoryPreferenceModel) return false
+        if (!super.equals(other)) return false
+        return true
+    }
+
 }
 
 inline fun EpoxyController.categoryPreference(

@@ -45,6 +45,24 @@ open class EditTextPreferenceModel(builder: Builder) : DialogPreferenceModel(bui
             .show()
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is EditTextPreferenceModel) return false
+        if (!super.equals(other)) return false
+
+        if (dialogHint != other.dialogHint) return false
+        if (allowEmptyInput != other.allowEmptyInput) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + (dialogHint?.hashCode() ?: 0)
+        result = 31 * result + allowEmptyInput.hashCode()
+        return result
+    }
+
     open class Builder(context: Context) : DialogPreferenceModel.Builder(context) {
 
         open var dialogHint: CharSequence? = null

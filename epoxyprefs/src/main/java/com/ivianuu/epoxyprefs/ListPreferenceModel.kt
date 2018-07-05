@@ -17,6 +17,7 @@
 package com.ivianuu.epoxyprefs
 
 import android.content.Context
+import java.util.*
 
 /**
  * A list preference model
@@ -39,6 +40,24 @@ abstract class ListPreferenceModel(builder: Builder) : DialogPreferenceModel(bui
             this.entryValues = entryValues
         }
 
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is ListPreferenceModel) return false
+        if (!super.equals(other)) return false
+
+        if (!Arrays.equals(entries, other.entries)) return false
+        if (!Arrays.equals(entryValues, other.entryValues)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + (entries?.let { Arrays.hashCode(it) } ?: 0)
+        result = 31 * result + (entryValues?.let { Arrays.hashCode(it) } ?: 0)
+        return result
     }
 }
 

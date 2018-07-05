@@ -48,6 +48,13 @@ open class SingleItemListPreferenceModel(builder: Builder) : ListPreferenceModel
             .show()
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is SingleItemListPreferenceModel) return false
+        if (!super.equals(other)) return false
+        return true
+    }
+
     open class Builder(context: Context) : ListPreferenceModel.Builder(context) {
         override fun build() = SingleItemListPreferenceModel(this)
     }
