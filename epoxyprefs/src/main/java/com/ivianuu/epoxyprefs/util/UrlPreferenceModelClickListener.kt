@@ -18,32 +18,14 @@ package com.ivianuu.epoxyprefs.util
 
 import android.content.Intent
 import android.net.Uri
-import com.ivianuu.epoxyprefs.PreferenceModel
 
 /**
  * Launches urls on pref clicks
  */
-class UrlPreferenceModelClickListener : IntentPreferenceModelClickListener {
-
-    constructor(url: String) : super(buildIntentForUrl(url)!!)
-
-    constructor(url: (preference: PreferenceModel) -> String?) : super({
-        buildIntentForUrl(url.invoke(it))
-    })
-
-    private companion object {
-        private fun buildIntentForUrl(url: String?): Intent? {
-            if (url == null) {
-                return null
-            }
-
-            return Intent(Intent.ACTION_VIEW).apply {
-                var realUrl = url
-                if (!url.startsWith("http://") && !url.startsWith("https://")) {
-                    realUrl = "http://$url"
-                }
-                data = Uri.parse(realUrl)
-            }
-        }
+class UrlPreferenceModelClickListener(
+    url: String
+) : IntentPreferenceModelClickListener(
+    Intent(Intent.ACTION_VIEW).apply {
+        data = Uri.parse(url)
     }
-}
+)

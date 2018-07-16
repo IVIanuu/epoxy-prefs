@@ -22,23 +22,11 @@ import com.ivianuu.epoxyprefs.PreferenceModel
 /**
  * A click listener to launch intents on preference clicks
  */
-open class IntentPreferenceModelClickListener : PreferenceModel.ClickListener {
-
-    private val intent: Intent?
-    private val intentProvider: ((PreferenceModel) -> Intent?)?
-
-    constructor(intent: Intent) {
-        this.intent = intent
-        this.intentProvider = null
-    }
-
-    constructor(intent: (preference: PreferenceModel) -> Intent?) {
-        this.intent = null
-        this.intentProvider = intent
-    }
+open class IntentPreferenceModelClickListener(
+    private val intent: Intent
+) : PreferenceModel.ClickListener {
 
     override fun onPreferenceClicked(preference: PreferenceModel): Boolean {
-        val intent = intent ?: intentProvider?.invoke(preference) ?: return false
         preference.context.startActivity(intent)
         return true
     }

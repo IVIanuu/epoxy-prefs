@@ -526,14 +526,6 @@ fun PreferenceModel.Builder.intentClickListener(intent: Intent) {
     clickListener(IntentPreferenceModelClickListener(intent))
 }
 
-fun PreferenceModel.Builder.intentClickListener(intent: (preference: PreferenceModel) -> Intent?) {
-    clickListener(IntentPreferenceModelClickListener(intent))
-}
-
 fun PreferenceModel.Builder.urlClickListener(url: String) {
-    clickListener(UrlPreferenceModelClickListener(url))
-}
-
-fun PreferenceModel.Builder.urlClickListener(url: (preference: PreferenceModel) -> String?) {
     clickListener(UrlPreferenceModelClickListener(url))
 }
