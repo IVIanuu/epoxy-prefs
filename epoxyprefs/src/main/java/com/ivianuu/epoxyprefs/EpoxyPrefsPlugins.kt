@@ -17,18 +17,30 @@
 package com.ivianuu.epoxyprefs
 
 import android.content.Context
+import android.content.SharedPreferences
 
 /**
  * Global config
  */
 object EpoxyPrefsPlugins {
 
+    private var defaultSharedPreferences: SharedPreferences? = null
     private var defaultSharedPreferencesName: String? = null
     private var useCommit = false
 
-    fun getDefaultSharedPreferencesName(context: Context): String {
-        return defaultSharedPreferencesName ?: context.packageName+"_preferences"
+    fun getDefaultSharedPreferences(context: Context): SharedPreferences =
+        this.defaultSharedPreferences
+                ?: context.getSharedPreferences(
+                    getDefaultSharedPreferencesName(context), Context.MODE_PRIVATE).also {
+                    defaultSharedPreferences = it
+                }
+
+    fun setDefaultSharedPreferences(sharedPreferences: SharedPreferences) {
+        this.defaultSharedPreferences = sharedPreferences
     }
+
+    fun getDefaultSharedPreferencesName(context: Context) =
+        defaultSharedPreferencesName ?: context.packageName+"_preferences"
 
     fun setDefaultSharedPreferencesName(defaultSharedPreferencesName: String) {
         this.defaultSharedPreferencesName = defaultSharedPreferencesName

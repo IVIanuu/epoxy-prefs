@@ -51,17 +51,12 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     open val dependencyValue = builder.dependencyValue
     open val clickListener = builder.clickListener
     open val changeListener = builder.changeListener
-    open val sharedPreferencesName = builder.sharedPreferencesName
     open val useCommit = builder.useCommit
     open val persistent = builder.persistent
     open val layoutRes = builder.layoutRes
     open val widgetLayoutRes = builder.widgetLayoutRes
 
-    protected val sharedPreferences: SharedPreferences by lazy(LazyThreadSafetyMode.NONE) {
-        val sharedPreferencesName = sharedPreferencesName
-                ?: EpoxyPrefsPlugins.getDefaultSharedPreferencesName(context)
-        context.getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
-    }
+    protected val sharedPreferences: SharedPreferences
 
     protected var currentHolder: Holder? = null
 
@@ -77,6 +72,16 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     private var listeningForChanges = false
 
     init {
+        sharedPreferences = if (builder.sharedPreferences != null) {
+            builder.sharedPreferences!!
+        } else {
+            if (builder.sharedPreferencesName != null) {
+                context.getSharedPreferences(builder.sharedPreferencesName, Context.MODE_PRIVATE)
+            } else {
+                EpoxyPrefsPlugins.getDefaultSharedPreferences(context)
+            }
+        }
+
         id(key ?: UUID.randomUUID().toString())
         layout(layoutRes + widgetLayoutRes)
     }
@@ -344,7 +349,6 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         if (enabled != other.enabled) return false
         if (dependencyKey != other.dependencyKey) return false
         if (dependencyValue != other.dependencyValue) return false
-        if (sharedPreferencesName != other.sharedPreferencesName) return false
         if (useCommit != other.useCommit) return false
         if (persistent != other.persistent) return false
         if (layoutRes != other.layoutRes) return false
@@ -363,7 +367,6 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         result = 31 * result + enabled.hashCode()
         result = 31 * result + (dependencyKey?.hashCode() ?: 0)
         result = 31 * result + (dependencyValue?.hashCode() ?: 0)
-        result = 31 * result + (sharedPreferencesName?.hashCode() ?: 0)
         result = 31 * result + useCommit.hashCode()
         result = 31 * result + persistent.hashCode()
         result = 31 * result + layoutRes
@@ -410,6 +413,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         open var dependencyValue: Any? = null
         open var clickListener: ClickListener? = null
         open var changeListener: ChangeListener? = null
+        open var sharedPreferences: SharedPreferences? = null
         open var sharedPreferencesName: String? = null
         open var useCommit: Boolean = EpoxyPrefsPlugins.getUseCommit()
         open var persistent: Boolean = true
@@ -454,6 +458,10 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
 
         open fun changeListener(changeListener: PreferenceModel.ChangeListener?) {
             this.changeListener = changeListener
+        }
+
+        open fun sharedPreferences(sharedPreferences: SharedPreferences?) {
+            this.sharedPreferences = sharedPreferences
         }
 
         open fun sharedPreferencesName(sharedPreferencesName: String?) {

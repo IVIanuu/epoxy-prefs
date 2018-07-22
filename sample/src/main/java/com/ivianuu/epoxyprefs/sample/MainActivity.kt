@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
                     title("Title")
                     summary("This is a summary.")
                     dependency("my_switch_$i", true)
-                    urlClickListener { "www.google.de" }
+                    urlClickListener("www.google.de")
                 }
 
                 checkboxPreference {
