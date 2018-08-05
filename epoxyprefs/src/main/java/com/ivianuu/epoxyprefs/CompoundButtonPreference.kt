@@ -26,6 +26,8 @@ abstract class CompoundButtonPreferenceModel(builder: Builder) : PreferenceModel
 
     protected abstract val PreferenceModel.Holder.compoundButton: CompoundButton?
 
+    private var isChecked = false
+
     override fun bind(holder: PreferenceModel.Holder) {
         super.bind(holder)
 

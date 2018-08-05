@@ -31,7 +31,8 @@ object EpoxyPrefsPlugins {
     fun getDefaultSharedPreferences(context: Context): SharedPreferences =
         this.defaultSharedPreferences
                 ?: context.getSharedPreferences(
-                    getDefaultSharedPreferencesName(context), Context.MODE_PRIVATE).also {
+                    getDefaultSharedPreferencesName(context), Context.MODE_PRIVATE
+                ).also {
                     defaultSharedPreferences = it
                 }
 

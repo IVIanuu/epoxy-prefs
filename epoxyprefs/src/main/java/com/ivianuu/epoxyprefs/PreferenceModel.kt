@@ -40,7 +40,7 @@ import java.util.*
  */
 open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceModel.Holder>() {
 
-    open val context = builder.context
+    val context = builder.context
     open val key = builder.key
     open val title = builder.title
     open val summary = builder.summary
@@ -190,75 +190,61 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         currentHolder.containerView.alpha = if (enabled) 1f else 0.5f
     }
 
-    protected fun callChangeListener(newValue: Any): Boolean {
-        return changeListener?.onPreferenceChange(this, newValue) ?: true
-    }
+    protected fun callChangeListener(newValue: Any): Boolean =
+        changeListener?.onPreferenceChange(this, newValue) ?: true
 
-    protected fun shouldPersist(): Boolean {
-        return persistent && key != null
-    }
+    protected fun shouldPersist(): Boolean = persistent && key != null
 
     protected fun getPersistedBoolean(
         key: String?,
         fallback: Boolean = defaultValue as? Boolean? ?: false
-    ): Boolean {
-        return if (shouldPersist()) {
-            sharedPreferences.getBoolean(key, fallback)
-        } else {
-            fallback
-        }
+    ): Boolean = if (shouldPersist()) {
+        sharedPreferences.getBoolean(key, fallback)
+    } else {
+        fallback
     }
 
     protected fun getPersistedFloat(
         key: String?,
         fallback: Float = defaultValue as? Float? ?: 0f
-    ): Float {
-        return if (shouldPersist()) {
-            sharedPreferences.getFloat(key, fallback)
-        } else {
-            fallback
-        }
+    ): Float = if (shouldPersist()) {
+        sharedPreferences.getFloat(key, fallback)
+    } else {
+        fallback
     }
 
-    protected fun getPersistedInt(key: String?, fallback: Int = defaultValue as? Int? ?: 0): Int {
-        return if (shouldPersist()) {
+    protected fun getPersistedInt(key: String?, fallback: Int = defaultValue as? Int? ?: 0): Int =
+        if (shouldPersist()) {
             sharedPreferences.getInt(key, fallback)
         } else {
             fallback
         }
-    }
 
     protected fun getPersistedLong(
         key: String?,
         fallback: Long = defaultValue as? Long? ?: 0L
-    ): Long {
-        return if (shouldPersist()) {
-            sharedPreferences.getLong(key, fallback)
-        } else {
-            fallback
-        }
+    ): Long = if (shouldPersist()) {
+        sharedPreferences.getLong(key, fallback)
+    } else {
+        fallback
     }
 
     protected fun getPersistedString(
         key: String?,
         fallback: String = defaultValue as? String? ?: ""
-    ): String {
-        return if (shouldPersist()) {
-            sharedPreferences.getString(key, fallback)
-        } else {
-            fallback
-        }
+    ): String = if (shouldPersist()) {
+        sharedPreferences.getString(key, fallback)
+    } else {
+        fallback
     }
 
     protected fun getPersistedStringSet(
         key: String?,
         fallback: MutableSet<String> = defaultValue as? MutableSet<String>? ?: mutableSetOf()
-    ): MutableSet<String> {
-        return if (shouldPersist()) {
-            sharedPreferences.getStringSet(key, fallback)
-        } else {
-            fallback
-        }
+    ): MutableSet<String> = if (shouldPersist()) {
+        sharedPreferences.getStringSet(key, fallback)
+    } else {
+        fallback
     }
 
     @SuppressLint("ApplySharedPref")
@@ -526,6 +512,19 @@ fun PreferenceModel.Builder.changeListener(changeListener: (preference: Preferen
     changeListener(object : PreferenceModel.ChangeListener {
         override fun onPreferenceChange(preference: PreferenceModel, newValue: Any): Boolean {
             return changeListener.invoke(preference, newValue)
+        }
+    })
+}
+
+@JvmName("typedChangeListener")
+inline fun <reified T> PreferenceModel.Builder.changeListener(crossinline changeListener: (preference: PreferenceModel, newValue: T) -> Boolean) {
+    changeListener(object : PreferenceModel.ChangeListener {
+        override fun onPreferenceChange(preference: PreferenceModel, newValue: Any): Boolean {
+            return if (newValue is T) {
+                changeListener.invoke(preference, newValue)
+            } else {
+                false
+            }
         }
     })
 }

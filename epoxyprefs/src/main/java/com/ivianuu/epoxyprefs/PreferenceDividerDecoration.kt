@@ -21,6 +21,8 @@ class PreferenceDividerDecoration(context: Context) : RecyclerView.ItemDecoratio
 
     var dividerHeight = 0
 
+    var style = Style.ITEMS
+
     init {
         val attrs =
             context.obtainStyledAttributes(intArrayOf(android.R.attr.dividerVertical))
@@ -36,7 +38,7 @@ class PreferenceDividerDecoration(context: Context) : RecyclerView.ItemDecoratio
 
         for (childViewIndex in 0 until childCount) {
             val view = parent.getChildAt(childViewIndex)
-            if (shouldDrawDividerBelow(view, parent)) {
+            if (shouldDrawDivider(view, parent)) {
                 val top = view.y.toInt() + view.height
                 divider.setBounds(0, top, width, top + dividerHeight)
                 divider.draw(c)
@@ -48,12 +50,12 @@ class PreferenceDividerDecoration(context: Context) : RecyclerView.ItemDecoratio
         outRect: Rect, view: View, parent: RecyclerView,
         state: RecyclerView.State
     ) {
-        if (shouldDrawDividerBelow(view, parent)) {
+        if (shouldDrawDivider(view, parent)) {
             outRect.bottom = dividerHeight
         }
     }
 
-    private fun shouldDrawDividerBelow(view: View, parent: RecyclerView): Boolean {
+    private fun shouldDrawDivider(view: View, parent: RecyclerView): Boolean {
         val holder = parent.getChildViewHolder(view)
 
         val isCategory =
@@ -77,5 +79,9 @@ class PreferenceDividerDecoration(context: Context) : RecyclerView.ItemDecoratio
         }
 
         return false
+    }
+
+    enum class Style {
+        CATEGORY, ITEMS
     }
 }
