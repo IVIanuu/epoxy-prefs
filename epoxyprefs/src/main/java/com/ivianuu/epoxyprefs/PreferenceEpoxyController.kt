@@ -31,7 +31,6 @@ abstract class PreferenceEpoxyController(
         super.onDetachedFromRecyclerView(recyclerView)
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(prefsChangeListener)
     }
-
 }
 
 fun Context.preferenceEpoxyController(buildModels: PreferenceEpoxyController.() -> Unit) =
