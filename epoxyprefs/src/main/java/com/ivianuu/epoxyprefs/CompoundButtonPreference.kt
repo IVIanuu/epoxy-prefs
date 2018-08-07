@@ -26,18 +26,22 @@ abstract class CompoundButtonPreferenceModel(builder: Builder) : PreferenceModel
 
     protected abstract val PreferenceModel.Holder.compoundButton: CompoundButton?
 
-    private var isChecked = false
+    private var selfChange = false
 
     override fun bind(holder: PreferenceModel.Holder) {
         super.bind(holder)
 
-        holder.compoundButton?.let { compoundButton ->
-            compoundButton.setOnCheckedChangeListener { _, checked ->
+        val compoundButton = holder.compoundButton
+        compoundButton?.setOnCheckedChangeListener { _, checked ->
+            if (!selfChange) {
                 if (callChangeListener(checked)) {
+                    selfChange = true
                     persistBoolean(key, checked)
                 } else {
                     compoundButton.isChecked = !checked
                 }
+            } else {
+                selfChange = false
             }
         }
 
@@ -53,6 +57,7 @@ abstract class CompoundButtonPreferenceModel(builder: Builder) : PreferenceModel
         super.onClick()
         val newValue = currentHolder?.compoundButton?.isChecked?.not() ?: getPersistedBoolean(key)
         if (callChangeListener(newValue)) {
+            selfChange = true
             persistBoolean(key, newValue)
         }
 
@@ -62,6 +67,7 @@ abstract class CompoundButtonPreferenceModel(builder: Builder) : PreferenceModel
     override fun onChange() {
         super.onChange()
         syncValueWithCompoundButton()
+        selfChange = false
     }
 
     private fun syncValueWithCompoundButton(value: Boolean = getPersistedBoolean(key)) {
