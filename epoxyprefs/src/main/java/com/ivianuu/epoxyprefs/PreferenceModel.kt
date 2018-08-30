@@ -50,12 +50,12 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     val dependencyValue = builder.dependencyValue
     val clickListener = builder.clickListener
     val changeListener = builder.changeListener
+    val sharedPreferences = builder.realSharedPreferences
+    val sharedPreferencesName = builder.sharedPreferencesName
     val useCommit = builder.useCommit
     val persistent = builder.persistent
     val layoutRes = builder.layoutRes
     val widgetLayoutRes = builder.widgetLayoutRes
-
-    protected val sharedPreferences = builder.realSharedPreferences
 
     protected val matchesDependency = if (dependencyKey != null && dependencyValue != null) {
         sharedPreferences.all[dependencyKey] == dependencyValue
@@ -224,6 +224,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         if (enabled != other.enabled) return false
         if (dependencyKey != other.dependencyKey) return false
         if (dependencyValue != other.dependencyValue) return false
+        if (sharedPreferencesName != other.sharedPreferencesName) return false
         if (useCommit != other.useCommit) return false
         if (persistent != other.persistent) return false
         if (layoutRes != other.layoutRes) return false
@@ -244,6 +245,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         result = 31 * result + enabled.hashCode()
         result = 31 * result + (dependencyKey?.hashCode() ?: 0)
         result = 31 * result + (dependencyValue?.hashCode() ?: 0)
+        result = 31 * result + (sharedPreferencesName?.hashCode() ?: 0)
         result = 31 * result + useCommit.hashCode()
         result = 31 * result + persistent.hashCode()
         result = 31 * result + layoutRes

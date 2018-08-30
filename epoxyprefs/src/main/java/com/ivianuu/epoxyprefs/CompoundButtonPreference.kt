@@ -31,11 +31,6 @@ abstract class CompoundButtonPreferenceModel(builder: Builder) : PreferenceModel
         holder.compoundButton?.isChecked = value as? Boolean ?: false
     }
 
-    override fun unbind(holder: PreferenceModel.Holder) {
-        super.unbind(holder)
-        holder.compoundButton?.setOnCheckedChangeListener(null)
-    }
-
     override fun onClick() {
         super.onClick()
         val newValue = (value as? Boolean ?: false).not()
