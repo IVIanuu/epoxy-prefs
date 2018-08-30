@@ -24,13 +24,13 @@ import java.util.*
  */
 abstract class ListPreferenceModel(builder: Builder) : DialogPreferenceModel(builder) {
 
-    open val entries = builder.entries
-    open val entryValues = builder.entryValues
+    val entries = builder.entries
+    val entryValues = builder.entryValues
 
     abstract class Builder(context: Context) : DialogPreferenceModel.Builder(context) {
 
-        open var entries: Array<CharSequence>? = null
-        open var entryValues: Array<CharSequence>? = null
+        var entries: Array<CharSequence>? = null
+        var entryValues: Array<CharSequence>? = null
 
         open fun entries(entries: Array<CharSequence>?) {
             this.entries = entries

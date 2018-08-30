@@ -29,7 +29,7 @@ open class MultiSelectListPreferenceModel(builder: Builder) : ListPreferenceMode
         val entries = entries ?: emptyArray()
         val entryValues = entryValues ?: emptyArray()
 
-        val currentValues = getPersistedStringSet(key)
+        val currentValues = value as? MutableSet<String> ?: mutableSetOf()
         val selectedIndices = currentValues
             .map { entryValues.indexOf(it) }
             .filter { it != -1 }

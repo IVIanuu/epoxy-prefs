@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity() {
                     dependency("my_switch_$i", true)
                     summary("Oh a checkbox")
                     defaultValue(true)
-                    persistent(false)
                 }
 
                 radioButtonPreference {

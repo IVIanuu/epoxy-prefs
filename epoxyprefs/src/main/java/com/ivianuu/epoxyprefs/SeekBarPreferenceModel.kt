@@ -18,7 +18,6 @@ package com.ivianuu.epoxyprefs
 
 import android.content.Context
 import android.widget.SeekBar
-import android.widget.TextView
 import com.airbnb.epoxy.EpoxyController
 import kotlinx.android.synthetic.main.item_preference_seekbar.*
 
@@ -27,29 +26,25 @@ import kotlinx.android.synthetic.main.item_preference_seekbar.*
  */
 open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
 
-    open val min = builder.min
-    open val max = builder.max
-    open val incValue = builder.incValue
+    val min = builder.min
+    val max = builder.max
+    val incValue = builder.incValue
 
-    open val valueTextProvider = builder.valueTextProvider
-
-    protected open val PreferenceModel.Holder.seekBar: SeekBar? get() = seekbar
-    protected open val PreferenceModel.Holder.seekBarValue: TextView? get() = seekbar_value
+    val valueTextProvider = builder.valueTextProvider
 
     private var internalValue = 0
 
     override fun bind(holder: PreferenceModel.Holder) {
         super.bind(holder)
-        val seekBar = holder.seekBar ?: return
 
-        internalValue = getPersistedInt(key)
+        internalValue = value as? Int ?: 0
 
-        seekBar.max = max - min
-        seekBar.progress = internalValue - min
+        holder.seekbar.max = max - min
+        holder.seekbar.progress = internalValue - min
 
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        holder.seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if (fromUser) syncView()
+                if (fromUser) syncView(holder)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -62,14 +57,11 @@ open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
             }
         })
 
-        syncView()
+        syncView(holder)
     }
 
-    private fun syncView() {
-        val seekBar = currentHolder?.seekBar ?: return
-        val seekBarValue = currentHolder?.seekBarValue ?: return
-
-        var progress = min + seekBar.progress
+    private fun syncView(holder: Holder) {
+        var progress = min + holder.seekbar.progress
 
         if (progress < min) {
             progress = min
@@ -86,8 +78,8 @@ open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
         val text = provider?.getText(internalValue)
                 ?: internalValue.toString() // fallback
 
-        seekBar.progress = internalValue - min
-        seekBarValue.text = text
+        holder.seekbar.progress = internalValue - min
+        holder.seekbar_value.text = text
     }
 
     override fun equals(other: Any?): Boolean {
@@ -120,29 +112,29 @@ open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
 
     open class Builder(context: Context) : PreferenceModel.Builder(context) {
 
-        open var min: Int = 0
-        open var max: Int = 0
-        open var incValue: Int = 1
+        var min: Int = 0
+        var max: Int = 0
+        var incValue: Int = 1
 
-        open var valueTextProvider: ValueTextProvider? = null
+        var valueTextProvider: ValueTextProvider? = null
 
         init {
             layoutRes(R.layout.item_preference_seekbar)
         }
 
-        open fun min(min: Int) {
+        fun min(min: Int) {
             this.min = min
         }
 
-        open fun max(max: Int) {
+        fun max(max: Int) {
             this.max = max
         }
 
-        open fun incValue(incValue: Int) {
+        fun incValue(incValue: Int) {
             this.incValue = incValue
         }
 
-        open fun valueTextProvider(valueTextProvider: SeekBarPreferenceModel.ValueTextProvider) {
+        fun valueTextProvider(valueTextProvider: SeekBarPreferenceModel.ValueTextProvider) {
             this.valueTextProvider = valueTextProvider
         }
 

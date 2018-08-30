@@ -25,11 +25,11 @@ import com.airbnb.epoxy.EpoxyController
  */
 open class EditTextPreferenceModel(builder: Builder) : DialogPreferenceModel(builder) {
 
-    open val dialogHint = builder.dialogHint
-    open val allowEmptyInput = builder.allowEmptyInput
+    val dialogHint = builder.dialogHint
+    val allowEmptyInput = builder.allowEmptyInput
 
     override fun showDialog() {
-        val prefill = getPersistedString(key)
+        val prefill = value as? String ?: ""
 
         MaterialDialog.Builder(context)
             .applyDialogSettings()
@@ -65,14 +65,14 @@ open class EditTextPreferenceModel(builder: Builder) : DialogPreferenceModel(bui
 
     open class Builder(context: Context) : DialogPreferenceModel.Builder(context) {
 
-        open var dialogHint: CharSequence? = null
-        open var allowEmptyInput = true
+        var dialogHint: CharSequence? = null
+        var allowEmptyInput = true
 
-        open fun dialogHint(dialogHint: CharSequence?) {
+        fun dialogHint(dialogHint: CharSequence?) {
             this.dialogHint = dialogHint
         }
 
-        open fun allowEmptyInput(allowEmptyInput: Boolean) {
+        fun allowEmptyInput(allowEmptyInput: Boolean) {
             this.allowEmptyInput = allowEmptyInput
         }
 

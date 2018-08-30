@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.support.annotation.CallSuper
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
@@ -29,8 +30,6 @@ import android.view.ViewGroup
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyHolder
 import com.airbnb.epoxy.EpoxyModelWithHolder
-import com.ivianuu.epoxyprefs.util.IntentPreferenceModelClickListener
-import com.ivianuu.epoxyprefs.util.UrlPreferenceModelClickListener
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_preference.*
 import java.util.*
@@ -41,56 +40,43 @@ import java.util.*
 open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceModel.Holder>() {
 
     val context = builder.context
-    open val key = builder.key
-    open val title = builder.title
-    open val summary = builder.summary
-    open val icon = builder.icon
-    open val defaultValue = builder.defaultValue
-    open val enabled = builder.enabled
-    open val dependencyKey = builder.dependencyKey
-    open val dependencyValue = builder.dependencyValue
-    open val clickListener = builder.clickListener
-    open val changeListener = builder.changeListener
-    open val useCommit = builder.useCommit
-    open val persistent = builder.persistent
-    open val layoutRes = builder.layoutRes
-    open val widgetLayoutRes = builder.widgetLayoutRes
+    val key = builder.key
+    val title = builder.title
+    val summary = builder.summary
+    val icon = builder.icon
+    val defaultValue = builder.defaultValue
+    val enabled = builder.enabled
+    val dependencyKey = builder.dependencyKey
+    val dependencyValue = builder.dependencyValue
+    val clickListener = builder.clickListener
+    val changeListener = builder.changeListener
+    val useCommit = builder.useCommit
+    val persistent = builder.persistent
+    val layoutRes = builder.layoutRes
+    val widgetLayoutRes = builder.widgetLayoutRes
 
-    protected val sharedPreferences: SharedPreferences
+    protected val sharedPreferences = builder.realSharedPreferences
 
-    protected var currentHolder: Holder? = null
+    protected val matchesDependency = if (dependencyKey != null && dependencyValue != null) {
+        sharedPreferences.all[dependencyKey] == dependencyValue
+    } else {
+        true
+    }
 
-    private val sharedPreferencesChangeListener =
-        SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            if (this.key == key) {
-                onChange()
-            } else if (this.dependencyKey == key) {
-                onDependencyChange()
-            }
-        }
-
-    private var listeningForChanges = false
+    val value = if (key != null) {
+        sharedPreferences.all[key] ?: defaultValue
+    } else {
+        null
+    }
 
     init {
-        sharedPreferences = if (builder.sharedPreferences != null) {
-            builder.sharedPreferences!!
-        } else {
-            if (builder.sharedPreferencesName != null) {
-                context.getSharedPreferences(builder.sharedPreferencesName, Context.MODE_PRIVATE)
-            } else {
-                EpoxyPrefsPlugins.getDefaultSharedPreferences(context)
-            }
-        }
-
-        id(key ?: UUID.randomUUID().toString())
+        id(key ?: UUID.randomUUID().toString()) // todo remove this
         layout(layoutRes + widgetLayoutRes)
     }
 
     @CallSuper
     override fun bind(holder: Holder) {
         super.bind(holder)
-
-        currentHolder = holder
 
         holder.title?.let {
             it.text = title
@@ -110,35 +96,24 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
             it.visibility = if (icon != null) View.VISIBLE else View.GONE
         }
 
-        val dependencyKey = dependencyKey
-        val dependencyValue = dependencyValue
+        holder.containerView.run {
+            val enabled = enabled && matchesDependency
+            isEnabled = enabled
+            alpha = if (enabled) 1f else 0.5f
 
-        val matchesDependency = if (dependencyKey != null && dependencyValue != null) {
-            val currentDependencyValue = sharedPreferences.all[dependencyKey]
-            dependencyValue == currentDependencyValue
-        } else {
-            true
-        }
-
-        val enabled = enabled && matchesDependency
-
-        holder.containerView.isEnabled = enabled
-        holder.containerView.alpha = if (enabled) 1f else 0.5f
-
-        holder.containerView.setOnClickListener {
-            val handled = clickListener?.onPreferenceClicked(this) ?: false
-            if (!handled) {
-                onClick()
+            setOnClickListener {
+                val handled =
+                    clickListener?.invoke(this@PreferenceModel) ?: false
+                if (!handled) {
+                    onClick()
+                }
             }
         }
-
-        startListeningForChanges()
     }
 
     @CallSuper
     override fun unbind(holder: Holder) {
         super.unbind(holder)
-        stopListeningForChanges()
 
         with(holder) {
             title?.text = null
@@ -146,8 +121,6 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
             icon?.setImageDrawable(null)
             holder.containerView.setOnClickListener(null)
         }
-
-        currentHolder = null
     }
 
     override fun createNewHolder() = Holder()
@@ -174,78 +147,10 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     protected open fun onClick() {
     }
 
-    protected open fun onChange() {
-    }
+    protected fun callChangeListener(newValue: Any) =
+        changeListener?.invoke(this, newValue) ?: true
 
-    protected open fun onDependencyChange() {
-        val dependencyKey = dependencyKey ?: return
-        val dependencyValue = dependencyValue ?: return
-        val currentHolder = currentHolder ?: return
-
-        val newDependencyValue = sharedPreferences.all[dependencyKey]
-
-        val enabled = enabled && dependencyValue == newDependencyValue
-
-        currentHolder.containerView.isEnabled = enabled
-        currentHolder.containerView.alpha = if (enabled) 1f else 0.5f
-    }
-
-    protected fun callChangeListener(newValue: Any): Boolean =
-        changeListener?.onPreferenceChange(this, newValue) ?: true
-
-    protected fun shouldPersist(): Boolean = persistent && key != null
-
-    protected fun getPersistedBoolean(
-        key: String?,
-        fallback: Boolean = defaultValue as? Boolean? ?: false
-    ): Boolean = if (shouldPersist()) {
-        sharedPreferences.getBoolean(key, fallback)
-    } else {
-        fallback
-    }
-
-    protected fun getPersistedFloat(
-        key: String?,
-        fallback: Float = defaultValue as? Float? ?: 0f
-    ): Float = if (shouldPersist()) {
-        sharedPreferences.getFloat(key, fallback)
-    } else {
-        fallback
-    }
-
-    protected fun getPersistedInt(key: String?, fallback: Int = defaultValue as? Int? ?: 0): Int =
-        if (shouldPersist()) {
-            sharedPreferences.getInt(key, fallback)
-        } else {
-            fallback
-        }
-
-    protected fun getPersistedLong(
-        key: String?,
-        fallback: Long = defaultValue as? Long? ?: 0L
-    ): Long = if (shouldPersist()) {
-        sharedPreferences.getLong(key, fallback)
-    } else {
-        fallback
-    }
-
-    protected fun getPersistedString(
-        key: String?,
-        fallback: String = defaultValue as? String? ?: ""
-    ): String = if (shouldPersist()) {
-        sharedPreferences.getString(key, fallback)
-    } else {
-        fallback
-    }
-
-    protected fun getPersistedStringSet(
-        key: String?,
-        fallback: MutableSet<String> = defaultValue as? MutableSet<String>? ?: mutableSetOf()
-    ): MutableSet<String> = if (shouldPersist()) {
-        sharedPreferences.getStringSet(key, fallback)
-    } else {
-        fallback
-    }
+    protected fun shouldPersist() = persistent && key != null
 
     @SuppressLint("ApplySharedPref")
     protected fun editSharedPreferences(edit: SharedPreferences.Editor.() -> Unit) {
@@ -304,28 +209,12 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         }
     }
 
-    private fun startListeningForChanges() {
-        if (!listeningForChanges) {
-            sharedPreferences.registerOnSharedPreferenceChangeListener(
-                sharedPreferencesChangeListener
-            )
-            listeningForChanges = true
-        }
-    }
-
-    private fun stopListeningForChanges() {
-        if (listeningForChanges) {
-            sharedPreferences.unregisterOnSharedPreferenceChangeListener(
-                sharedPreferencesChangeListener
-            )
-            listeningForChanges = false
-        }
-    }
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is PreferenceModel) return false
+        if (javaClass != other?.javaClass) return false
         if (!super.equals(other)) return false
+
+        other as PreferenceModel
 
         if (key != other.key) return false
         if (title != other.title) return false
@@ -339,6 +228,8 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         if (persistent != other.persistent) return false
         if (layoutRes != other.layoutRes) return false
         if (widgetLayoutRes != other.widgetLayoutRes) return false
+        if (matchesDependency != other.matchesDependency) return false
+        if (value != other.value) return false
 
         return true
     }
@@ -357,21 +248,9 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         result = 31 * result + persistent.hashCode()
         result = 31 * result + layoutRes
         result = 31 * result + widgetLayoutRes
+        result = 31 * result + matchesDependency.hashCode()
+        result = 31 * result + (value?.hashCode() ?: 0)
         return result
-    }
-
-    /**
-     * A click listener for [PreferenceModel]'s
-     */
-    interface ClickListener {
-        fun onPreferenceClicked(preference: PreferenceModel): Boolean
-    }
-
-    /**
-     * A change listener for [PreferenceModel]'s
-     */
-    interface ChangeListener {
-        fun onPreferenceChange(preference: PreferenceModel, newValue: Any): Boolean
     }
 
     /**
@@ -389,84 +268,95 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
 
     open class Builder(val context: Context) {
 
-        open var key: String? = null
-        open var title: CharSequence? = null
-        open var summary: CharSequence? = null
-        open var icon: Drawable? = null
-        open var defaultValue: Any? = null
-        open var enabled: Boolean = true
-        open var dependencyKey: String? = null
-        open var dependencyValue: Any? = null
-        open var clickListener: ClickListener? = null
-        open var changeListener: ChangeListener? = null
-        open var sharedPreferences: SharedPreferences? = null
-        open var sharedPreferencesName: String? = null
-        open var useCommit: Boolean = EpoxyPrefsPlugins.getUseCommit()
-        open var persistent: Boolean = true
-        open var layoutRes: Int = R.layout.item_preference
-        open var widgetLayoutRes: Int = 0
+        var key: String? = null
+        var title: CharSequence? = null
+        var summary: CharSequence? = null
+        var icon: Drawable? = null
+        var defaultValue: Any? = null
+        var enabled: Boolean = true
+        var dependencyKey: String? = null
+        var dependencyValue: Any? = null
+        var clickListener: ((preference: PreferenceModel) -> Boolean)? = null
+        var changeListener: ((preference: PreferenceModel, newValue: Any) -> Boolean)? = null
+        var sharedPreferences: SharedPreferences? = null
+        var sharedPreferencesName: String? = null
+        var useCommit: Boolean = EpoxyPrefsPlugins.getUseCommit()
+        var persistent: Boolean = true
+        var layoutRes: Int = R.layout.item_preference
+        var widgetLayoutRes: Int = 0
 
-        open fun key(key: String) {
+        internal val realSharedPreferences
+            get() = if (sharedPreferences != null) {
+                sharedPreferences!!
+            } else {
+                if (sharedPreferencesName != null) {
+                    context.getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
+                } else {
+                    EpoxyPrefsPlugins.getDefaultSharedPreferences(context)
+                }
+            }
+
+        fun key(key: String) {
             this.key = key
         }
 
-        open fun title(title: CharSequence?) {
+        fun title(title: CharSequence?) {
             this.title = title
         }
 
-        open fun summary(summary: CharSequence?) {
+        fun summary(summary: CharSequence?) {
             this.summary = summary
         }
 
-        open fun icon(icon: Drawable?) {
+        fun icon(icon: Drawable?) {
             this.icon = icon
         }
 
-        open fun defaultValue(defaultValue: Any?) {
+        fun defaultValue(defaultValue: Any?) {
             this.defaultValue = defaultValue
         }
 
-        open fun enabled(enabled: Boolean) {
+        fun enabled(enabled: Boolean) {
             this.enabled = enabled
         }
 
-        open fun dependencyKey(dependencyKey: String?) {
+        fun dependencyKey(dependencyKey: String?) {
             this.dependencyKey = dependencyKey
         }
 
-        open fun dependencyValue(dependencyValue: Any?) {
+        fun dependencyValue(dependencyValue: Any?) {
             this.dependencyValue = dependencyValue
         }
 
-        open fun clickListener(clickListener: PreferenceModel.ClickListener?) {
+        fun clickListener(clickListener: (preference: PreferenceModel) -> Boolean) {
             this.clickListener = clickListener
         }
 
-        open fun changeListener(changeListener: PreferenceModel.ChangeListener?) {
+        fun changeListener(changeListener: (preference: PreferenceModel, newValue: Any) -> Boolean) {
             this.changeListener = changeListener
         }
 
-        open fun sharedPreferences(sharedPreferences: SharedPreferences?) {
+        fun sharedPreferences(sharedPreferences: SharedPreferences?) {
             this.sharedPreferences = sharedPreferences
         }
 
-        open fun sharedPreferencesName(sharedPreferencesName: String?) {
+        fun sharedPreferencesName(sharedPreferencesName: String?) {
             this.sharedPreferencesName = sharedPreferencesName
         }
 
-        open fun useCommit(useCommit: Boolean) {
+        fun useCommit(useCommit: Boolean) {
             this.useCommit = useCommit
         }
 
-        open fun persistent(persistent: Boolean) {
+        fun persistent(persistent: Boolean) {
             this.persistent = persistent
         }
 
-        open fun layoutRes(layoutRes: Int) {
+        fun layoutRes(layoutRes: Int) {
             this.layoutRes = layoutRes
         }
 
-        open fun widgetLayoutRes(widgetLayoutRes: Int) {
+        fun widgetLayoutRes(widgetLayoutRes: Int) {
             this.widgetLayoutRes = widgetLayoutRes
         }
 
@@ -500,39 +390,23 @@ fun PreferenceModel.Builder.dependency(key: String?, value: Any?) {
     dependencyValue(value)
 }
 
-fun PreferenceModel.Builder.clickListener(clickListener: (preference: PreferenceModel) -> Boolean) {
-    clickListener(object : PreferenceModel.ClickListener {
-        override fun onPreferenceClicked(preference: PreferenceModel): Boolean {
-            return clickListener.invoke(preference)
-        }
-    })
-}
-
-fun PreferenceModel.Builder.changeListener(changeListener: (preference: PreferenceModel, newValue: Any) -> Boolean) {
-    changeListener(object : PreferenceModel.ChangeListener {
-        override fun onPreferenceChange(preference: PreferenceModel, newValue: Any): Boolean {
-            return changeListener.invoke(preference, newValue)
-        }
-    })
-}
-
 @JvmName("typedChangeListener")
 inline fun <reified T> PreferenceModel.Builder.changeListener(crossinline changeListener: (preference: PreferenceModel, newValue: T) -> Boolean) {
-    changeListener(object : PreferenceModel.ChangeListener {
-        override fun onPreferenceChange(preference: PreferenceModel, newValue: Any): Boolean {
-            return if (newValue is T) {
-                changeListener.invoke(preference, newValue)
-            } else {
-                false
-            }
-        }
-    })
+    changeListener { preference: PreferenceModel, newValue: Any ->
+        changeListener(
+            preference,
+            newValue as T
+        )
+    }
 }
 
-fun PreferenceModel.Builder.intentClickListener(intent: Intent) {
-    clickListener(IntentPreferenceModelClickListener(intent))
+fun PreferenceModel.Builder.intentClickListener(intent: Intent) = clickListener {
+    it.context.startActivity(intent)
+    true
 }
 
 fun PreferenceModel.Builder.urlClickListener(url: String) {
-    clickListener(UrlPreferenceModelClickListener(url))
+    intentClickListener(Intent(Intent.ACTION_VIEW).apply {
+        data = Uri.parse(url)
+    })
 }

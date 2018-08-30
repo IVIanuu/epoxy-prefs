@@ -26,11 +26,11 @@ import com.afollestad.materialdialogs.MaterialDialog
  */
 abstract class DialogPreferenceModel(builder: Builder) : PreferenceModel(builder) {
 
-    open val dialogTitle = builder.dialogTitle ?: title
-    open val dialogMessage = builder.dialogMessage
-    open val dialogIcon = builder.dialogIcon
-    open val positiveButtonText = builder.positiveButtonText
-    open val negativeButtonText = builder.negativeButtonText
+    val dialogTitle = builder.dialogTitle ?: title
+    val dialogMessage = builder.dialogMessage
+    val dialogIcon = builder.dialogIcon
+    val positiveButtonText = builder.positiveButtonText
+    val negativeButtonText = builder.negativeButtonText
 
     override fun onClick() {
         super.onClick()
@@ -80,32 +80,32 @@ abstract class DialogPreferenceModel(builder: Builder) : PreferenceModel(builder
 
     abstract class Builder(context: Context) : PreferenceModel.Builder(context) {
 
-        open var dialogTitle: CharSequence? = null
-        open var dialogMessage: CharSequence? = null
-        open var dialogIcon: Drawable? = null
-        open var positiveButtonText: CharSequence? =
+        var dialogTitle: CharSequence? = null
+        var dialogMessage: CharSequence? = null
+        var dialogIcon: Drawable? = null
+        var positiveButtonText: CharSequence? =
             context.getString(android.R.string.ok)
 
-        open var negativeButtonText: CharSequence? =
+        var negativeButtonText: CharSequence? =
             context.getString(android.R.string.cancel)
 
-        open fun dialogTitle(dialogTitle: CharSequence?) {
+        fun dialogTitle(dialogTitle: CharSequence?) {
             this.dialogTitle = dialogTitle
         }
 
-        open fun dialogMessage(dialogMessage: CharSequence?) {
+        fun dialogMessage(dialogMessage: CharSequence?) {
             this.dialogMessage = dialogMessage
         }
 
-        open fun dialogIcon(dialogIcon: Drawable?) {
+        fun dialogIcon(dialogIcon: Drawable?) {
             this.dialogIcon = dialogIcon
         }
 
-        open fun positiveButtonText(positiveButtonText: CharSequence?) {
+        fun positiveButtonText(positiveButtonText: CharSequence?) {
             this.positiveButtonText = positiveButtonText
         }
 
-        open fun negativeButtonText(negativeButtonText: CharSequence?) {
+        fun negativeButtonText(negativeButtonText: CharSequence?) {
             this.negativeButtonText = negativeButtonText
         }
 

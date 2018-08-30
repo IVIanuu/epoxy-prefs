@@ -30,7 +30,7 @@ open class SingleItemListPreferenceModel(builder: Builder) : ListPreferenceModel
         val entries = entries ?: emptyArray()
         val entryValues = entryValues ?: emptyArray()
 
-        val currentValue = getPersistedString(key)
+        val currentValue = value as? String ?: ""
         val selectedIndex = entryValues.indexOf(currentValue)
 
         MaterialDialog.Builder(context)
