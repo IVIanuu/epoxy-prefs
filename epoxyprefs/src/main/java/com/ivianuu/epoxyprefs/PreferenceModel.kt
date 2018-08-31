@@ -64,8 +64,10 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         true
     }
 
-    val value = if (key != null) {
+    val value = if (key != null && persistent) {
         sharedPreferences.all[key] ?: defaultValue
+    } else if (!persistent) {
+        defaultValue
     } else {
         null
     }

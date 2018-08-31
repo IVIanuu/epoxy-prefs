@@ -7,6 +7,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    private var nonPersistentState = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -48,7 +50,13 @@ class MainActivity : AppCompatActivity() {
                     title("CheckBox")
                     dependency("my_switch_$i", true)
                     summary("Oh a checkbox")
-                    defaultValue(true)
+                    defaultValue(nonPersistentState)
+                    persistent(false)
+                    changeListener { preference: PreferenceModel, newValue: Any ->
+                        nonPersistentState = newValue as Boolean
+                        requestModelBuild()
+                        true
+                    }
                 }
 
                 radioButtonPreference {

@@ -30,7 +30,6 @@ open class CheckboxPreferenceModel(builder: Builder) : CompoundButtonPreferenceM
         get() = checkbox
 
     open class Builder(context: Context) : CompoundButtonPreferenceModel.Builder(context) {
-
         init {
             widgetLayoutRes(R.layout.widget_preference_checkbox)
         }
