@@ -30,6 +30,7 @@ import android.view.ViewGroup
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyHolder
 import com.airbnb.epoxy.EpoxyModelWithHolder
+import com.ivianuu.epoxyprefs.internal.setTextFuture
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_preference.*
 import java.util.*
@@ -79,12 +80,13 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         super.bind(holder)
 
         holder.title?.let {
+            if (title != null) it.setTextFuture(title)
             it.text = title
             it.visibility = if (title != null) View.VISIBLE else View.GONE
         }
 
         holder.summary?.let {
-            it.text = summary
+            if (summary != null) it.setTextFuture(summary)
             it.visibility = if (summary != null) View.VISIBLE else View.GONE
         }
 

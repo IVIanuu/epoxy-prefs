@@ -39,6 +39,8 @@ dependencies {
 
     api Deps.kotlinStdLib
     api Deps.materialDialogs
+
+    api Deps.supportAppCompat
 }
 
 // build a jar with source files

@@ -23,6 +23,7 @@ import com.airbnb.epoxy.EpoxyController
  * A category preference
  */
 open class CategoryPreferenceModel(builder: Builder) : PreferenceModel(builder) {
+
     open class Builder(context: Context) : PreferenceModel.Builder(context) {
 
         init {

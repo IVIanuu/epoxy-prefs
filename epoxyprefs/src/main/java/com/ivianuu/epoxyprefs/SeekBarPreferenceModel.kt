@@ -19,6 +19,7 @@ package com.ivianuu.epoxyprefs
 import android.content.Context
 import android.widget.SeekBar
 import com.airbnb.epoxy.EpoxyController
+import com.ivianuu.epoxyprefs.internal.setTextFuture
 import kotlinx.android.synthetic.main.item_preference_seekbar.*
 
 /**
@@ -79,7 +80,7 @@ open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
                 ?: internalValue.toString() // fallback
 
         holder.seekbar.progress = internalValue - min
-        holder.seekbar_value.text = text
+        holder.seekbar_value.setTextFuture(text)
     }
 
     override fun equals(other: Any?): Boolean {
