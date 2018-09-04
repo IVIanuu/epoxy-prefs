@@ -35,12 +35,12 @@ android {
 }
 
 dependencies {
+    api Deps.androidxAppCompat
+
     api Deps.epoxy
 
     api Deps.kotlinStdLib
     api Deps.materialDialogs
-
-    api Deps.supportAppCompat
 }
 
 // build a jar with source files

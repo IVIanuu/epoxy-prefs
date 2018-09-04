@@ -8,7 +8,9 @@ object Versions {
     const val versionCode = 1
     const val versionName = "1.0"
 
-    const val androidGradlePlugin = "3.1.4"
+    const val androidGradlePlugin = "3.2.0-rc02"
+
+    const val androidx = "1.0.0-rc02"
 
     const val epoxy = "2.16.4"
 
@@ -17,12 +19,12 @@ object Versions {
     const val materialDialogs = "0.9.6.0"
 
     const val mavenGradle = "2.1"
-
-    const val support = "28.0.0-rc01"
 }
 
 object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
+
+    const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidx}"
 
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
 
@@ -32,6 +34,4 @@ object Deps {
     const val materialDialogs = "com.afollestad.material-dialogs:core:${Versions.materialDialogs}"
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"
-
-    const val supportAppCompat = "com.android.support:appcompat-v7:${Versions.support}"
 }

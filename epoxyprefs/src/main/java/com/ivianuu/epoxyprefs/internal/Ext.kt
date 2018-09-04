@@ -1,9 +1,9 @@
 package com.ivianuu.epoxyprefs.internal
 
-import android.support.v4.text.PrecomputedTextCompat
-import android.support.v4.widget.TextViewCompat
-import android.support.v7.widget.AppCompatTextView
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.text.PrecomputedTextCompat
+import androidx.core.widget.TextViewCompat
 import java.util.concurrent.Executor
 
 internal fun TextView.setTextFuture(
