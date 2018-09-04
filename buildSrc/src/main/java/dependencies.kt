@@ -10,7 +10,7 @@ object Versions {
 
     const val androidGradlePlugin = "3.1.4"
 
-    const val epoxy = "2.16.2"
+    const val epoxy = "2.16.4"
 
     const val kotlin = "1.2.61"
 
@@ -18,7 +18,7 @@ object Versions {
 
     const val mavenGradle = "2.1"
 
-    const val support = "28.0.0-alpha3"
+    const val support = "28.0.0-rc01"
 }
 
 object Deps {
