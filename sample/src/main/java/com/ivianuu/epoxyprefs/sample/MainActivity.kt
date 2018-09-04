@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                     title("Title")
                     summary("This is a summary.")
                     dependency("my_switch_$i", true)
-                    urlClickListener("www.google.de")
+                    urlClickListener { "https://www.google.de/" }
                 }
 
                 checkboxPreference {
@@ -52,8 +52,8 @@ class MainActivity : AppCompatActivity() {
                     summary("Oh a checkbox")
                     defaultValue(nonPersistentState)
                     persistent(false)
-                    changeListener { preference: PreferenceModel, newValue: Any ->
-                        nonPersistentState = newValue as Boolean
+                    changeListener<Boolean> { _, newValue ->
+                        nonPersistentState = newValue
                         requestModelBuild()
                         true
                     }

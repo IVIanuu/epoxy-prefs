@@ -396,7 +396,7 @@ fun PreferenceModel.Builder.dependency(key: String?, value: Any?) {
     dependencyValue(value)
 }
 
-@JvmName("typedChangeListener")
+@JvmName("changeListenerTyped")
 inline fun <reified T> PreferenceModel.Builder.changeListener(crossinline changeListener: (preference: PreferenceModel, newValue: T) -> Boolean) {
     changeListener { preference: PreferenceModel, newValue: Any ->
         changeListener(
@@ -406,13 +406,13 @@ inline fun <reified T> PreferenceModel.Builder.changeListener(crossinline change
     }
 }
 
-fun PreferenceModel.Builder.intentClickListener(intent: Intent) = clickListener {
-    it.context.startActivity(intent)
+fun PreferenceModel.Builder.intentClickListener(intent: (PreferenceModel) -> Intent) =
+    clickListener {
+        it.context.startActivity(intent(it))
     true
 }
 
-fun PreferenceModel.Builder.urlClickListener(url: String) {
-    intentClickListener(Intent(Intent.ACTION_VIEW).apply {
-        data = Uri.parse(url)
-    })
+fun PreferenceModel.Builder.urlClickListener(url: (PreferenceModel) -> String) =
+    intentClickListener {
+        Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(url(it)) }
 }
