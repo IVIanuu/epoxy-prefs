@@ -379,15 +379,15 @@ inline fun EpoxyController.preference(context: Context, init: PreferenceModel.Bu
 inline fun PreferenceEpoxyController.preference(init: PreferenceModel.Builder.() -> Unit) =
     preference(context, init)
 
-fun PreferenceModel.Builder.titleRes(titleRes: Int) {
+fun PreferenceModel.Builder.title(titleRes: Int) {
     title(context.getString(titleRes))
 }
 
-fun PreferenceModel.Builder.summaryRes(summaryRes: Int) {
+fun PreferenceModel.Builder.summary(summaryRes: Int) {
     summary(context.getString(summaryRes))
 }
 
-fun PreferenceModel.Builder.iconRes(iconRes: Int) {
+fun PreferenceModel.Builder.icon(iconRes: Int) {
     icon(ContextCompat.getDrawable(context, iconRes))
 }
 

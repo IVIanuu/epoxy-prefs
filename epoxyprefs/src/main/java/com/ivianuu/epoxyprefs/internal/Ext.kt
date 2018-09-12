@@ -4,13 +4,16 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
 import androidx.core.widget.TextViewCompat
-import java.util.concurrent.Executor
 
-internal fun TextView.setTextFuture(
-    text: CharSequence,
-    params: PrecomputedTextCompat.Params = TextViewCompat.getTextMetricsParams(this),
-    executor: Executor? = null
-) {
-    (this as? AppCompatTextView)
-        ?.setTextFuture(PrecomputedTextCompat.getTextFuture(text, params, executor))
+internal fun TextView.setTextFuture(text: CharSequence) {
+    if (this is AppCompatTextView) {
+        setTextFuture(
+            PrecomputedTextCompat.getTextFuture(
+                text,
+                TextViewCompat.getTextMetricsParams(this), null
+            )
+        )
+    } else {
+        setText(text)
+    }
 }
