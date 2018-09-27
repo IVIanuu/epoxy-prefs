@@ -49,6 +49,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     val enabled = builder.enabled
     val dependencyKey = builder.dependencyKey
     val dependencyValue = builder.dependencyValue
+    val allowedByDependency = builder.allowedByDependency
     val clickListener = builder.clickListener
     val changeListener = builder.changeListener
     val sharedPreferences = builder.realSharedPreferences
@@ -57,20 +58,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     val persistent = builder.persistent
     val layoutRes = builder.layoutRes
     val widgetLayoutRes = builder.widgetLayoutRes
-
-    protected val matchesDependency = if (dependencyKey != null && dependencyValue != null) {
-        sharedPreferences.all[dependencyKey] == dependencyValue
-    } else {
-        true
-    }
-
-    val value = if (key != null && persistent) {
-        sharedPreferences.all[key] ?: defaultValue
-    } else if (!persistent) {
-        defaultValue
-    } else {
-        null
-    }
+    val value = builder.value
 
     init {
         id(key ?: UUID.randomUUID().toString()) // todo remove this
@@ -101,7 +89,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         }
 
         holder.containerView.run {
-            val enabled = enabled && matchesDependency
+            val enabled = enabled && allowedByDependency
             isEnabled = enabled
             alpha = if (enabled) 1f else 0.5f
 
@@ -228,12 +216,12 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         if (enabled != other.enabled) return false
         if (dependencyKey != other.dependencyKey) return false
         if (dependencyValue != other.dependencyValue) return false
+        if (allowedByDependency != other.allowedByDependency) return false
         if (sharedPreferencesName != other.sharedPreferencesName) return false
         if (useCommit != other.useCommit) return false
         if (persistent != other.persistent) return false
         if (layoutRes != other.layoutRes) return false
         if (widgetLayoutRes != other.widgetLayoutRes) return false
-        if (matchesDependency != other.matchesDependency) return false
         if (value != other.value) return false
 
         return true
@@ -249,12 +237,12 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         result = 31 * result + enabled.hashCode()
         result = 31 * result + (dependencyKey?.hashCode() ?: 0)
         result = 31 * result + (dependencyValue?.hashCode() ?: 0)
+        result = 31 * result + allowedByDependency.hashCode()
         result = 31 * result + (sharedPreferencesName?.hashCode() ?: 0)
         result = 31 * result + useCommit.hashCode()
         result = 31 * result + persistent.hashCode()
         result = 31 * result + layoutRes
         result = 31 * result + widgetLayoutRes
-        result = 31 * result + matchesDependency.hashCode()
         result = 31 * result + (value?.hashCode() ?: 0)
         return result
     }
@@ -282,6 +270,12 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         var enabled: Boolean = true
         var dependencyKey: String? = null
         var dependencyValue: Any? = null
+        val allowedByDependency
+            get() = if (dependencyKey != null && dependencyValue != null) {
+                realSharedPreferences.all[dependencyKey] == dependencyValue
+            } else {
+                true
+            }
         var clickListener: ((preference: PreferenceModel) -> Boolean)? = null
         var changeListener: ((preference: PreferenceModel, newValue: Any) -> Boolean)? = null
         var sharedPreferences: SharedPreferences? = null
@@ -290,6 +284,15 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         var persistent: Boolean = true
         var layoutRes: Int = R.layout.item_preference
         var widgetLayoutRes: Int = 0
+        internal val value
+            get() = if (key != null && persistent) {
+                realSharedPreferences.all[key] ?: defaultValue
+            } else if (!persistent) {
+                defaultValue
+            } else {
+                null
+            }
+
 
         internal val realSharedPreferences
             get() = if (sharedPreferences != null) {
