@@ -47,6 +47,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     val icon = builder.icon
     val defaultValue = builder.defaultValue
     val enabled = builder.enabled
+    val clickable = builder.clickable
     val dependencyKey = builder.dependencyKey
     val dependencyValue = builder.dependencyValue
     val allowedByDependency = builder.allowedByDependency
@@ -93,12 +94,18 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
             isEnabled = enabled
             alpha = if (enabled) 1f else 0.5f
 
-            setOnClickListener {
-                val handled =
-                    clickListener?.invoke(this@PreferenceModel) ?: false
-                if (!handled) {
-                    onClick()
+            isClickable = clickable
+
+            if (clickable) {
+                setOnClickListener {
+                    val handled =
+                        clickListener?.invoke(this@PreferenceModel) ?: false
+                    if (!handled) {
+                        onClick()
+                    }
                 }
+            } else {
+                setOnClickListener(null)
             }
         }
     }
@@ -214,6 +221,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         if (icon != other.icon) return false
         if (defaultValue != other.defaultValue) return false
         if (enabled != other.enabled) return false
+        if (clickable != other.clickable) return false
         if (dependencyKey != other.dependencyKey) return false
         if (dependencyValue != other.dependencyValue) return false
         if (allowedByDependency != other.allowedByDependency) return false
@@ -235,6 +243,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         result = 31 * result + (icon?.hashCode() ?: 0)
         result = 31 * result + (defaultValue?.hashCode() ?: 0)
         result = 31 * result + enabled.hashCode()
+        result = 31 * result + clickable.hashCode()
         result = 31 * result + (dependencyKey?.hashCode() ?: 0)
         result = 31 * result + (dependencyValue?.hashCode() ?: 0)
         result = 31 * result + allowedByDependency.hashCode()
@@ -263,13 +272,23 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     open class Builder(val context: Context) {
 
         var key: String? = null
+            private set
         var title: CharSequence? = null
+            private set
         var summary: CharSequence? = null
+            private set
         var icon: Drawable? = null
+            private set
         var defaultValue: Any? = null
+            private set
         var enabled: Boolean = true
+            private set
+        var clickable: Boolean = true
+            private set
         var dependencyKey: String? = null
+            private set
         var dependencyValue: Any? = null
+            private set
         val allowedByDependency
             get() = if (dependencyKey != null && dependencyValue != null) {
                 realSharedPreferences.all[dependencyKey] == dependencyValue
@@ -277,13 +296,21 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
                 true
             }
         var clickListener: ((preference: PreferenceModel) -> Boolean)? = null
+            private set
         var changeListener: ((preference: PreferenceModel, newValue: Any) -> Boolean)? = null
+            private set
         var sharedPreferences: SharedPreferences? = null
+            private set
         var sharedPreferencesName: String? = null
+            private set
         var useCommit: Boolean = EpoxyPrefsPlugins.getUseCommit()
+            private set
         var persistent: Boolean = true
+            private set
         var layoutRes: Int = R.layout.item_preference
+            private set
         var widgetLayoutRes: Int = 0
+            private set
         internal val value
             get() = if (key != null && persistent) {
                 realSharedPreferences.all[key] ?: defaultValue
@@ -327,6 +354,10 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
 
         fun enabled(enabled: Boolean) {
             this.enabled = enabled
+        }
+
+        fun clickable(clickable: Boolean) {
+            this.clickable = clickable
         }
 
         fun dependencyKey(dependencyKey: String?) {

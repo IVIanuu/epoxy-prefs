@@ -66,7 +66,9 @@ open class EditTextPreferenceModel(builder: Builder) : DialogPreferenceModel(bui
     open class Builder(context: Context) : DialogPreferenceModel.Builder(context) {
 
         var dialogHint: CharSequence? = null
+            private set
         var allowEmptyInput = true
+            private set
 
         fun dialogHint(dialogHint: CharSequence?) {
             this.dialogHint = dialogHint

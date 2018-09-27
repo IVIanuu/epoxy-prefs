@@ -114,10 +114,13 @@ open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
     open class Builder(context: Context) : PreferenceModel.Builder(context) {
 
         var min: Int = 0
+            private set
         var max: Int = 0
+            private set
         var incValue: Int = 1
-
+            private set
         var valueTextProvider: ValueTextProvider? = null
+            private set
 
         init {
             layoutRes(R.layout.item_preference_seekbar)

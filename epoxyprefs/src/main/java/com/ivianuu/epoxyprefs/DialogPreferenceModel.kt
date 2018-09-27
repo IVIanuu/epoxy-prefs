@@ -81,13 +81,18 @@ abstract class DialogPreferenceModel(builder: Builder) : PreferenceModel(builder
     abstract class Builder(context: Context) : PreferenceModel.Builder(context) {
 
         var dialogTitle: CharSequence? = null
+            private set
         var dialogMessage: CharSequence? = null
+            private set
         var dialogIcon: Drawable? = null
+            private set
         var positiveButtonText: CharSequence? =
             context.getString(android.R.string.ok)
+            private set
 
         var negativeButtonText: CharSequence? =
             context.getString(android.R.string.cancel)
+            private set
 
         fun dialogTitle(dialogTitle: CharSequence?) {
             this.dialogTitle = dialogTitle

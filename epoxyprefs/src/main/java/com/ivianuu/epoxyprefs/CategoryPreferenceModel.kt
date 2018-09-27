@@ -27,6 +27,7 @@ open class CategoryPreferenceModel(builder: Builder) : PreferenceModel(builder) 
     open class Builder(context: Context) : PreferenceModel.Builder(context) {
 
         init {
+            clickable(false)
             layoutRes(R.layout.item_preference_category)
         }
 
