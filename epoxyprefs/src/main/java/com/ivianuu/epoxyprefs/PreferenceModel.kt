@@ -118,7 +118,11 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
             title?.text = null
             summary?.text = null
             icon?.setImageDrawable(null)
-            holder.containerView.setOnClickListener(null)
+            icon_frame?.visibility = View.VISIBLE
+            containerView.isEnabled = true
+            containerView.alpha = 1f
+            containerView.isClickable = true
+            containerView.setOnClickListener(null)
         }
     }
 
