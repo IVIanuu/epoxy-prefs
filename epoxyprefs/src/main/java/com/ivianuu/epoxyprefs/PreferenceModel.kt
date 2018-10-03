@@ -72,7 +72,6 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
 
         holder.title?.let {
             if (title != null) it.setTextFuture(title)
-            it.text = title
             it.visibility = if (title != null) View.VISIBLE else View.GONE
         }
 
