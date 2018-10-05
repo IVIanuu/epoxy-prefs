@@ -14,30 +14,35 @@
  * limitations under the License.
  */
 
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+plugins {
+    id("com.android.application")
+    id("kotlin-android")
+    id("kotlin-android-extensions")
+    id("kotlin-kapt")
+}
 
 android {
-    compileSdkVersion Versions.compileSdk
+    compileSdkVersion(Build.compileSdk)
+
     defaultConfig {
-        applicationId "com.ivianuu.epoxyprefs.sample"
-        minSdkVersion Versions.minSdk
-        targetSdkVersion Versions.targetSdk
-        versionCode Versions.versionCode
-        versionName Versions.versionName
+        applicationId = Build.applicationId
+        buildToolsVersion = Build.buildToolsVersion
+        minSdkVersion(Build.minSdk)
+        targetSdkVersion(Build.targetSdk)
+        versionCode = Build.versionCode
+        versionName = Build.versionName
     }
+
     androidExtensions {
-        experimental = true
+        isExperimental = true
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+
+    kapt {
+        correctErrorTypes = true
     }
 }
 
 dependencies {
-    implementation Deps.androidxAppCompat
-    implementation project(':epoxyprefs')
+    implementation(Deps.androidxAppCompat)
+    implementation(project(":epoxyprefs"))
 }
