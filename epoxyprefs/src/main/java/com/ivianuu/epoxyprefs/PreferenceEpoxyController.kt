@@ -9,6 +9,7 @@ import com.airbnb.epoxy.EpoxyRecyclerView
 /**
  * Preference epoxy controller
  */
+// todo remove once we came up with a better solution
 abstract class PreferenceEpoxyController(
     val context: Context,
     val sharedPreferencesName: String? = EpoxyPrefsPlugins.getDefaultSharedPreferencesName(context)

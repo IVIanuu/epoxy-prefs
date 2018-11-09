@@ -19,7 +19,6 @@ package com.ivianuu.epoxyprefs
 import android.content.Context
 import android.widget.SeekBar
 import com.airbnb.epoxy.EpoxyController
-import com.ivianuu.epoxyprefs.internal.setTextFuture
 import kotlinx.android.synthetic.main.item_preference_seekbar.*
 
 /**
@@ -76,11 +75,11 @@ open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
 
         val provider = valueTextProvider
 
-        val text = provider?.getText(internalValue)
+        val text = provider?.invoke(internalValue)
                 ?: internalValue.toString() // fallback
 
         holder.seekbar.progress = internalValue - min
-        holder.seekbar_value.setTextFuture(text)
+        holder.seekbar_value.text = text
     }
 
     override fun equals(other: Any?): Boolean {
@@ -107,10 +106,6 @@ open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
         return result
     }
 
-    interface ValueTextProvider {
-        fun getText(value: Int): String
-    }
-
     open class Builder(context: Context) : PreferenceModel.Builder(context) {
 
         var min: Int = 0
@@ -119,7 +114,7 @@ open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
             private set
         var incValue: Int = 1
             private set
-        var valueTextProvider: ValueTextProvider? = null
+        var valueTextProvider: ((Int) -> String)? = null
             private set
 
         init {
@@ -138,7 +133,7 @@ open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
             this.incValue = incValue
         }
 
-        fun valueTextProvider(valueTextProvider: SeekBarPreferenceModel.ValueTextProvider) {
+        fun valueTextProvider(valueTextProvider: (Int) -> String) {
             this.valueTextProvider = valueTextProvider
         }
 
@@ -157,9 +152,3 @@ inline fun EpoxyController.seekBarPreference(
 inline fun PreferenceEpoxyController.seekBarPreference(
     init: SeekBarPreferenceModel.Builder.() -> Unit
 ) = seekBarPreference(context, init)
-
-fun SeekBarPreferenceModel.Builder.valueTextProvider(getText: (Int) -> String) {
-    valueTextProvider(object : SeekBarPreferenceModel.ValueTextProvider {
-        override fun getText(value: Int) = getText(value)
-    })
-}
