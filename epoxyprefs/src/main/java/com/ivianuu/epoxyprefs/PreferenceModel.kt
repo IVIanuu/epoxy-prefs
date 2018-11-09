@@ -30,8 +30,7 @@ import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyHolder
 import com.airbnb.epoxy.EpoxyModelWithHolder
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_preference.*
+import kotlinx.android.synthetic.main.item_preference.view.*
 
 /**
  * Base preference
@@ -67,21 +66,21 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     override fun bind(holder: Holder) {
         super.bind(holder)
 
-        holder.title?.let {
+        holder.containerView.title?.let {
             it.text = title
             it.visibility = if (title != null) View.VISIBLE else View.GONE
         }
 
-        holder.summary?.let {
+        holder.containerView.summary?.let {
             it.text = summary
             it.visibility = if (summary != null) View.VISIBLE else View.GONE
         }
 
-        holder.icon?.let {
+        holder.containerView.icon?.let {
             it.setImageDrawable(icon)
         }
 
-        holder.icon_frame?.let {
+        holder.containerView.icon_frame?.let {
             it.visibility = if (icon != null) View.VISIBLE else View.GONE
         }
 
@@ -111,10 +110,10 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         super.unbind(holder)
 
         with(holder) {
-            title?.text = null
-            summary?.text = null
-            icon?.setImageDrawable(null)
-            icon_frame?.visibility = View.VISIBLE
+            containerView.title?.text = null
+            containerView.summary?.text = null
+            containerView.icon?.setImageDrawable(null)
+            containerView.icon_frame?.visibility = View.VISIBLE
             containerView.isEnabled = true
             containerView.alpha = 1f
             containerView.isClickable = true
@@ -259,9 +258,9 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     /**
      * A [EpoxyHolder] for [PreferenceModel]'s
      */
-    open class Holder : EpoxyHolder(), LayoutContainer {
+    open class Holder : EpoxyHolder() {
 
-        override lateinit var containerView: View
+        lateinit var containerView: View
 
         @CallSuper
         override fun bindView(view: View) {

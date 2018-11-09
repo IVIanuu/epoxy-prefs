@@ -19,7 +19,7 @@ package com.ivianuu.epoxyprefs
 import android.content.Context
 import android.widget.CompoundButton
 import com.airbnb.epoxy.EpoxyController
-import kotlinx.android.synthetic.main.widget_preference_checkbox.*
+import kotlinx.android.synthetic.main.widget_preference_checkbox.view.*
 
 /**
  * A check box preference
@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.widget_preference_checkbox.*
 open class CheckboxPreferenceModel(builder: Builder) : CompoundButtonPreferenceModel(builder) {
 
     override val Holder.compoundButton: CompoundButton?
-        get() = checkbox
+        get() = containerView.checkbox
 
     open class Builder(context: Context) : CompoundButtonPreferenceModel.Builder(context) {
         init {
