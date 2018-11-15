@@ -13,6 +13,8 @@ import com.airbnb.epoxy.EpoxyViewHolder
  */
 class PreferenceDividerDecoration(context: Context) : RecyclerView.ItemDecoration() {
 
+    var style = Style.CATEGORIES
+
     var divider: Drawable? = null
         set(value) {
             field = value
@@ -20,8 +22,6 @@ class PreferenceDividerDecoration(context: Context) : RecyclerView.ItemDecoratio
         }
 
     var dividerHeight = 0
-
-    var style = Style.ITEMS
 
     init {
         val attrs =
@@ -55,16 +55,12 @@ class PreferenceDividerDecoration(context: Context) : RecyclerView.ItemDecoratio
         }
     }
 
-    private fun shouldDrawDivider(view: View, parent: RecyclerView): Boolean {
-        val holder = parent.getChildViewHolder(view)
+    private fun shouldDrawDivider(view: View, parent: RecyclerView) = when (style) {
+        Style.CATEGORIES -> shouldDrawDividerCategories(view, parent)
+        Style.ITEMS -> shouldDrawDividerItems(view, parent)
+    }
 
-        val isCategory =
-            holder is EpoxyViewHolder && holder.model is CategoryPreferenceModel
-
-        if (isCategory) {
-            // return true
-        }
-
+    private fun shouldDrawDividerCategories(view: View, parent: RecyclerView): Boolean {
         val index = parent.indexOfChild(view)
 
         val isNextCategory = if (index < parent.childCount - 1) {
@@ -81,7 +77,27 @@ class PreferenceDividerDecoration(context: Context) : RecyclerView.ItemDecoratio
         return false
     }
 
+    private fun shouldDrawDividerItems(view: View, parent: RecyclerView): Boolean {
+        val holder = parent.getChildViewHolder(view)
+
+        val isCategory =
+            holder is EpoxyViewHolder && holder.model is CategoryPreferenceModel
+
+        if (isCategory) return false
+
+        val index = parent.indexOfChild(view)
+
+        val isNextCategory = if (index < parent.childCount - 1) {
+            val nextHolder = parent.getChildViewHolder(parent.getChildAt(index + 1))
+            nextHolder is EpoxyViewHolder && nextHolder.model is CategoryPreferenceModel
+        } else {
+            false
+        }
+
+        return !isNextCategory
+    }
+
     enum class Style {
-        CATEGORY, ITEMS
+        CATEGORIES, ITEMS
     }
 }

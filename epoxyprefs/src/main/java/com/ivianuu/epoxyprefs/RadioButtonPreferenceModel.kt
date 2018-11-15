@@ -3,7 +3,7 @@ package com.ivianuu.epoxyprefs
 import android.content.Context
 import android.widget.CompoundButton
 import com.airbnb.epoxy.EpoxyController
-import kotlinx.android.synthetic.main.widget_preference_radio.view.*
+import kotlinx.android.synthetic.main.widget_preference_radio.*
 
 /**
  * A radio button preference
@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.widget_preference_radio.view.*
 open class RadioButtonPreferenceModel(builder: Builder) : CompoundButtonPreferenceModel(builder) {
 
     override val Holder.compoundButton: CompoundButton?
-        get() = containerView.radio
+        get() = radio
 
     open class Builder(context: Context) : CompoundButtonPreferenceModel.Builder(context) {
 

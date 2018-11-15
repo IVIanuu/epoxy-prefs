@@ -19,7 +19,7 @@ package com.ivianuu.epoxyprefs
 import android.content.Context
 import android.widget.SeekBar
 import com.airbnb.epoxy.EpoxyController
-import kotlinx.android.synthetic.main.item_preference_seekbar.view.*
+import kotlinx.android.synthetic.main.item_preference_seekbar.*
 
 /**
  * Abstract seek bar preference model
@@ -39,10 +39,10 @@ open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
 
         internalValue = value as? Int ?: 0
 
-        holder.containerView.seekbar.max = max - min
-        holder.containerView.seekbar.progress = internalValue - min
+        holder.seekbar.max = max - min
+        holder.seekbar.progress = internalValue - min
 
-        holder.containerView.seekbar.setOnSeekBarChangeListener(object :
+        holder.seekbar.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (fromUser) syncView(holder)
@@ -62,7 +62,7 @@ open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
     }
 
     private fun syncView(holder: Holder) {
-        var progress = min + holder.containerView.seekbar.progress
+        var progress = min + holder.seekbar.progress
 
         if (progress < min) {
             progress = min
@@ -79,8 +79,8 @@ open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
         val text = provider?.invoke(internalValue)
                 ?: internalValue.toString() // fallback
 
-        holder.containerView.seekbar.progress = internalValue - min
-        holder.containerView.seekbar_value.text = text
+        holder.seekbar.progress = internalValue - min
+        holder.seekbar_value.text = text
     }
 
     override fun equals(other: Any?): Boolean {

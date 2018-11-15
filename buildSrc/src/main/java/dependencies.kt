@@ -15,7 +15,7 @@ object Versions {
     const val androidGradlePlugin = "3.2.1"
     const val androidx = "1.0.0"
     const val epoxy = "2.19.0"
-    const val kotlin = "1.3.0-rc-57"
+    const val kotlin = "1.3.10"
     const val materialDialogs = "0.9.6.0"
     const val mavenGradle = "2.1"
 }

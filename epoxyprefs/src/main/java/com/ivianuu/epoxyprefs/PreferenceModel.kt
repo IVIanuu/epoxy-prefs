@@ -30,7 +30,8 @@ import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyHolder
 import com.airbnb.epoxy.EpoxyModelWithHolder
-import kotlinx.android.synthetic.main.item_preference.view.*
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_preference.*
 
 /**
  * Base preference
@@ -38,7 +39,7 @@ import kotlinx.android.synthetic.main.item_preference.view.*
 open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceModel.Holder>() {
 
     val context = builder.context
-    val key = builder.key
+    val key = builder.key ?: throw IllegalStateException("missing key")
     val title = builder.title
     val summary = builder.summary
     val icon = builder.icon
@@ -59,6 +60,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     val value = builder.value
 
     init {
+        id(key)
         layout(layoutRes + widgetLayoutRes)
     }
 
@@ -66,25 +68,25 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     override fun bind(holder: Holder) {
         super.bind(holder)
 
-        holder.containerView.title?.let {
+        holder.title?.let {
             it.text = title
             it.visibility = if (title != null) View.VISIBLE else View.GONE
         }
 
-        holder.containerView.summary?.let {
+        holder.summary?.let {
             it.text = summary
             it.visibility = if (summary != null) View.VISIBLE else View.GONE
         }
 
-        holder.containerView.icon?.let {
+        holder.icon?.let {
             it.setImageDrawable(icon)
         }
 
-        holder.containerView.icon_frame?.let {
+        holder.icon_frame?.let {
             it.visibility = if (icon != null) View.VISIBLE else View.GONE
         }
 
-        holder.containerView.run {
+        holder.containerView.apply {
             val enabled = enabled && allowedByDependency
             isEnabled = enabled
             alpha = if (enabled) 1f else 0.5f
@@ -110,10 +112,10 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         super.unbind(holder)
 
         with(holder) {
-            containerView.title?.text = null
-            containerView.summary?.text = null
-            containerView.icon?.setImageDrawable(null)
-            containerView.icon_frame?.visibility = View.VISIBLE
+            title?.text = null
+            summary?.text = null
+            icon?.setImageDrawable(null)
+            icon_frame?.visibility = View.VISIBLE
             containerView.isEnabled = true
             containerView.alpha = 1f
             containerView.isClickable = true
@@ -148,7 +150,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     protected fun callChangeListener(newValue: Any) =
         changeListener?.invoke(this, newValue) ?: true
 
-    protected fun shouldPersist() = persistent && key != null
+    protected fun shouldPersist() = persistent
 
     @SuppressLint("ApplySharedPref")
     protected fun editSharedPreferences(edit: SharedPreferences.Editor.() -> Unit) {
@@ -258,9 +260,9 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     /**
      * A [EpoxyHolder] for [PreferenceModel]'s
      */
-    open class Holder : EpoxyHolder() {
+    open class Holder : EpoxyHolder(), LayoutContainer {
 
-        lateinit var containerView: View
+        override lateinit var containerView: View
 
         @CallSuper
         override fun bindView(view: View) {
