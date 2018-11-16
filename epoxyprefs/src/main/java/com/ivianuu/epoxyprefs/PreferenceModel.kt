@@ -30,6 +30,7 @@ import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyHolder
 import com.airbnb.epoxy.EpoxyModelWithHolder
+import com.ivianuu.epoxyprefs.internal.tryToResolveDefaultValue
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_preference.*
 
@@ -44,6 +45,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     val summary = builder.summary
     val icon = builder.icon
     val defaultValue = builder.defaultValue
+    val defaultDependencyValue = builder.defaultDependencyValue
     val enabled = builder.enabled
     val clickable = builder.clickable
     val dependencyKey = builder.dependencyKey
@@ -221,6 +223,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         if (summary != other.summary) return false
         if (icon != other.icon) return false
         if (defaultValue != other.defaultValue) return false
+        if (defaultDependencyValue != other.defaultDependencyValue) return false
         if (enabled != other.enabled) return false
         if (clickable != other.clickable) return false
         if (dependencyKey != other.dependencyKey) return false
@@ -243,6 +246,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         result = 31 * result + (summary?.hashCode() ?: 0)
         result = 31 * result + (icon?.hashCode() ?: 0)
         result = 31 * result + (defaultValue?.hashCode() ?: 0)
+        result = 31 * result + (defaultDependencyValue?.hashCode() ?: 0)
         result = 31 * result + enabled.hashCode()
         result = 31 * result + clickable.hashCode()
         result = 31 * result + (dependencyKey?.hashCode() ?: 0)
@@ -282,6 +286,8 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
             private set
         var defaultValue: Any? = null
             private set
+        var defaultDependencyValue: Any? = null
+            private set
         var enabled: Boolean = true
             private set
         var clickable: Boolean = true
@@ -292,7 +298,9 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
             private set
         val allowedByDependency
             get() = if (dependencyKey != null && dependencyValue != null) {
-                realSharedPreferences.all[dependencyKey] == dependencyValue
+                (realSharedPreferences.all[dependencyKey]
+                    ?: defaultDependencyValue
+                    ?: dependencyValue.tryToResolveDefaultValue()) == dependencyValue
             } else {
                 true
             }
@@ -351,6 +359,10 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
 
         fun defaultValue(defaultValue: Any?) {
             this.defaultValue = defaultValue
+        }
+
+        fun defaultDependencyValue(defaultDependencyValue: Any?) {
+            this.defaultDependencyValue = defaultDependencyValue
         }
 
         fun enabled(enabled: Boolean) {
@@ -426,9 +438,10 @@ fun PreferenceModel.Builder.icon(iconRes: Int) {
     icon(ContextCompat.getDrawable(context, iconRes))
 }
 
-fun PreferenceModel.Builder.dependency(key: String?, value: Any?) {
+fun PreferenceModel.Builder.dependency(key: String?, value: Any?, defaultValue: Any? = null) {
     dependencyKey(key)
     dependencyValue(value)
+    defaultDependencyValue(defaultValue)
 }
 
 @JvmName("changeListenerTyped")
