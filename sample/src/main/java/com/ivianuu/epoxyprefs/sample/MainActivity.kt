@@ -2,8 +2,22 @@ package com.ivianuu.epoxyprefs.sample
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.ivianuu.epoxyprefs.*
-import kotlinx.android.synthetic.main.activity_main.*
+import com.ivianuu.epoxyprefs.PreferenceDividerDecoration
+import com.ivianuu.epoxyprefs.buildPreferencesWith
+import com.ivianuu.epoxyprefs.categoryPreference
+import com.ivianuu.epoxyprefs.changeListener
+import com.ivianuu.epoxyprefs.checkboxPreference
+import com.ivianuu.epoxyprefs.dependency
+import com.ivianuu.epoxyprefs.editTextPreference
+import com.ivianuu.epoxyprefs.icon
+import com.ivianuu.epoxyprefs.multiSelectListPreference
+import com.ivianuu.epoxyprefs.preference
+import com.ivianuu.epoxyprefs.radioButtonPreference
+import com.ivianuu.epoxyprefs.seekBarPreference
+import com.ivianuu.epoxyprefs.singleItemListPreference
+import com.ivianuu.epoxyprefs.switchPreference
+import com.ivianuu.epoxyprefs.urlClickListener
+import kotlinx.android.synthetic.main.activity_main.list
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,6 +40,7 @@ class MainActivity : AppCompatActivity() {
                     key("my_switch_$i")
                     title("Switch")
                     summary("Nice a switch")
+                    icon(R.drawable.abc_ic_ab_back_material)
                 }
 
                 if (sharedPreferences.getBoolean("my_switch_$i", false)) {
