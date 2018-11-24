@@ -17,8 +17,8 @@
 package com.ivianuu.epoxyprefs
 
 import android.content.Context
-import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.airbnb.epoxy.EpoxyController
 
 /**
@@ -33,17 +33,19 @@ open class SingleItemListPreferenceModel(builder: Builder) : ListPreferenceModel
         val currentValue = value as? String ?: ""
         val selectedIndex = entryValues.indexOf(currentValue)
 
-        MaterialDialog.Builder(context)
+        MaterialDialog(context)
             .applyDialogSettings(applyPositiveButtonText = false)
-            .items(entries.toList())
-            .itemsCallbackSingleChoice(selectedIndex) { _: MaterialDialog, _: View, position: Int, _: CharSequence ->
-                val newValue = entryValues.toList()[position].toString()
+            .listItemsSingleChoice(
+                initialSelection = selectedIndex,
+                items = entries.toList(),
+                waitForPositiveButton = false
+            ) { dialog, position, _ ->
+                val newValue = entryValues.toList()[position]
                 if (callChangeListener(newValue)) {
                     persistString(key, newValue)
-                    true
-                } else {
-                    false
                 }
+
+                dialog.dismiss()
             }
             .show()
     }

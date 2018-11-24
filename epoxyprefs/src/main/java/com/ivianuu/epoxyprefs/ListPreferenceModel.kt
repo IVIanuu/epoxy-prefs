@@ -29,10 +29,10 @@ abstract class ListPreferenceModel(builder: Builder) : DialogPreferenceModel(bui
 
     abstract class Builder(context: Context) : DialogPreferenceModel.Builder(context) {
 
-        var entries: Array<CharSequence>? = null
+        var entries: Array<String>? = null
         var entryValues: Array<String>? = null
 
-        open fun entries(entries: Array<CharSequence>?) {
+        open fun entries(entries: Array<String>?) {
             this.entries = entries
         }
 
@@ -62,7 +62,7 @@ abstract class ListPreferenceModel(builder: Builder) : DialogPreferenceModel(bui
 }
 
 fun ListPreferenceModel.Builder.entriesRes(entriesRes: Int) {
-    entries(context.resources.getTextArray(entriesRes))
+    entries(context.resources.getStringArray(entriesRes))
 }
 
 fun ListPreferenceModel.Builder.entryValuesRes(entryValuesRes: Int) {

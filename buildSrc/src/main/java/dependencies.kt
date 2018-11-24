@@ -16,7 +16,7 @@ object Versions {
     const val androidx = "1.0.0"
     const val epoxy = "2.19.0"
     const val kotlin = "1.3.10"
-    const val materialDialogs = "0.9.6.0"
+    const val materialDialogs = "2.0.0-rc1"
     const val mavenGradle = "2.1"
 }
 
@@ -31,6 +31,8 @@ object Deps {
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
 
     const val materialDialogs = "com.afollestad.material-dialogs:core:${Versions.materialDialogs}"
+    const val materialDialogsInput =
+        "com.afollestad.material-dialogs:input:${Versions.materialDialogs}"
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"
 }

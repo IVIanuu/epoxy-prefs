@@ -39,19 +39,18 @@ abstract class DialogPreferenceModel(builder: Builder) : PreferenceModel(builder
 
     protected abstract fun showDialog()
 
-    protected open fun MaterialDialog.Builder.applyDialogSettings(
+    protected open fun MaterialDialog.applyDialogSettings(
         applyTitle: Boolean = true,
         applyMessage: Boolean = true,
         applyIcon: Boolean = true,
         applyPositiveButtonText: Boolean = true,
         applyNegativeButtonText: Boolean = true
-    ): MaterialDialog.Builder {
-        if (applyTitle) dialogTitle?.let(this::title)
-        if (applyMessage) dialogMessage?.let(this::content)
-        if (applyIcon) dialogIcon?.let(this::icon)
-        if (applyPositiveButtonText) positiveButtonText?.let(this::positiveText)
-        if (applyNegativeButtonText) negativeButtonText?.let(this::negativeText)
-        return this
+    ) = apply {
+        if (applyTitle) dialogTitle?.let { title(text = it) }
+        if (applyMessage) dialogMessage?.let { message(text = it) }
+        if (applyIcon) dialogIcon?.let { icon(drawable = it) }
+        if (applyPositiveButtonText) positiveButtonText?.let { positiveButton(text = it) }
+        if (applyNegativeButtonText) negativeButtonText?.let { negativeButton(text = it) }
     }
 
     override fun equals(other: Any?): Boolean {
@@ -80,25 +79,25 @@ abstract class DialogPreferenceModel(builder: Builder) : PreferenceModel(builder
 
     abstract class Builder(context: Context) : PreferenceModel.Builder(context) {
 
-        var dialogTitle: CharSequence? = null
+        var dialogTitle: String? = null
             private set
-        var dialogMessage: CharSequence? = null
+        var dialogMessage: String? = null
             private set
         var dialogIcon: Drawable? = null
             private set
-        var positiveButtonText: CharSequence? =
+        var positiveButtonText: String? =
             context.getString(android.R.string.ok)
             private set
 
-        var negativeButtonText: CharSequence? =
+        var negativeButtonText: String? =
             context.getString(android.R.string.cancel)
             private set
 
-        fun dialogTitle(dialogTitle: CharSequence?) {
+        fun dialogTitle(dialogTitle: String?) {
             this.dialogTitle = dialogTitle
         }
 
-        fun dialogMessage(dialogMessage: CharSequence?) {
+        fun dialogMessage(dialogMessage: String?) {
             this.dialogMessage = dialogMessage
         }
 
@@ -106,11 +105,11 @@ abstract class DialogPreferenceModel(builder: Builder) : PreferenceModel(builder
             this.dialogIcon = dialogIcon
         }
 
-        fun positiveButtonText(positiveButtonText: CharSequence?) {
+        fun positiveButtonText(positiveButtonText: String?) {
             this.positiveButtonText = positiveButtonText
         }
 
-        fun negativeButtonText(negativeButtonText: CharSequence?) {
+        fun negativeButtonText(negativeButtonText: String?) {
             this.negativeButtonText = negativeButtonText
         }
 
@@ -134,5 +133,5 @@ fun DialogPreferenceModel.Builder.positiveButtonTextRes(positiveButtonTextRes: I
 }
 
 fun DialogPreferenceModel.Builder.negativeButtonTextRes(negativeButtonTextRes: Int) {
-    negativeButtonText(context.getText(negativeButtonTextRes))
+    negativeButtonText(context.getString(negativeButtonTextRes))
 }

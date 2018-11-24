@@ -32,7 +32,10 @@ import com.airbnb.epoxy.EpoxyHolder
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.ivianuu.epoxyprefs.internal.tryToResolveDefaultValue
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_preference.*
+import kotlinx.android.synthetic.main.item_preference.icon
+import kotlinx.android.synthetic.main.item_preference.icon_frame
+import kotlinx.android.synthetic.main.item_preference.summary
+import kotlinx.android.synthetic.main.item_preference.title
 
 /**
  * Base preference
@@ -278,9 +281,9 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
 
         var key: String? = null
             private set
-        var title: CharSequence? = null
+        var title: String? = null
             private set
-        var summary: CharSequence? = null
+        var summary: String? = null
             private set
         var icon: Drawable? = null
             private set
@@ -345,11 +348,11 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
             this.key = key
         }
 
-        fun title(title: CharSequence?) {
+        fun title(title: String?) {
             this.title = title
         }
 
-        fun summary(summary: CharSequence?) {
+        fun summary(summary: String?) {
             this.summary = summary
         }
 

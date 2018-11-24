@@ -18,6 +18,7 @@ package com.ivianuu.epoxyprefs
 
 import android.content.Context
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.input
 import com.airbnb.epoxy.EpoxyController
 
 /**
@@ -26,18 +27,16 @@ import com.airbnb.epoxy.EpoxyController
 open class EditTextPreferenceModel(builder: Builder) : DialogPreferenceModel(builder) {
 
     val dialogHint = builder.dialogHint
-    val allowEmptyInput = builder.allowEmptyInput
 
     override fun showDialog() {
         val prefill = value as? String ?: ""
 
-        MaterialDialog.Builder(context)
+        MaterialDialog(context)
             .applyDialogSettings()
             .input(
-                dialogHint ?: "",
-                prefill,
-                allowEmptyInput
-            ) { _: MaterialDialog, input: CharSequence ->
+                hint = dialogHint ?: "",
+                prefill = prefill
+            ) { _, input ->
                 if (callChangeListener(input.toString())) {
                     persistString(key, input.toString())
                 }
@@ -51,7 +50,6 @@ open class EditTextPreferenceModel(builder: Builder) : DialogPreferenceModel(bui
         if (!super.equals(other)) return false
 
         if (dialogHint != other.dialogHint) return false
-        if (allowEmptyInput != other.allowEmptyInput) return false
 
         return true
     }
@@ -59,23 +57,17 @@ open class EditTextPreferenceModel(builder: Builder) : DialogPreferenceModel(bui
     override fun hashCode(): Int {
         var result = super.hashCode()
         result = 31 * result + (dialogHint?.hashCode() ?: 0)
-        result = 31 * result + allowEmptyInput.hashCode()
         return result
     }
 
     open class Builder(context: Context) : DialogPreferenceModel.Builder(context) {
 
-        var dialogHint: CharSequence? = null
-            private set
-        var allowEmptyInput = true
+        var dialogHint: String? = null
             private set
 
-        fun dialogHint(dialogHint: CharSequence?) {
+
+        fun dialogHint(dialogHint: String?) {
             this.dialogHint = dialogHint
-        }
-
-        fun allowEmptyInput(allowEmptyInput: Boolean) {
-            this.allowEmptyInput = allowEmptyInput
         }
 
         override fun build() = EditTextPreferenceModel(this)

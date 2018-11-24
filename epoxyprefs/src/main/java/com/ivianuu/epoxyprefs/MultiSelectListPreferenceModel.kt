@@ -18,6 +18,7 @@ package com.ivianuu.epoxyprefs
 
 import android.content.Context
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.airbnb.epoxy.EpoxyController
 
 /**
@@ -33,22 +34,22 @@ open class MultiSelectListPreferenceModel(builder: Builder) : ListPreferenceMode
         val selectedIndices = currentValues
             .map { entryValues.indexOf(it) }
             .filter { it != -1 }
-            .toTypedArray()
+            .toIntArray()
 
-        MaterialDialog.Builder(context)
+        MaterialDialog(context)
             .applyDialogSettings()
-            .items(entries.toList())
-            .itemsCallbackMultiChoice(selectedIndices) { _: MaterialDialog, positions: Array<Int>, _: Array<CharSequence> ->
+            .listItemsMultiChoice(
+                items = entries.toList(),
+                initialSelection = selectedIndices,
+                allowEmptySelection = true
+            ) { _, positions, _ ->
                 val newValue = entryValues.toList()
                     .filterIndexed { index, _ -> positions.contains(index) }
-                    .map(CharSequence::toString)
+                    .map(String::toString)
                     .toMutableSet()
 
                 if (callChangeListener(newValue)) {
                     persistStringSet(key, newValue)
-                    true
-                } else {
-                    false
                 }
             }
             .show()

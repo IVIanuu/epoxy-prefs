@@ -49,6 +49,7 @@ dependencies {
     api(Deps.epoxy)
     api(Deps.kotlinStdLib)
     api(Deps.materialDialogs)
+    api(Deps.materialDialogsInput)
 }
 
 val sourcesJar = task("sourcesJar", Jar::class) {
