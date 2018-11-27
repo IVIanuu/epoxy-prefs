@@ -54,8 +54,8 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     val dependencyKey = builder.dependencyKey
     val dependencyValue = builder.dependencyValue
     val allowedByDependency = builder.allowedByDependency
-    val onClick = builder.clickListener
-    val onChange = builder.changeListener
+    val onClick = builder.onClick
+    val onChange = builder.onChange
     val sharedPreferences = builder.realSharedPreferences
     val sharedPreferencesName = builder.sharedPreferencesName
     val useCommit = builder.useCommit
@@ -307,9 +307,9 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
             } else {
                 true
             }
-        var clickListener: ((preference: PreferenceModel) -> Boolean)? = null
+        var onClick: ((preference: PreferenceModel) -> Boolean)? = null
             private set
-        var changeListener: ((preference: PreferenceModel, newValue: Any) -> Boolean)? = null
+        var onChange: ((preference: PreferenceModel, newValue: Any) -> Boolean)? = null
             private set
         var sharedPreferences: SharedPreferences? = null
             private set
@@ -384,12 +384,12 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
             this.dependencyValue = dependencyValue
         }
 
-        fun clickListener(clickListener: (preference: PreferenceModel) -> Boolean) {
-            this.clickListener = clickListener
+        fun onClick(onClick: (preference: PreferenceModel) -> Boolean) {
+            this.onClick = onClick
         }
 
-        fun onChange(changeListener: (preference: PreferenceModel, newValue: Any) -> Boolean) {
-            this.changeListener = changeListener
+        fun onChange(onChange: (preference: PreferenceModel, newValue: Any) -> Boolean) {
+            this.onChange = onChange
         }
 
         fun sharedPreferences(sharedPreferences: SharedPreferences?) {
@@ -458,7 +458,7 @@ inline fun <reified T> PreferenceModel.Builder.onChange(crossinline changeListen
 }
 
 fun PreferenceModel.Builder.onClickIntent(intent: (PreferenceModel) -> Intent) =
-    clickListener {
+    onClick {
         it.context.startActivity(intent(it))
     true
 }
