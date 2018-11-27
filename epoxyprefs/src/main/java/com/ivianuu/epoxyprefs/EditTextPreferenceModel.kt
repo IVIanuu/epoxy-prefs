@@ -86,6 +86,6 @@ inline fun PreferenceEpoxyController.editTextPreference(
     init: EditTextPreferenceModel.Builder.() -> Unit
 ) = editTextPreference(context, init)
 
-fun EditTextPreferenceModel.Builder.dialogHintRes(dialogHintRes: Int) {
+fun EditTextPreferenceModel.Builder.dialogHint(dialogHintRes: Int) {
     dialogHint(context.getString(dialogHintRes))
 }

@@ -54,8 +54,8 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     val dependencyKey = builder.dependencyKey
     val dependencyValue = builder.dependencyValue
     val allowedByDependency = builder.allowedByDependency
-    val clickListener = builder.clickListener
-    val changeListener = builder.changeListener
+    val onClick = builder.clickListener
+    val onChange = builder.changeListener
     val sharedPreferences = builder.realSharedPreferences
     val sharedPreferencesName = builder.sharedPreferencesName
     val useCommit = builder.useCommit
@@ -101,7 +101,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
             if (clickable) {
                 setOnClickListener {
                     val handled =
-                        clickListener?.invoke(this@PreferenceModel) ?: false
+                        onClick?.invoke(this@PreferenceModel) ?: false
                     if (!handled) {
                         onClick()
                     }
@@ -153,7 +153,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     }
 
     protected fun callChangeListener(newValue: Any) =
-        changeListener?.invoke(this, newValue) ?: true
+        onChange?.invoke(this, newValue) ?: true
 
     protected fun shouldPersist() = persistent
 
@@ -388,7 +388,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
             this.clickListener = clickListener
         }
 
-        fun changeListener(changeListener: (preference: PreferenceModel, newValue: Any) -> Boolean) {
+        fun onChange(changeListener: (preference: PreferenceModel, newValue: Any) -> Boolean) {
             this.changeListener = changeListener
         }
 
@@ -429,11 +429,11 @@ inline fun EpoxyController.preference(context: Context, init: PreferenceModel.Bu
 inline fun PreferenceEpoxyController.preference(init: PreferenceModel.Builder.() -> Unit) =
     preference(context, init)
 
-fun PreferenceModel.Builder.titleRes(titleRes: Int) {
+fun PreferenceModel.Builder.title(titleRes: Int) {
     title(context.getString(titleRes))
 }
 
-fun PreferenceModel.Builder.summaryRes(summaryRes: Int) {
+fun PreferenceModel.Builder.summary(summaryRes: Int) {
     summary(context.getString(summaryRes))
 }
 
@@ -448,8 +448,8 @@ fun PreferenceModel.Builder.dependency(key: String?, value: Any?, defaultValue: 
 }
 
 @JvmName("changeListenerTyped")
-inline fun <reified T> PreferenceModel.Builder.changeListener(crossinline changeListener: (preference: PreferenceModel, newValue: T) -> Boolean) {
-    changeListener { preference: PreferenceModel, newValue: Any ->
+inline fun <reified T> PreferenceModel.Builder.onChange(crossinline changeListener: (preference: PreferenceModel, newValue: T) -> Boolean) {
+    onChange { preference: PreferenceModel, newValue: Any ->
         changeListener(
             preference,
             newValue as T
@@ -457,13 +457,13 @@ inline fun <reified T> PreferenceModel.Builder.changeListener(crossinline change
     }
 }
 
-fun PreferenceModel.Builder.intentClickListener(intent: (PreferenceModel) -> Intent) =
+fun PreferenceModel.Builder.onClickIntent(intent: (PreferenceModel) -> Intent) =
     clickListener {
         it.context.startActivity(intent(it))
     true
 }
 
-fun PreferenceModel.Builder.urlClickListener(url: (PreferenceModel) -> String) =
-    intentClickListener {
+fun PreferenceModel.Builder.onClickUrl(url: (PreferenceModel) -> String) =
+    onClickIntent {
         Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(url(it)) }
 }

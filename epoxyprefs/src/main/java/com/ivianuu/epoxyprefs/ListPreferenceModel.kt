@@ -61,10 +61,10 @@ abstract class ListPreferenceModel(builder: Builder) : DialogPreferenceModel(bui
     }
 }
 
-fun ListPreferenceModel.Builder.entriesRes(entriesRes: Int) {
+fun ListPreferenceModel.Builder.entries(entriesRes: Int) {
     entries(context.resources.getStringArray(entriesRes))
 }
 
-fun ListPreferenceModel.Builder.entryValuesRes(entryValuesRes: Int) {
+fun ListPreferenceModel.Builder.entryValues(entryValuesRes: Int) {
     entryValues(context.resources.getStringArray(entryValuesRes))
 }

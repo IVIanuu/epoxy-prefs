@@ -116,22 +116,22 @@ abstract class DialogPreferenceModel(builder: Builder) : PreferenceModel(builder
     }
 }
 
-fun DialogPreferenceModel.Builder.dialogTitleRes(dialogTitleRes: Int) {
+fun DialogPreferenceModel.Builder.dialogTitle(dialogTitleRes: Int) {
     dialogTitle(context.getString(dialogTitleRes))
 }
 
-fun DialogPreferenceModel.Builder.dialogMessageRes(dialogMessageRes: Int) {
+fun DialogPreferenceModel.Builder.dialogMessage(dialogMessageRes: Int) {
     dialogTitle(context.getString(dialogMessageRes))
 }
 
-fun DialogPreferenceModel.Builder.dialogIconRes(dialogIconRes: Int) {
+fun DialogPreferenceModel.Builder.dialogIcon(dialogIconRes: Int) {
     dialogIcon(ContextCompat.getDrawable(context, dialogIconRes))
 }
 
-fun DialogPreferenceModel.Builder.positiveButtonTextRes(positiveButtonTextRes: Int) {
+fun DialogPreferenceModel.Builder.positiveButtonText(positiveButtonTextRes: Int) {
     positiveButtonText(context.getString(positiveButtonTextRes))
 }
 
-fun DialogPreferenceModel.Builder.negativeButtonTextRes(negativeButtonTextRes: Int) {
+fun DialogPreferenceModel.Builder.negativeButtonText(negativeButtonTextRes: Int) {
     negativeButtonText(context.getString(negativeButtonTextRes))
 }
