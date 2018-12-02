@@ -14,8 +14,10 @@ object Build {
 object Versions {
     const val androidGradlePlugin = "3.2.1"
     const val androidx = "1.0.0"
+    const val constraintLayout = "1.1.3"
     const val epoxy = "2.19.0"
     const val kotlin = "1.3.10"
+    const val materialComponents = "1.1.0-alpha01"
     const val materialDialogs = "2.0.0-rc1"
     const val mavenGradle = "2.1"
 }
@@ -25,10 +27,16 @@ object Deps {
 
     const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidx}"
 
+    const val constraintLayout =
+        "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
+
     const val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
 
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
+
+    const val materialComponents =
+        "com.google.android.material:material:${Versions.materialComponents}"
 
     const val materialDialogs = "com.afollestad.material-dialogs:core:${Versions.materialDialogs}"
     const val materialDialogsInput =

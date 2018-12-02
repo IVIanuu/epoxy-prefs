@@ -46,8 +46,10 @@ android {
 
 dependencies {
     api(Deps.androidxAppCompat)
+    api(Deps.constraintLayout)
     api(Deps.epoxy)
     api(Deps.kotlinStdLib)
+    api(Deps.materialComponents)
     api(Deps.materialDialogs)
     api(Deps.materialDialogsInput)
 }
