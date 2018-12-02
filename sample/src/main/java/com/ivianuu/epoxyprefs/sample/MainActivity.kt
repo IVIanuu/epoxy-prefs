@@ -1,6 +1,5 @@
 package com.ivianuu.epoxyprefs.sample
 
-import android.content.Context
 import android.os.Bundle
 import com.ivianuu.epoxyprefs.PreferenceDividerDecoration
 
@@ -12,7 +11,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        list.addItemDecoration(PreferenceDividerDecoration(this as Context))
+        list.addItemDecoration(PreferenceDividerDecoration(this))
 
         list.buildPreferencesWith {
             for (i in 0 until 100) {
