@@ -1,6 +1,4 @@
-import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
-import java.io.File
 
 /*
  * Copyright 2018 Manuel Wrage
@@ -54,25 +52,4 @@ dependencies {
     api(Deps.materialDialogsInput)
 }
 
-val sourcesJar = task("sourcesJar", Jar::class) {
-    from(android.sourceSets["main"].java.srcDirs)
-    classifier = "sources"
-}
-
-val javadoc = task("javadoc", Javadoc::class) {
-    isFailOnError = false
-    source = android.sourceSets["main"].java.sourceFiles
-    classpath += project.files(android.bootClasspath.joinToString(File.pathSeparator))
-    classpath += configurations.compile
-}
-
-val javadocJar = task("javadocJar", Jar::class) {
-    dependsOn(javadoc)
-    classifier = "javadoc"
-    from(javadoc.destinationDir)
-}
-
-artifacts {
-    add("archives", sourcesJar)
-    add("archives", javadocJar)
-}
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-sources.gradle")
