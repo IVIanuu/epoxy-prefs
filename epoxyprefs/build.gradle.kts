@@ -19,28 +19,10 @@ import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
 plugins {
     id("com.android.library")
     id("kotlin-android")
-    id("kotlin-android-extensions")
-    id("com.github.dcendents.android-maven")
 }
 
-group = "com.github.ivianuu"
-
-android {
-    compileSdkVersion(Build.compileSdk)
-
-    defaultConfig {
-        buildToolsVersion = Build.buildToolsVersion
-        minSdkVersion(Build.minSdk)
-        targetSdkVersion(Build.targetSdk)
-    }
-
-    androidExtensions {
-        // isExperimental = true
-        configure(delegateClosureOf<AndroidExtensionsExtension> {
-            isExperimental = true
-        })
-    }
-}
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/jitpack-publish.gradle")
 
 dependencies {
     api(Deps.androidxAppCompat)
@@ -51,5 +33,3 @@ dependencies {
     api(Deps.materialDialogs)
     api(Deps.materialDialogsInput)
 }
-
-apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mvn-sources.gradle")
