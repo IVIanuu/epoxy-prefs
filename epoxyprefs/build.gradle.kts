@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
-
 /*
  * Copyright 2018 Manuel Wrage
  *
@@ -22,6 +20,7 @@ plugins {
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-lib.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-android-ext.gradle")
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/jitpack-publish.gradle")
 
 dependencies {
