@@ -22,6 +22,7 @@ buildscript {
     }
     dependencies {
         classpath(Deps.androidGradlePlugin)
+        classpath(Deps.bintrayGradlePlugin)
         classpath(Deps.kotlinGradlePlugin)
         classpath(Deps.mavenGradlePlugin)
     }
@@ -31,7 +32,6 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven("https://jitpack.io")
         maven("https://dl.bintray.com/drummer-aidan/maven/")
     }
 }

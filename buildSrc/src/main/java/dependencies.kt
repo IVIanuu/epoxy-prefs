@@ -11,9 +11,16 @@ object Build {
     const val versionName = "0.0.1"
 }
 
+object Publishing {
+    const val groupId = "com.ivianuu.epoxyprefs"
+    const val vcsUrl = "https://github.com/IVIanuu/epoxy-prefs"
+    const val version = "git"
+}
+
 object Versions {
     const val androidGradlePlugin = "3.3.0"
     const val androidxAppCompat = "1.0.2"
+    const val bintray = "1.8.4"
     const val constraintLayout = "1.1.3"
     const val epoxy = "3.0.0"
     const val kotlin = "1.3.20"
@@ -26,6 +33,9 @@ object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
 
     const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidxAppCompat}"
+
+    const val bintrayGradlePlugin =
+        "com.jfrog.bintray.gradle:gradle-bintray-plugin:${Versions.bintray}"
 
     const val constraintLayout =
         "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
