@@ -70,21 +70,23 @@ open class EditTextPreferenceModel(builder: Builder) : DialogPreferenceModel(bui
             this.dialogHint = dialogHint
         }
 
-        override fun build() = EditTextPreferenceModel(this)
+        override fun build(): EditTextPreferenceModel = EditTextPreferenceModel(this)
     }
 }
 
 inline fun EpoxyController.editTextPreference(
     context: Context,
     init: EditTextPreferenceModel.Builder.() -> Unit
-) = EditTextPreferenceModel.Builder(context)
-    .apply(init)
-    .build()
-    .also { it.addTo(this) }
+): EditTextPreferenceModel {
+    return EditTextPreferenceModel.Builder(context)
+        .apply(init)
+        .build()
+        .also { it.addTo(this) }
+}
 
 inline fun PreferenceEpoxyController.editTextPreference(
     init: EditTextPreferenceModel.Builder.() -> Unit
-) = editTextPreference(context, init)
+): EditTextPreferenceModel = editTextPreference(context, init)
 
 fun EditTextPreferenceModel.Builder.dialogHint(dialogHintRes: Int) {
     dialogHint(context.getString(dialogHintRes))

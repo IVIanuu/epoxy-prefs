@@ -315,7 +315,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
             private set
         var sharedPreferencesName: String? = null
             private set
-        var useCommit: Boolean = EpoxyPrefsPlugins.getUseCommit()
+        var useCommit: Boolean = EpoxyPrefsPlugins.useCommit
             private set
         var persistent: Boolean = true
             private set
@@ -331,7 +331,6 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
             } else {
                 null
             }
-
 
         internal val realSharedPreferences
             get() = if (sharedPreferences != null) {
@@ -416,17 +415,21 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
             this.widgetLayoutRes = widgetLayoutRes
         }
 
-        open fun build() = PreferenceModel(this)
+        open fun build(): PreferenceModel = PreferenceModel(this)
     }
 }
 
-inline fun EpoxyController.preference(context: Context, init: PreferenceModel.Builder.() -> Unit) =
-    PreferenceModel.Builder(context)
+inline fun EpoxyController.preference(
+    context: Context,
+    init: PreferenceModel.Builder.() -> Unit
+): PreferenceModel {
+    return PreferenceModel.Builder(context)
         .apply(init)
         .build()
         .also { it.addTo(this) }
+}
 
-inline fun PreferenceEpoxyController.preference(init: PreferenceModel.Builder.() -> Unit) =
+inline fun PreferenceEpoxyController.preference(init: PreferenceModel.Builder.() -> Unit): PreferenceModel =
     preference(context, init)
 
 fun PreferenceModel.Builder.title(titleRes: Int) {

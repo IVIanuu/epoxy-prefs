@@ -20,7 +20,9 @@ plugins {
 }
 
 apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/android-build-app.gradle")
+apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/kt-android-ext.gradle")
 
 dependencies {
     implementation(Deps.androidxAppCompat)
+    implementation(project(":epoxyprefs"))
 }

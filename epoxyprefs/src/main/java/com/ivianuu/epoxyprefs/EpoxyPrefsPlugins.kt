@@ -26,30 +26,43 @@ object EpoxyPrefsPlugins {
 
     private var defaultSharedPreferences: SharedPreferences? = null
     private var defaultSharedPreferencesName: String? = null
-    private var useCommit = false
 
+    /** Provider for [SharedPreferences] */
+    var prefsProvider: PrefsProvider = { context, name ->
+        context.getSharedPreferences(name, Context.MODE_PRIVATE)
+    }
+
+    /** Whether or not [SharedPreferences.Editor.commit] should be used */
+    var useCommit = false
+
+    /**
+     * Returns the default [SharedPreferences]
+     */
     fun getDefaultSharedPreferences(context: Context): SharedPreferences =
-        this.defaultSharedPreferences
-                ?: context.getSharedPreferences(
-                    getDefaultSharedPreferencesName(context), Context.MODE_PRIVATE
-                ).also {
-                    defaultSharedPreferences = it
-                }
+        defaultSharedPreferences
+            ?: prefsProvider(context, getDefaultSharedPreferencesName(context))
+                .also { defaultSharedPreferences = it }
 
+    /**
+     * Sets the default [SharedPreferences]
+     */
     fun setDefaultSharedPreferences(sharedPreferences: SharedPreferences) {
         this.defaultSharedPreferences = sharedPreferences
     }
 
+    /**
+     * Returns the default shared preferences name
+     */
     fun getDefaultSharedPreferencesName(context: Context) =
-        defaultSharedPreferencesName ?: context.packageName+"_preferences"
+        defaultSharedPreferencesName ?: context.packageName + "_preferences"
 
+    /**
+     * Sets the default shared preferences name
+     */
     fun setDefaultSharedPreferencesName(defaultSharedPreferencesName: String) {
         this.defaultSharedPreferencesName = defaultSharedPreferencesName
     }
 
-    fun getUseCommit() = useCommit
-
-    fun setUseCommit(useCommit: Boolean) {
-        this.useCommit = useCommit
-    }
 }
+
+typealias PrefsProvider = (Context, String) -> SharedPreferences

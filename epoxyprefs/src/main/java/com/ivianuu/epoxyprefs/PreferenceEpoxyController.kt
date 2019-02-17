@@ -34,7 +34,7 @@ abstract class PreferenceEpoxyController(
     }
 }
 
-fun Context.preferenceEpoxyController(buildModels: PreferenceEpoxyController.() -> Unit) =
+fun Context.preferenceEpoxyController(buildModels: PreferenceEpoxyController.() -> Unit): PreferenceEpoxyController =
     preferenceEpoxyController(this, buildModels)
 
 @JvmName("preferenceEpoxyControllerWith")

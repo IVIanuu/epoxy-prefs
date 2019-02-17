@@ -19,7 +19,7 @@ package com.ivianuu.epoxyprefs
 import android.content.Context
 import android.widget.CompoundButton
 import com.airbnb.epoxy.EpoxyController
-import kotlinx.android.synthetic.main.widget_preference_checkbox.*
+import kotlinx.android.synthetic.main.widget_preference_checkbox.checkbox
 
 /**
  * A check box preference
@@ -34,7 +34,7 @@ open class CheckboxPreferenceModel(builder: Builder) : CompoundButtonPreferenceM
             widgetLayoutRes(R.layout.widget_preference_checkbox)
         }
 
-        override fun build() = CheckboxPreferenceModel(this)
+        override fun build(): CheckboxPreferenceModel = CheckboxPreferenceModel(this)
     }
 
     override fun equals(other: Any?): Boolean {
@@ -49,11 +49,13 @@ open class CheckboxPreferenceModel(builder: Builder) : CompoundButtonPreferenceM
 inline fun EpoxyController.checkboxPreference(
     context: Context,
     init: CheckboxPreferenceModel.Builder.() -> Unit
-) = CheckboxPreferenceModel.Builder(context)
-    .apply(init)
-    .build()
-    .also { it.addTo(this) }
+): CheckboxPreferenceModel {
+    return CheckboxPreferenceModel.Builder(context)
+        .apply(init)
+        .build()
+        .also { it.addTo(this) }
+}
 
 inline fun PreferenceEpoxyController.checkboxPreference(
     init: CheckboxPreferenceModel.Builder.() -> Unit
-) = checkboxPreference(context, init)
+): CheckboxPreferenceModel = checkboxPreference(context, init)

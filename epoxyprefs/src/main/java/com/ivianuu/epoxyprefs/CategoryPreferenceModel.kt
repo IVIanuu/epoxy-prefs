@@ -31,7 +31,7 @@ open class CategoryPreferenceModel(builder: Builder) : PreferenceModel(builder) 
             layoutRes(R.layout.item_preference_category)
         }
 
-        override fun build() = CategoryPreferenceModel(this)
+        override fun build(): CategoryPreferenceModel = CategoryPreferenceModel(this)
     }
 
     override fun equals(other: Any?): Boolean {
@@ -46,11 +46,13 @@ open class CategoryPreferenceModel(builder: Builder) : PreferenceModel(builder) 
 inline fun EpoxyController.categoryPreference(
     context: Context,
     init: CategoryPreferenceModel.Builder.() -> Unit
-) = CategoryPreferenceModel.Builder(context)
-    .apply(init)
-    .build()
-    .also { it.addTo(this) }
+): CategoryPreferenceModel {
+    return CategoryPreferenceModel.Builder(context)
+        .apply(init)
+        .build()
+        .also { it.addTo(this) }
+}
 
 inline fun PreferenceEpoxyController.categoryPreference(
     init: CategoryPreferenceModel.Builder.() -> Unit
-) = categoryPreference(context, init)
+): CategoryPreferenceModel = categoryPreference(context, init)

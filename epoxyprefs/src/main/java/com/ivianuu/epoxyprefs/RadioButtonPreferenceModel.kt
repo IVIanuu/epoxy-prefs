@@ -3,7 +3,7 @@ package com.ivianuu.epoxyprefs
 import android.content.Context
 import android.widget.CompoundButton
 import com.airbnb.epoxy.EpoxyController
-import kotlinx.android.synthetic.main.widget_preference_radio.*
+import kotlinx.android.synthetic.main.widget_preference_radio.radio
 
 /**
  * A radio button preference
@@ -19,7 +19,7 @@ open class RadioButtonPreferenceModel(builder: Builder) : CompoundButtonPreferen
             widgetLayoutRes(R.layout.widget_preference_radio)
         }
 
-        override fun build() = RadioButtonPreferenceModel(this)
+        override fun build(): RadioButtonPreferenceModel = RadioButtonPreferenceModel(this)
 
     }
 
@@ -35,11 +35,13 @@ open class RadioButtonPreferenceModel(builder: Builder) : CompoundButtonPreferen
 inline fun EpoxyController.radioButtonPreference(
     context: Context,
     init: RadioButtonPreferenceModel.Builder.() -> Unit
-) = RadioButtonPreferenceModel.Builder(context)
-    .apply(init)
-    .build()
-    .also { it.addTo(this) }
+): RadioButtonPreferenceModel {
+    return RadioButtonPreferenceModel.Builder(context)
+        .apply(init)
+        .build()
+        .also { it.addTo(this) }
+}
 
 inline fun PreferenceEpoxyController.radioButtonPreference(
     init: RadioButtonPreferenceModel.Builder.() -> Unit
-) = radioButtonPreference(context, init)
+): RadioButtonPreferenceModel = radioButtonPreference(context, init)

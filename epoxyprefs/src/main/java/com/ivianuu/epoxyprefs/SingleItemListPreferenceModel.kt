@@ -58,18 +58,20 @@ open class SingleItemListPreferenceModel(builder: Builder) : ListPreferenceModel
     }
 
     open class Builder(context: Context) : ListPreferenceModel.Builder(context) {
-        override fun build() = SingleItemListPreferenceModel(this)
+        override fun build(): SingleItemListPreferenceModel = SingleItemListPreferenceModel(this)
     }
 }
 
 inline fun EpoxyController.singleItemListPreference(
     context: Context,
     init: SingleItemListPreferenceModel.Builder.() -> Unit
-) = SingleItemListPreferenceModel.Builder(context)
-    .apply(init)
-    .build()
-    .also { it.addTo(this) }
+): SingleItemListPreferenceModel {
+    return SingleItemListPreferenceModel.Builder(context)
+        .apply(init)
+        .build()
+        .also { it.addTo(this) }
+}
 
 inline fun PreferenceEpoxyController.singleItemListPreference(
     init: SingleItemListPreferenceModel.Builder.() -> Unit
-) = singleItemListPreference(context, init)
+): SingleItemListPreferenceModel = singleItemListPreference(context, init)

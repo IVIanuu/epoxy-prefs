@@ -2,22 +2,6 @@ package com.ivianuu.epoxyprefs.sample
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.ivianuu.epoxyprefs.PreferenceDividerDecoration
-import com.ivianuu.epoxyprefs.buildPreferencesWith
-import com.ivianuu.epoxyprefs.categoryPreference
-import com.ivianuu.epoxyprefs.checkboxPreference
-import com.ivianuu.epoxyprefs.dependency
-import com.ivianuu.epoxyprefs.editTextPreference
-import com.ivianuu.epoxyprefs.icon
-import com.ivianuu.epoxyprefs.multiSelectListPreference
-import com.ivianuu.epoxyprefs.onChange
-import com.ivianuu.epoxyprefs.onClickUrl
-import com.ivianuu.epoxyprefs.preference
-import com.ivianuu.epoxyprefs.radioButtonPreference
-import com.ivianuu.epoxyprefs.seekBarPreference
-import com.ivianuu.epoxyprefs.singleItemListPreference
-import com.ivianuu.epoxyprefs.switchPreference
-import kotlinx.android.synthetic.main.activity_main.list
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         list.addItemDecoration(PreferenceDividerDecoration(this))
 
         list.buildPreferencesWith {
-            for (i in 0 until 100) {
+            for (i in 0..100) {
                 categoryPreference {
                     key("category_$i")
                     title("Category $i")

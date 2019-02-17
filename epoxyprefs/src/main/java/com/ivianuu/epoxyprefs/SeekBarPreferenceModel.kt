@@ -19,7 +19,8 @@ package com.ivianuu.epoxyprefs
 import android.content.Context
 import android.widget.SeekBar
 import com.airbnb.epoxy.EpoxyController
-import kotlinx.android.synthetic.main.item_preference_seekbar.*
+import kotlinx.android.synthetic.main.item_preference_seekbar.seekbar
+import kotlinx.android.synthetic.main.item_preference_seekbar.seekbar_value
 
 /**
  * Abstract seek bar preference model
@@ -138,18 +139,20 @@ open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
             this.valueTextProvider = valueTextProvider
         }
 
-        override fun build() = SeekBarPreferenceModel(this)
+        override fun build(): SeekBarPreferenceModel = SeekBarPreferenceModel(this)
     }
 }
 
 inline fun EpoxyController.seekBarPreference(
     context: Context,
     init: SeekBarPreferenceModel.Builder.() -> Unit
-) = SeekBarPreferenceModel.Builder(context)
-    .apply(init)
-    .build()
-    .also { it.addTo(this) }
+): SeekBarPreferenceModel {
+    return SeekBarPreferenceModel.Builder(context)
+        .apply(init)
+        .build()
+        .also { it.addTo(this) }
+}
 
 inline fun PreferenceEpoxyController.seekBarPreference(
     init: SeekBarPreferenceModel.Builder.() -> Unit
-) = seekBarPreference(context, init)
+): SeekBarPreferenceModel = seekBarPreference(context, init)

@@ -63,18 +63,20 @@ open class MultiSelectListPreferenceModel(builder: Builder) : ListPreferenceMode
     }
 
     open class Builder(context: Context) : ListPreferenceModel.Builder(context) {
-        override fun build() = MultiSelectListPreferenceModel(this)
+        override fun build(): MultiSelectListPreferenceModel = MultiSelectListPreferenceModel(this)
     }
 }
 
 inline fun EpoxyController.multiSelectListPreference(
     context: Context,
     init: MultiSelectListPreferenceModel.Builder.() -> Unit
-) = MultiSelectListPreferenceModel.Builder(context)
-    .apply(init)
-    .build()
-    .also { it.addTo(this) }
+): MultiSelectListPreferenceModel {
+    return MultiSelectListPreferenceModel.Builder(context)
+        .apply(init)
+        .build()
+        .also { it.addTo(this) }
+}
 
 inline fun PreferenceEpoxyController.multiSelectListPreference(
     init: MultiSelectListPreferenceModel.Builder.() -> Unit
-) = multiSelectListPreference(context, init)
+): MultiSelectListPreferenceModel = multiSelectListPreference(context, init)

@@ -19,7 +19,7 @@ package com.ivianuu.epoxyprefs
 import android.content.Context
 import android.widget.CompoundButton
 import com.airbnb.epoxy.EpoxyController
-import kotlinx.android.synthetic.main.widget_preference_switch.*
+import kotlinx.android.synthetic.main.widget_preference_switch.switchWidget
 
 /**
  * A switch preference
@@ -35,7 +35,7 @@ open class SwitchPreferenceModel(builder: Builder) : CompoundButtonPreferenceMod
             widgetLayoutRes(R.layout.widget_preference_switch)
         }
 
-        override fun build() = SwitchPreferenceModel(this)
+        override fun build(): SwitchPreferenceModel = SwitchPreferenceModel(this)
     }
 
     override fun equals(other: Any?): Boolean {
@@ -50,11 +50,13 @@ open class SwitchPreferenceModel(builder: Builder) : CompoundButtonPreferenceMod
 fun EpoxyController.switchPreference(
     context: Context,
     init: SwitchPreferenceModel.Builder.() -> Unit
-) = SwitchPreferenceModel.Builder(context)
-    .apply(init)
-    .build()
-    .also { it.addTo(this) }
+): SwitchPreferenceModel {
+    return SwitchPreferenceModel.Builder(context)
+        .apply(init)
+        .build()
+        .also { it.addTo(this) }
+}
 
 fun PreferenceEpoxyController.switchPreference(
     init: SwitchPreferenceModel.Builder.() -> Unit
-) = switchPreference(context, init)
+): SwitchPreferenceModel = switchPreference(context, init)
