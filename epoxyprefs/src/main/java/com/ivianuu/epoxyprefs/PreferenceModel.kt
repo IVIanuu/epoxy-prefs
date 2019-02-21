@@ -51,9 +51,8 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     val defaultDependencyValue = builder.defaultDependencyValue
     val enabled = builder.enabled
     val clickable = builder.clickable
-    val dependencyKey = builder.dependencyKey
-    val dependencyValue = builder.dependencyValue
-    val allowedByDependency = builder.allowedByDependency
+    val dependencies = builder.dependencies
+    val allowedByDependencies = builder.allowedByDependencies
     val onClick = builder.onClick
     val onChange = builder.onChange
     val sharedPreferences = builder.realSharedPreferences
@@ -92,7 +91,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         }
 
         holder.containerView.apply {
-            val enabled = enabled && allowedByDependency
+            val enabled = enabled && allowedByDependencies
             isEnabled = enabled
             alpha = if (enabled) 1f else 0.5f
 
@@ -229,9 +228,8 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         if (defaultDependencyValue != other.defaultDependencyValue) return false
         if (enabled != other.enabled) return false
         if (clickable != other.clickable) return false
-        if (dependencyKey != other.dependencyKey) return false
-        if (dependencyValue != other.dependencyValue) return false
-        if (allowedByDependency != other.allowedByDependency) return false
+        if (dependencies != other.dependencies) return false
+        if (allowedByDependencies != other.allowedByDependencies) return false
         if (sharedPreferencesName != other.sharedPreferencesName) return false
         if (useCommit != other.useCommit) return false
         if (persistent != other.persistent) return false
@@ -252,9 +250,8 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         result = 31 * result + (defaultDependencyValue?.hashCode() ?: 0)
         result = 31 * result + enabled.hashCode()
         result = 31 * result + clickable.hashCode()
-        result = 31 * result + (dependencyKey?.hashCode() ?: 0)
-        result = 31 * result + (dependencyValue?.hashCode() ?: 0)
-        result = 31 * result + allowedByDependency.hashCode()
+        result = 31 * result + dependencies.hashCode()
+        result = 31 * result + allowedByDependencies.hashCode()
         result = 31 * result + (sharedPreferencesName?.hashCode() ?: 0)
         result = 31 * result + useCommit.hashCode()
         result = 31 * result + persistent.hashCode()
@@ -277,6 +274,18 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         }
     }
 
+    class Dependency(
+        val key: String,
+        val value: Any?,
+        val defaultValue: Any?
+    ) {
+        fun isOk(sharedPreferences: SharedPreferences): Boolean {
+            return (sharedPreferences.all[key]
+                ?: defaultValue
+                ?: value.tryToResolveDefaultValue()) == value
+        }
+    }
+
     open class Builder(val context: Context) {
 
         var key: String? = null
@@ -295,18 +304,9 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
             private set
         var clickable: Boolean = true
             private set
-        var dependencyKey: String? = null
-            private set
-        var dependencyValue: Any? = null
-            private set
-        val allowedByDependency
-            get() = if (dependencyKey != null && dependencyValue != null) {
-                (realSharedPreferences.all[dependencyKey]
-                    ?: defaultDependencyValue
-                    ?: dependencyValue.tryToResolveDefaultValue()) == dependencyValue
-            } else {
-                true
-            }
+        val dependencies = mutableListOf<Dependency>()
+        val allowedByDependencies: Boolean
+            get() = dependencies.all { it.isOk(realSharedPreferences) }
         var onClick: ((preference: PreferenceModel) -> Boolean)? = null
             private set
         var onChange: ((preference: PreferenceModel, newValue: Any) -> Boolean)? = null
@@ -323,7 +323,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
             private set
         var widgetLayoutRes: Int = 0
             private set
-        internal val value
+        internal val value: Any?
             get() = if (key != null && persistent) {
                 realSharedPreferences.all[key] ?: defaultValue
             } else if (!persistent) {
@@ -332,7 +332,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
                 null
             }
 
-        internal val realSharedPreferences
+        internal val realSharedPreferences: SharedPreferences
             get() = if (sharedPreferences != null) {
                 sharedPreferences!!
             } else {
@@ -375,12 +375,8 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
             this.clickable = clickable
         }
 
-        fun dependencyKey(dependencyKey: String?) {
-            this.dependencyKey = dependencyKey
-        }
-
-        fun dependencyValue(dependencyValue: Any?) {
-            this.dependencyValue = dependencyValue
+        fun dependency(dependency: Dependency) {
+            dependencies.add(dependency)
         }
 
         fun onClick(onClick: (preference: PreferenceModel) -> Boolean) {
@@ -444,10 +440,12 @@ fun PreferenceModel.Builder.icon(iconRes: Int) {
     icon(ContextCompat.getDrawable(context, iconRes))
 }
 
-fun PreferenceModel.Builder.dependency(key: String?, value: Any?, defaultValue: Any? = null) {
-    dependencyKey(key)
-    dependencyValue(value)
-    defaultDependencyValue(defaultValue)
+fun PreferenceModel.Builder.dependency(
+    key: String,
+    value: Any?,
+    defaultValue: Any? = null
+) {
+    dependency(PreferenceModel.Dependency(key, value, defaultValue))
 }
 
 @JvmName("changeListenerTyped")
