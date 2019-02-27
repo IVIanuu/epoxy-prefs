@@ -14,7 +14,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.epoxyprefs"
     const val vcsUrl = "https://github.com/IVIanuu/epoxy-prefs"
-    const val version = "${Build.versionName}-dev-2"
+    const val version = "${Build.versionName}-dev-3"
 }
 
 object Versions {
@@ -25,7 +25,7 @@ object Versions {
     const val epoxy = "3.0.0"
     const val kotlin = "1.3.21"
     const val materialComponents = "1.1.0-alpha02"
-    const val materialDialogs = "2.0.0-rc8"
+    const val materialDialogs = "2.0.3"
     const val mavenGradle = "2.1"
 }
 
