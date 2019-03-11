@@ -8,7 +8,6 @@ import com.ivianuu.epoxyprefs.categoryPreference
 import com.ivianuu.epoxyprefs.checkboxPreference
 import com.ivianuu.epoxyprefs.dependency
 import com.ivianuu.epoxyprefs.editTextPreference
-import com.ivianuu.epoxyprefs.icon
 import com.ivianuu.epoxyprefs.multiSelectListPreference
 import com.ivianuu.epoxyprefs.onChange
 import com.ivianuu.epoxyprefs.onClickUrl
@@ -40,7 +39,6 @@ class MainActivity : AppCompatActivity() {
                     key("my_switch_$i")
                     title("Switch")
                     summary("Nice a switch")
-                    icon(R.drawable.abc_ic_ab_back_material)
                 }
 
                 if (sharedPreferences.getBoolean("my_switch_$i", false)) {

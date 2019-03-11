@@ -24,7 +24,7 @@ object Versions {
     const val constraintLayout = "1.1.3"
     const val epoxy = "3.0.0"
     const val kotlin = "1.3.21"
-    const val materialComponents = "1.1.0-alpha02"
+    const val materialComponents = "1.1.0-alpha04"
     const val materialDialogs = "2.0.3"
     const val mavenGradle = "2.1"
 }

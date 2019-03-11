@@ -1,113 +1,99 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2018 Manuel Wrage
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~ http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:gravity="center_vertical"
-    android:paddingEnd="?android:attr/scrollbarSize"
-    android:clipChildren="false"
-    android:clipToPadding="false">
+    android:background="?android:attr/selectableItemBackground"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall">
 
-    <ImageView
-        android:id="@android:id/icon"
+    <FrameLayout
+        android:id="@+id/icon_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:tint="?colorControlNormal" />
+        android:minWidth="40dp"
+        android:layout_marginStart="?android:attr/listPreferredItemPaddingStart"
+        app:layout_constraintBottom_toTopOf="@id/seekbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@android:id/title">
 
-    <RelativeLayout
+        <ImageView
+            android:id="@android:id/icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:tint="?colorControlNormal"
+            tools:src="@drawable/abc_ic_clear_material"
+            tools:tint="?android:textColorSecondary" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@android:id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:textAppearance="?textAppearanceSubtitle1"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp"
-        android:layout_weight="1"
-        android:clipChildren="false"
-        android:clipToPadding="false">
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="?android:listPreferredItemPaddingEnd"
+        app:layout_constraintBottom_toTopOf="@android:id/summary"
+        app:layout_constraintStart_toEndOf="@id/icon_frame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="This is a title" />
 
-        <TextView
-            android:id="@android:id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textAppearance="?textAppearanceSubtitle1"
-            android:ellipsize="marquee"
-            android:fadingEdge="horizontal"
-            tools:text="This is the title" />
+    <TextView
+        android:id="@android:id/summary"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@android:id/title"
+        app:layout_constraintStart_toStartOf="@android:id/title"
+        app:layout_constraintEnd_toEndOf="@android:id/title"
+        app:layout_constraintBottom_toTopOf="@id/seekbar"
+        android:textAppearance="?textAppearanceBody2"
+        android:textColor="?android:attr/textColorSecondary"
+        tools:text="This is a summary. Bla bla bla bla bla bla bla bla bla bla bla bla bla bla" />
 
-        <TextView
-            android:id="@android:id/summary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@android:id/title"
-            android:layout_alignStart="@android:id/title"
-            android:textAppearance="?textAppearanceBody2"
-            android:textColor="?android:attr/textColorSecondary"
-            android:maxLines="4"
-            tools:text="This is the summary" />
+    <SeekBar
+        android:id="@+id/seekbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        app:layout_constraintWidth_default="spread"
+        android:clickable="false"
+        android:focusable="false"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@android:id/summary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingEnd="56dp"
+        app:layout_constraintEnd_toEndOf="@id/seekbar_value" />
 
-        <!-- Using UnPressableLinearLayout as a workaround to disable the pressed state propagation
-        to the children of this container layout. Otherwise, the animated pressed state will also
-        play for the thumb in the AbsSeekBar in addition to the preference's ripple background.
-        The background of the SeekBar is also set to null to disable the ripple background -->
-        <com.ivianuu.epoxyprefs.internal.UnpressableRelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@android:id/summary"
-            android:layout_alignStart="@android:id/title"
-            android:clipChildren="false"
-            android:clipToPadding="false">
+    <TextView
+        android:id="@+id/seekbar_value"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_default="wrap"
+        android:minWidth="56dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="16dp"
+        android:paddingEnd="8dp"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-condensed"
+        android:singleLine="true"
+        android:textAppearance="?textAppearanceBody2"
+        android:textColor="?android:textColorSecondary"
+        android:gravity="center_vertical|end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@android:id/summary"
+        tools:text="1000%" />
 
-            <SeekBar
-                android:id="@+id/seekbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="0dp"
-                android:paddingEnd="22dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
-                android:layout_toStartOf="@+id/seekbar_value"
-                android:focusable="false"
-                android:clickable="false"
-                android:background="@null" />
-
-            <TextView
-                android:id="@+id/seekbar_value"
-                android:layout_marginEnd="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="end|center_vertical"
-                android:fontFamily="sans-serif-condensed"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentTop="true"
-                android:singleLine="true"
-                android:textAppearance="?textAppearanceBody2"
-                android:textColor="?android:textColorSecondary"
-                android:ellipsize="marquee"
-                tools:text="1000%"
-                android:fadingEdge="horizontal" />
-
-        </com.ivianuu.epoxyprefs.internal.UnpressableRelativeLayout>
-
-    </RelativeLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -47,6 +47,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
     val title = builder.title
     val summary = builder.summary
     val icon = builder.icon
+    val preserveIconSpace = builder.preserveIconSpace
     val defaultValue = builder.defaultValue
     val defaultDependencyValue = builder.defaultDependencyValue
     val enabled = builder.enabled
@@ -87,7 +88,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         }
 
         holder.icon_frame?.let {
-            it.visibility = if (icon != null) View.VISIBLE else View.GONE
+            it.visibility = if (icon != null || preserveIconSpace) View.VISIBLE else View.GONE
         }
 
         holder.containerView.apply {
@@ -224,6 +225,7 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         if (title != other.title) return false
         if (summary != other.summary) return false
         if (icon != other.icon) return false
+        if (preserveIconSpace != other.preserveIconSpace) return false
         if (defaultValue != other.defaultValue) return false
         if (defaultDependencyValue != other.defaultDependencyValue) return false
         if (enabled != other.enabled) return false
@@ -242,10 +244,11 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
 
     override fun hashCode(): Int {
         var result = super.hashCode()
-        result = 31 * result + (key?.hashCode() ?: 0)
+        result = 31 * result + key.hashCode()
         result = 31 * result + (title?.hashCode() ?: 0)
         result = 31 * result + (summary?.hashCode() ?: 0)
         result = 31 * result + (icon?.hashCode() ?: 0)
+        result = 31 * result + preserveIconSpace.hashCode()
         result = 31 * result + (defaultValue?.hashCode() ?: 0)
         result = 31 * result + (defaultDependencyValue?.hashCode() ?: 0)
         result = 31 * result + enabled.hashCode()
@@ -295,6 +298,8 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
         var summary: String? = null
             private set
         var icon: Drawable? = null
+            private set
+        var preserveIconSpace: Boolean = false
             private set
         var defaultValue: Any? = null
             private set
@@ -357,6 +362,10 @@ open class PreferenceModel(builder: Builder) : EpoxyModelWithHolder<PreferenceMo
 
         fun icon(icon: Drawable?) {
             this.icon = icon
+        }
+
+        fun preserveIconSpace(preserveIconSpace: Boolean) {
+            this.preserveIconSpace = preserveIconSpace
         }
 
         fun defaultValue(defaultValue: Any?) {
