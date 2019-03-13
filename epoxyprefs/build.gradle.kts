@@ -25,7 +25,6 @@ apply(from = "https://raw.githubusercontent.com/IVIanuu/gradle-scripts/master/mv
 
 dependencies {
     api(Deps.androidxAppCompat)
-    api(Deps.constraintLayout)
     api(Deps.epoxy)
     api(Deps.kotlinStdLib)
     api(Deps.materialComponents)

@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
                 preference {
                     key("my_key_$i")
-                    title("Title")
+                    //  title("Title")
                     summary("This is a summary.")
                     dependency("my_switch_$i", true)
                     onClickUrl { "https://www.google.de/" }
