@@ -21,6 +21,7 @@ import android.widget.SeekBar
 import com.airbnb.epoxy.EpoxyController
 import kotlinx.android.synthetic.main.item_preference_seekbar.seekbar
 import kotlinx.android.synthetic.main.item_preference_seekbar.seekbar_value
+import kotlin.math.round
 
 /**
  * Abstract seek bar preference model
@@ -73,7 +74,7 @@ open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
             progress = max
         }
 
-        internalValue = (Math.round((progress / incValue).toDouble()) * incValue).toInt()
+        internalValue = (round((progress / incValue).toDouble()) * incValue).toInt()
 
         val provider = valueTextProvider
 
