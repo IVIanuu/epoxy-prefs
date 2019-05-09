@@ -30,7 +30,6 @@ import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyHolder
 import com.airbnb.epoxy.EpoxyModelWithHolder
-import com.ivianuu.epoxyprefs.internal.tryToResolveDefaultValue
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_preference.icon
 import kotlinx.android.synthetic.main.item_preference.icon_frame

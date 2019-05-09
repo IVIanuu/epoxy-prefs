@@ -1,4 +1,4 @@
-package com.ivianuu.epoxyprefs.internal
+package com.ivianuu.epoxyprefs
 
 internal fun Any?.tryToResolveDefaultValue(): Any? = when (this) {
     is Boolean -> false
