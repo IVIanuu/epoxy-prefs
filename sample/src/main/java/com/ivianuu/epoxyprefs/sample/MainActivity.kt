@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
         list.addItemDecoration(PreferenceDividerDecoration(this))
 
-        list.buildPreferencesWith {
+        val epoxyController = preferenceEpoxyController {
             for (i in 0..100) {
                 categoryPreference {
                     key("category_$i")
@@ -98,5 +98,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        list.setControllerAndBuildModels(epoxyController)
     }
 }

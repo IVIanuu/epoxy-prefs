@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
-import com.airbnb.epoxy.EpoxyRecyclerView
 
 /**
  * Preference epoxy controller
@@ -47,9 +46,4 @@ fun preferenceEpoxyController(
             buildModels.invoke(this)
         }
     }
-}
-
-fun EpoxyRecyclerView.buildPreferencesWith(buildModels: PreferenceEpoxyController.() -> Unit) {
-    val controller = preferenceEpoxyController(context, buildModels)
-    setControllerAndBuildModels(controller)
 }

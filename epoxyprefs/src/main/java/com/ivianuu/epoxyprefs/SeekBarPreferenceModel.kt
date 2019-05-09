@@ -36,11 +36,12 @@ open class SeekBarPreferenceModel(builder: Builder) : AbstractPreferenceModel<In
 
     private var internalValue = 0
 
-    override fun bind(holder: AbstractPreferenceModel.Holder) {
+    override fun bind(holder: Holder) {
         super.bind(holder)
 
         internalValue = value ?: 0
 
+        holder.seekbar.isEnabled = viewsShouldBeEnabled
         holder.seekbar.max = max - min
         holder.seekbar.progress = internalValue - min
 
