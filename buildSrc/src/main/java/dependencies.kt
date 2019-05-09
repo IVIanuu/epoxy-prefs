@@ -14,16 +14,16 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.epoxyprefs"
     const val vcsUrl = "https://github.com/IVIanuu/epoxy-prefs"
-    const val version = "${Build.versionName}-dev-7"
+    const val version = "${Build.versionName}-dev-8"
 }
 
 object Versions {
-    const val androidGradlePlugin = "3.3.0"
-    const val androidxAppCompat = "1.0.2"
+    const val androidGradlePlugin = "3.4.0"
+    const val androidxAppCompat = "1.1.0-alpha04"
     const val bintray = "1.8.4"
-    const val epoxy = "3.0.0"
-    const val kotlin = "1.3.21"
-    const val materialComponents = "1.1.0-alpha04"
+    const val epoxy = "3.4.2"
+    const val kotlin = "1.3.31"
+    const val materialComponents = "1.1.0-alpha06"
     const val materialDialogs = "2.0.3"
     const val mavenGradle = "2.1"
 }
