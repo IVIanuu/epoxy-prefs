@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
                     summary("Nice a switch")
                 }
 
-                if (sharedPreferences.getBoolean("my_switch_$i", false)) {
+                if (context.getOrDefault("my_switch_$i", false)) {
                     editTextPreference {
                         key("my_edit_text_$i")
                         title("Edit text")

@@ -10,12 +10,8 @@ import com.airbnb.epoxy.EpoxyController
  */
 // todo remove once we came up with a better solution
 abstract class PreferenceEpoxyController(
-    val context: Context,
-    val sharedPreferencesName: String? = EpoxyPrefsPlugins.getDefaultSharedPreferencesName(context)
+    val context: PreferenceContext
 ) : EpoxyController() {
-
-    val sharedPreferences: SharedPreferences =
-        context.getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
 
     private val prefsChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
@@ -24,21 +20,30 @@ abstract class PreferenceEpoxyController(
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
-        sharedPreferences.registerOnSharedPreferenceChangeListener(prefsChangeListener)
+        context.sharedPreferences
+            .registerOnSharedPreferenceChangeListener(prefsChangeListener)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(prefsChangeListener)
+        context.sharedPreferences
+            .unregisterOnSharedPreferenceChangeListener(prefsChangeListener)
     }
 }
 
-fun Context.preferenceEpoxyController(buildModels: PreferenceEpoxyController.() -> Unit): PreferenceEpoxyController =
-    preferenceEpoxyController(this, buildModels)
+fun Context.preferenceEpoxyController(
+    buildModels: PreferenceEpoxyController.() -> Unit
+): PreferenceEpoxyController = preferenceEpoxyController(this, buildModels)
 
 @JvmName("preferenceEpoxyControllerWith")
 fun preferenceEpoxyController(
     context: Context,
+    buildModels: PreferenceEpoxyController.() -> Unit
+): PreferenceEpoxyController =
+    preferenceEpoxyController(EpoxyPrefsPlugins.getDefaultContext(context), buildModels)
+
+fun preferenceEpoxyController(
+    context: PreferenceContext,
     buildModels: PreferenceEpoxyController.() -> Unit
 ): PreferenceEpoxyController {
     return object : PreferenceEpoxyController(context) {

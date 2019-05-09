@@ -19,7 +19,6 @@ package com.ivianuu.epoxyprefs
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.LayoutInflater
@@ -52,9 +51,6 @@ open class AbstractPreferenceModel<T : Any>(
     val allowedByDependencies = builder.allowedByDependencies
     val onClick = builder.onClick
     val onChange = builder.onChange
-    val sharedPreferences = builder.realSharedPreferences
-    val sharedPreferencesName = builder.sharedPreferencesName
-    val useCommit = builder.useCommit
     val persistent = builder.persistent
     val layoutRes = builder.layoutRes
     val widgetLayoutRes = builder.widgetLayoutRes
@@ -161,22 +157,7 @@ open class AbstractPreferenceModel<T : Any>(
     @SuppressLint("ApplySharedPref")
     protected fun persistValue(value: T) {
         if (onChange?.invoke(value) != false && persistent) {
-            sharedPreferences.edit().apply {
-                when (value) {
-                    is Boolean -> putBoolean(key, value)
-                    is Float -> putFloat(key, value)
-                    is Int -> putInt(key, value)
-                    is Long -> putLong(key, value)
-                    is String -> putString(key, value)
-                    is Set<*> -> putStringSet(key, value as Set<String>)
-                }
 
-                if (useCommit) {
-                    commit()
-                } else {
-                    apply()
-                }
-            }
         }
     }
 
@@ -197,8 +178,6 @@ open class AbstractPreferenceModel<T : Any>(
         if (clickable != other.clickable) return false
         if (dependencies != other.dependencies) return false
         if (allowedByDependencies != other.allowedByDependencies) return false
-        if (sharedPreferencesName != other.sharedPreferencesName) return false
-        if (useCommit != other.useCommit) return false
         if (persistent != other.persistent) return false
         if (layoutRes != other.layoutRes) return false
         if (widgetLayoutRes != other.widgetLayoutRes) return false
@@ -219,8 +198,6 @@ open class AbstractPreferenceModel<T : Any>(
         result = 31 * result + clickable.hashCode()
         result = 31 * result + dependencies.hashCode()
         result = 31 * result + allowedByDependencies.hashCode()
-        result = 31 * result + (sharedPreferencesName?.hashCode() ?: 0)
-        result = 31 * result + useCommit.hashCode()
         result = 31 * result + persistent.hashCode()
         result = 31 * result + layoutRes
         result = 31 * result + widgetLayoutRes
@@ -246,15 +223,15 @@ open class AbstractPreferenceModel<T : Any>(
         val value: Any?,
         val defaultValue: Any?
     ) {
-        fun isOk(sharedPreferences: SharedPreferences): Boolean {
-            return (sharedPreferences.all[key]
-                ?: defaultValue
-                ?: value.tryToResolveDefaultValue()) == value
+        fun isOk(context: PreferenceContext): Boolean {
+            return (context.get(key, defaultValue) ?: value.tryToResolveDefaultValue()) == value
         }
     }
 
     abstract class Builder<T : Any>(val context: Context) {
 
+        var preferenceContext: PreferenceContext = EpoxyPrefsPlugins.getDefaultContext(context)
+            private set
         var key: String? = null
             private set
         var title: String? = null
@@ -273,16 +250,10 @@ open class AbstractPreferenceModel<T : Any>(
             private set
         val dependencies = mutableListOf<Dependency>()
         val allowedByDependencies: Boolean
-            get() = dependencies.all { it.isOk(realSharedPreferences) }
+            get() = dependencies.all { it.isOk(preferenceContext) }
         var onClick: (() -> Boolean)? = null
             private set
         var onChange: ((newValue: T) -> Boolean)? = null
-            private set
-        var sharedPreferences: SharedPreferences? = null
-            private set
-        var sharedPreferencesName: String? = null
-            private set
-        var useCommit: Boolean = EpoxyPrefsPlugins.useCommit
             private set
         var persistent: Boolean = true
             private set
@@ -292,22 +263,11 @@ open class AbstractPreferenceModel<T : Any>(
             private set
         internal val value: T?
             get() = if (key != null && persistent) {
-                realSharedPreferences.all[key] as? T ?: defaultValue
+                preferenceContext.get(key!!, defaultValue)
             } else if (!persistent) {
                 defaultValue
             } else {
                 null
-            }
-
-        internal val realSharedPreferences: SharedPreferences
-            get() = if (sharedPreferences != null) {
-                sharedPreferences!!
-            } else {
-                if (sharedPreferencesName != null) {
-                    context.getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
-                } else {
-                    EpoxyPrefsPlugins.getDefaultSharedPreferences(context)
-                }
             }
 
         fun key(key: String) {
@@ -352,18 +312,6 @@ open class AbstractPreferenceModel<T : Any>(
 
         fun onChange(onChange: (newValue: T) -> Boolean) {
             this.onChange = onChange
-        }
-
-        fun sharedPreferences(sharedPreferences: SharedPreferences?) {
-            this.sharedPreferences = sharedPreferences
-        }
-
-        fun sharedPreferencesName(sharedPreferencesName: String?) {
-            this.sharedPreferencesName = sharedPreferencesName
-        }
-
-        fun useCommit(useCommit: Boolean) {
-            this.useCommit = useCommit
         }
 
         fun persistent(persistent: Boolean) {

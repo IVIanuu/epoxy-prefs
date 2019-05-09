@@ -18,51 +18,29 @@ package com.ivianuu.epoxyprefs
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.preference.PreferenceManager
 
 /**
  * Global config
  */
 object EpoxyPrefsPlugins {
 
-    private var defaultSharedPreferences: SharedPreferences? = null
-    private var defaultSharedPreferencesName: String? = null
-
-    /** Provider for [SharedPreferences] */
-    var prefsProvider: PrefsProvider = { context, name ->
-        context.getSharedPreferences(name, Context.MODE_PRIVATE)
-    }
-
-    /** Whether or not [SharedPreferences.Editor.commit] should be used */
-    var useCommit = false
+    private var defaultContext: PreferenceContext? = null
 
     /**
      * Returns the default [SharedPreferences]
      */
-    fun getDefaultSharedPreferences(context: Context): SharedPreferences =
-        defaultSharedPreferences
-            ?: prefsProvider(context, getDefaultSharedPreferencesName(context))
-                .also { defaultSharedPreferences = it }
-
+    fun getDefaultContext(context: Context): PreferenceContext {
+        return defaultContext ?: PreferenceContext(
+            PreferenceManager.getDefaultSharedPreferences(context),
+            false
+        ).also { defaultContext = it }
+    }
     /**
      * Sets the default [SharedPreferences]
      */
-    fun setDefaultSharedPreferences(sharedPreferences: SharedPreferences) {
-        this.defaultSharedPreferences = sharedPreferences
-    }
-
-    /**
-     * Returns the default shared preferences name
-     */
-    fun getDefaultSharedPreferencesName(context: Context) =
-        defaultSharedPreferencesName ?: context.packageName + "_preferences"
-
-    /**
-     * Sets the default shared preferences name
-     */
-    fun setDefaultSharedPreferencesName(defaultSharedPreferencesName: String) {
-        this.defaultSharedPreferencesName = defaultSharedPreferencesName
+    fun setDefaultContext(context: PreferenceContext) {
+        this.defaultContext = context
     }
 
 }
-
-typealias PrefsProvider = (Context, String) -> SharedPreferences
