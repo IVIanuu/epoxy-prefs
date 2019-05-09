@@ -26,7 +26,7 @@ import kotlin.math.round
 /**
  * Abstract seek bar preference model
  */
-open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
+open class SeekBarPreferenceModel(builder: Builder) : AbstractPreferenceModel<Int>(builder) {
 
     val min = builder.min
     val max = builder.max
@@ -36,10 +36,10 @@ open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
 
     private var internalValue = 0
 
-    override fun bind(holder: PreferenceModel.Holder) {
+    override fun bind(holder: AbstractPreferenceModel.Holder) {
         super.bind(holder)
 
-        internalValue = value as? Int ?: 0
+        internalValue = value ?: 0
 
         holder.seekbar.max = max - min
         holder.seekbar.progress = internalValue - min
@@ -54,9 +54,7 @@ open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                if (callChangeListener(internalValue)) {
-                    persistInt(key, internalValue)
-                }
+                persistValue(internalValue)
             }
         })
 
@@ -109,7 +107,7 @@ open class SeekBarPreferenceModel(builder: Builder) : PreferenceModel(builder) {
         return result
     }
 
-    open class Builder(context: Context) : PreferenceModel.Builder(context) {
+    open class Builder(context: Context) : AbstractPreferenceModel.Builder<Int>(context) {
 
         var min: Int = 0
             private set

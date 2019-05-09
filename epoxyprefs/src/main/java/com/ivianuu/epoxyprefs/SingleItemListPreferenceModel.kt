@@ -24,13 +24,13 @@ import com.airbnb.epoxy.EpoxyController
 /**
  * A single item preference
  */
-open class SingleItemListPreferenceModel(builder: Builder) : ListPreferenceModel(builder) {
+open class SingleItemListPreferenceModel(builder: Builder) : ListPreferenceModel<String>(builder) {
 
     override fun showDialog() {
         val entries = entries ?: emptyArray()
         val entryValues = entryValues ?: emptyArray()
 
-        val currentValue = value as? String ?: ""
+        val currentValue = value ?: ""
         val selectedIndex = entryValues.indexOf(currentValue)
 
         MaterialDialog(context)
@@ -41,10 +41,7 @@ open class SingleItemListPreferenceModel(builder: Builder) : ListPreferenceModel
                 waitForPositiveButton = false
             ) { dialog, position, _ ->
                 val newValue = entryValues.toList()[position]
-                if (callChangeListener(newValue)) {
-                    persistString(key, newValue)
-                }
-
+                persistValue(newValue)
                 dialog.dismiss()
             }
             .show()
@@ -57,7 +54,7 @@ open class SingleItemListPreferenceModel(builder: Builder) : ListPreferenceModel
         return true
     }
 
-    open class Builder(context: Context) : ListPreferenceModel.Builder(context) {
+    open class Builder(context: Context) : ListPreferenceModel.Builder<String>(context) {
         override fun build(): SingleItemListPreferenceModel = SingleItemListPreferenceModel(this)
     }
 }

@@ -24,23 +24,19 @@ import com.airbnb.epoxy.EpoxyController
 /**
  * A edit text preference
  */
-open class EditTextPreferenceModel(builder: Builder) : DialogPreferenceModel(builder) {
+open class EditTextPreferenceModel(builder: Builder) : DialogPreferenceModel<String>(builder) {
 
     val dialogHint = builder.dialogHint
 
     override fun showDialog() {
-        val prefill = value as? String ?: ""
+        val prefill = value ?: ""
 
         MaterialDialog(context)
             .applyDialogSettings()
             .input(
                 hint = dialogHint ?: "",
                 prefill = prefill
-            ) { _, input ->
-                if (callChangeListener(input.toString())) {
-                    persistString(key, input.toString())
-                }
-            }
+            ) { _, input -> persistValue(input.toString()) }
             .show()
     }
 
@@ -60,7 +56,7 @@ open class EditTextPreferenceModel(builder: Builder) : DialogPreferenceModel(bui
         return result
     }
 
-    open class Builder(context: Context) : DialogPreferenceModel.Builder(context) {
+    open class Builder(context: Context) : DialogPreferenceModel.Builder<String>(context) {
 
         var dialogHint: String? = null
             private set

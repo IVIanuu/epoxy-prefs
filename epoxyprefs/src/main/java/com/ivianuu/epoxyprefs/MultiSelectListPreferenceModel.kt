@@ -24,7 +24,8 @@ import com.airbnb.epoxy.EpoxyController
 /**
  * A multi select list preference
  */
-open class MultiSelectListPreferenceModel(builder: Builder) : ListPreferenceModel(builder) {
+open class MultiSelectListPreferenceModel(builder: Builder) :
+    ListPreferenceModel<Set<String>>(builder) {
 
     override fun showDialog() {
         val entries = entries ?: emptyArray()
@@ -45,12 +46,10 @@ open class MultiSelectListPreferenceModel(builder: Builder) : ListPreferenceMode
             ) { _, positions, _ ->
                 val newValue = entryValues.toList()
                     .filterIndexed { index, _ -> positions.contains(index) }
-                    .map(String::toString)
+                    .map { it }
                     .toMutableSet()
 
-                if (callChangeListener(newValue)) {
-                    persistStringSet(key, newValue)
-                }
+                persistValue(newValue)
             }
             .show()
     }
@@ -62,7 +61,7 @@ open class MultiSelectListPreferenceModel(builder: Builder) : ListPreferenceMode
         return true
     }
 
-    open class Builder(context: Context) : ListPreferenceModel.Builder(context) {
+    open class Builder(context: Context) : ListPreferenceModel.Builder<Set<String>>(context) {
         override fun build(): MultiSelectListPreferenceModel = MultiSelectListPreferenceModel(this)
     }
 }

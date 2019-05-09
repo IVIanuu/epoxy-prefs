@@ -22,12 +22,13 @@ import java.util.*
 /**
  * A list preference model
  */
-abstract class ListPreferenceModel(builder: Builder) : DialogPreferenceModel(builder) {
+abstract class ListPreferenceModel<T : Any>(builder: Builder<T>) :
+    DialogPreferenceModel<T>(builder) {
 
     val entries = builder.entries
     val entryValues = builder.entryValues
 
-    abstract class Builder(context: Context) : DialogPreferenceModel.Builder(context) {
+    abstract class Builder<T : Any>(context: Context) : DialogPreferenceModel.Builder<T>(context) {
 
         var entries: Array<String>? = null
         var entryValues: Array<String>? = null
@@ -44,7 +45,7 @@ abstract class ListPreferenceModel(builder: Builder) : DialogPreferenceModel(bui
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is ListPreferenceModel) return false
+        if (other !is ListPreferenceModel<*>) return false
         if (!super.equals(other)) return false
 
         if (!Arrays.equals(entries, other.entries)) return false
@@ -61,10 +62,10 @@ abstract class ListPreferenceModel(builder: Builder) : DialogPreferenceModel(bui
     }
 }
 
-fun ListPreferenceModel.Builder.entries(entriesRes: Int) {
+fun ListPreferenceModel.Builder<*>.entries(entriesRes: Int) {
     entries(context.resources.getStringArray(entriesRes))
 }
 
-fun ListPreferenceModel.Builder.entryValues(entryValuesRes: Int) {
+fun ListPreferenceModel.Builder<*>.entryValues(entryValuesRes: Int) {
     entryValues(context.resources.getStringArray(entryValuesRes))
 }

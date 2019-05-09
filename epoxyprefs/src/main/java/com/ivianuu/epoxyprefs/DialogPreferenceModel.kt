@@ -24,7 +24,8 @@ import com.afollestad.materialdialogs.MaterialDialog
 /**
  * A dialog preference
  */
-abstract class DialogPreferenceModel(builder: Builder) : PreferenceModel(builder) {
+abstract class DialogPreferenceModel<T : Any>(builder: Builder<T>) :
+    AbstractPreferenceModel<T>(builder) {
 
     val dialogTitle = builder.dialogTitle ?: title
     val dialogMessage = builder.dialogMessage
@@ -55,7 +56,7 @@ abstract class DialogPreferenceModel(builder: Builder) : PreferenceModel(builder
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is DialogPreferenceModel) return false
+        if (other !is DialogPreferenceModel<*>) return false
         if (!super.equals(other)) return false
 
         if (dialogTitle != other.dialogTitle) return false
@@ -77,7 +78,8 @@ abstract class DialogPreferenceModel(builder: Builder) : PreferenceModel(builder
         return result
     }
 
-    abstract class Builder(context: Context) : PreferenceModel.Builder(context) {
+    abstract class Builder<T : Any>(context: Context) :
+        AbstractPreferenceModel.Builder<T>(context) {
 
         var dialogTitle: String? = null
             private set
@@ -116,22 +118,22 @@ abstract class DialogPreferenceModel(builder: Builder) : PreferenceModel(builder
     }
 }
 
-fun DialogPreferenceModel.Builder.dialogTitle(dialogTitleRes: Int) {
+fun DialogPreferenceModel.Builder<*>.dialogTitle(dialogTitleRes: Int) {
     dialogTitle(context.getString(dialogTitleRes))
 }
 
-fun DialogPreferenceModel.Builder.dialogMessage(dialogMessageRes: Int) {
+fun DialogPreferenceModel.Builder<*>.dialogMessage(dialogMessageRes: Int) {
     dialogTitle(context.getString(dialogMessageRes))
 }
 
-fun DialogPreferenceModel.Builder.dialogIcon(dialogIconRes: Int) {
+fun DialogPreferenceModel.Builder<*>.dialogIcon(dialogIconRes: Int) {
     dialogIcon(ContextCompat.getDrawable(context, dialogIconRes))
 }
 
-fun DialogPreferenceModel.Builder.positiveButtonText(positiveButtonTextRes: Int) {
+fun DialogPreferenceModel.Builder<*>.positiveButtonText(positiveButtonTextRes: Int) {
     positiveButtonText(context.getString(positiveButtonTextRes))
 }
 
-fun DialogPreferenceModel.Builder.negativeButtonText(negativeButtonTextRes: Int) {
+fun DialogPreferenceModel.Builder<*>.negativeButtonText(negativeButtonTextRes: Int) {
     negativeButtonText(context.getString(negativeButtonTextRes))
 }

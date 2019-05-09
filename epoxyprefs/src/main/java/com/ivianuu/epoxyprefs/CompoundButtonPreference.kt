@@ -22,21 +22,19 @@ import android.widget.CompoundButton
 /**
  * A preference for compound buttons
  */
-abstract class CompoundButtonPreferenceModel(builder: Builder) : PreferenceModel(builder) {
+abstract class CompoundButtonPreferenceModel(builder: Builder) :
+    AbstractPreferenceModel<Boolean>(builder) {
 
-    protected abstract val PreferenceModel.Holder.compoundButton: CompoundButton?
+    protected abstract val Holder.compoundButton: CompoundButton?
 
-    override fun bind(holder: PreferenceModel.Holder) {
+    override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.compoundButton?.isChecked = value as? Boolean ?: false
+        holder.compoundButton?.isChecked = value ?: false
     }
 
     override fun onClick() {
         super.onClick()
-        val newValue = (value as? Boolean ?: false).not()
-        if (callChangeListener(newValue)) {
-            persistBoolean(key, newValue)
-        }
+        persistValue((value ?: false).not())
     }
 
     override fun equals(other: Any?): Boolean {
@@ -47,5 +45,5 @@ abstract class CompoundButtonPreferenceModel(builder: Builder) : PreferenceModel
         return true
     }
 
-    abstract class Builder(context: Context) : PreferenceModel.Builder(context)
+    abstract class Builder(context: Context) : AbstractPreferenceModel.Builder<Boolean>(context)
 }
