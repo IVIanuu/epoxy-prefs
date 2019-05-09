@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
                 preference {
                     key("my_key_$i")
-                    //  title("Title")
+                    title("Title")
                     summary("This is a summary.")
                     dependency("my_switch_$i", true)
                     onClickUrl { "https://www.google.de/" }
@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity() {
                     title("Single item list")
                     entries(arrayOf("1", "2", "3"))
                     entryValues(arrayOf("1", "2", "3"))
+                    defaultValue("2")
                     dependency("my_switch_$i", true)
                 }
 
@@ -87,6 +88,7 @@ class MainActivity : AppCompatActivity() {
                     title("Multi select list")
                     entries(arrayOf("A", "B", "C"))
                     entryValues(arrayOf("A", "B", "C"))
+                    defaultValue(setOf("B", "C"))
                     dependency("my_switch_$i", true)
                 }
 
