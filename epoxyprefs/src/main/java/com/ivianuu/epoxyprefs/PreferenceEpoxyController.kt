@@ -20,14 +20,12 @@ abstract class PreferenceEpoxyController(
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
-        context.sharedPreferences
-            .registerOnSharedPreferenceChangeListener(prefsChangeListener)
+        //context.sharedPreferences.registerOnSharedPreferenceChangeListener(prefsChangeListener)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
-        context.sharedPreferences
-            .unregisterOnSharedPreferenceChangeListener(prefsChangeListener)
+        //context.sharedPreferences.unregisterOnSharedPreferenceChangeListener(prefsChangeListener)
     }
 }
 

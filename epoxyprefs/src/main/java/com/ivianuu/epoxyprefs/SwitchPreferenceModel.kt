@@ -16,27 +16,25 @@
 
 package com.ivianuu.epoxyprefs
 
-import android.content.Context
 import android.widget.CompoundButton
 import com.airbnb.epoxy.EpoxyController
 import kotlinx.android.synthetic.main.widget_preference_switch.switchWidget
 
+fun EpoxyController.SwitchPreference(
+    body: SwitchPreferenceModel.Builder.() -> Unit
+): SwitchPreferenceModel = SwitchPreferenceModel.Builder()
+    .apply(body)
+    .build()
+    .also { it.addTo(this) }
+
 /**
- * A switch preference
+ * A check box Preference
  */
-open class SwitchPreferenceModel(builder: Builder) : CompoundButtonPreferenceModel(builder) {
+open class SwitchPreferenceModel(builder: CompoundButtonPreferenceModel.Builder) :
+    CompoundButtonPreferenceModel(builder) {
 
     override val Holder.compoundButton: CompoundButton?
         get() = switchWidget
-
-    open class Builder(context: Context) : CompoundButtonPreferenceModel.Builder(context) {
-
-        init {
-            widgetLayoutRes(R.layout.widget_preference_switch)
-        }
-
-        override fun build(): SwitchPreferenceModel = SwitchPreferenceModel(this)
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -45,18 +43,15 @@ open class SwitchPreferenceModel(builder: Builder) : CompoundButtonPreferenceMod
         return true
     }
 
-}
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
 
-fun EpoxyController.switchPreference(
-    context: Context,
-    init: SwitchPreferenceModel.Builder.() -> Unit
-): SwitchPreferenceModel {
-    return SwitchPreferenceModel.Builder(context)
-        .apply(init)
-        .build()
-        .also { it.addTo(this) }
-}
+    open class Builder : CompoundButtonPreferenceModel.Builder() {
+        init {
+            widgetLayoutRes(R.layout.widget_preference_switch)
+        }
 
-fun PreferenceEpoxyController.switchPreference(
-    init: SwitchPreferenceModel.Builder.() -> Unit
-): SwitchPreferenceModel = switchPreference(context, init)
+        override fun build() = SwitchPreferenceModel(this)
+    }
+}

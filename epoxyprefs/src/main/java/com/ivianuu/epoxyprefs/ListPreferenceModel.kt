@@ -16,56 +16,72 @@
 
 package com.ivianuu.epoxyprefs
 
-import android.content.Context
-import java.util.*
-
 /**
- * A list preference model
+ * A list Preference model
  */
 abstract class ListPreferenceModel<T : Any>(builder: Builder<T>) :
     DialogPreferenceModel<T>(builder) {
 
     val entries = builder.entries
+    val entriesRes = builder.entriesRes
     val entryValues = builder.entryValues
-
-    abstract class Builder<T : Any>(context: Context) : DialogPreferenceModel.Builder<T>(context) {
-
-        var entries: Array<String>? = null
-        var entryValues: Array<String>? = null
-
-        open fun entries(entries: Array<String>?) {
-            this.entries = entries
-        }
-
-        open fun entryValues(entryValues: Array<String>?) {
-            this.entryValues = entryValues
-        }
-
-    }
+    val entryValuesRes = builder.entryValuesRes
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is ListPreferenceModel<*>) return false
         if (!super.equals(other)) return false
 
-        if (!Arrays.equals(entries, other.entries)) return false
-        if (!Arrays.equals(entryValues, other.entryValues)) return false
+        if (entries != null) {
+            if (other.entries == null) return false
+            if (!entries.contentEquals(other.entries)) return false
+        } else if (other.entries != null) return false
+        if (entriesRes != other.entriesRes) return false
+        if (entryValues != null) {
+            if (other.entryValues == null) return false
+            if (!entryValues.contentEquals(other.entryValues)) return false
+        } else if (other.entryValues != null) return false
+        if (entryValuesRes != other.entryValuesRes) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = super.hashCode()
-        result = 31 * result + (entries?.let { Arrays.hashCode(it) } ?: 0)
-        result = 31 * result + (entryValues?.let { Arrays.hashCode(it) } ?: 0)
+        result = 31 * result + (entries?.contentHashCode() ?: 0)
+        result = 31 * result + entriesRes
+        result = 31 * result + (entryValues?.contentHashCode() ?: 0)
+        result = 31 * result + entryValuesRes
         return result
     }
-}
 
-fun ListPreferenceModel.Builder<*>.entries(entriesRes: Int) {
-    entries(context.resources.getStringArray(entriesRes))
-}
+    abstract class Builder<T : Any> : DialogPreferenceModel.Builder<T>() {
 
-fun ListPreferenceModel.Builder<*>.entryValues(entryValuesRes: Int) {
-    entryValues(context.resources.getStringArray(entryValuesRes))
+        var entries: Array<String>? = null
+            private set
+        var entriesRes: Int = 0
+            private set
+        var entryValues: Array<String>? = null
+            private set
+        var entryValuesRes: Int = 0
+            private set
+
+        fun entries(entries: Array<String>?) {
+            this.entries = entries
+        }
+
+        fun entriesRes(entriesRes: Int) {
+            this.entriesRes = entriesRes
+        }
+
+        fun entryValues(entryValues: Array<String>) {
+            this.entryValues = entryValues
+        }
+
+        fun entryValuesRes(entryValuesRes: Int) {
+            this.entryValuesRes = entryValuesRes
+        }
+
+        abstract override fun build(): ListPreferenceModel<T>
+    }
 }

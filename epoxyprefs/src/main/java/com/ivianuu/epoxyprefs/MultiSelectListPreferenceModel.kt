@@ -21,13 +21,20 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.airbnb.epoxy.EpoxyController
 
+fun EpoxyController.MultiSelectListPreference(
+    body: MultiSelectListPreferenceModel.Builder.() -> Unit
+): MultiSelectListPreferenceModel = MultiSelectListPreferenceModel.Builder()
+    .apply(body)
+    .build()
+    .also { it.addTo(this) }
+
 /**
- * A multi select list preference
+ * A multi select list Preference
  */
 open class MultiSelectListPreferenceModel(builder: Builder) :
     ListPreferenceModel<Set<String>>(builder) {
 
-    override fun showDialog() {
+    override fun showDialog(context: Context) {
         val entries = entries ?: emptyArray()
         val entryValues = entryValues ?: emptyArray()
 
@@ -61,21 +68,11 @@ open class MultiSelectListPreferenceModel(builder: Builder) :
         return true
     }
 
-    open class Builder(context: Context) : ListPreferenceModel.Builder<Set<String>>(context) {
-        override fun build(): MultiSelectListPreferenceModel = MultiSelectListPreferenceModel(this)
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+
+    open class Builder : ListPreferenceModel.Builder<Set<String>>() {
+        override fun build() = MultiSelectListPreferenceModel(this)
     }
 }
-
-inline fun EpoxyController.multiSelectListPreference(
-    context: Context,
-    init: MultiSelectListPreferenceModel.Builder.() -> Unit
-): MultiSelectListPreferenceModel {
-    return MultiSelectListPreferenceModel.Builder(context)
-        .apply(init)
-        .build()
-        .also { it.addTo(this) }
-}
-
-inline fun PreferenceEpoxyController.multiSelectListPreference(
-    init: MultiSelectListPreferenceModel.Builder.() -> Unit
-): MultiSelectListPreferenceModel = multiSelectListPreference(context, init)

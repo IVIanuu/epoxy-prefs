@@ -16,11 +16,10 @@
 
 package com.ivianuu.epoxyprefs
 
-import android.content.Context
 import android.widget.CompoundButton
 
 /**
- * A preference for compound buttons
+ * A Preference for compound buttons
  */
 abstract class CompoundButtonPreferenceModel(builder: Builder) :
     AbstractPreferenceModel<Boolean>(builder) {
@@ -45,5 +44,12 @@ abstract class CompoundButtonPreferenceModel(builder: Builder) :
         return true
     }
 
-    abstract class Builder(context: Context) : AbstractPreferenceModel.Builder<Boolean>(context)
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+
+    abstract class Builder : AbstractPreferenceModel.Builder<Boolean>() {
+        abstract override fun build(): CompoundButtonPreferenceModel
+    }
+
 }

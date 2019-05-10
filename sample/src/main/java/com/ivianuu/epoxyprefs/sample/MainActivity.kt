@@ -1,6 +1,7 @@
 package com.ivianuu.epoxyprefs.sample
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ivianuu.epoxyprefs.*
 import kotlinx.android.synthetic.main.activity_main.list
@@ -17,86 +18,85 @@ class MainActivity : AppCompatActivity() {
 
         val epoxyController = preferenceEpoxyController {
             for (i in 0..100) {
-                categoryPreference {
+                CategoryPreference {
                     key("category_$i")
                     title("Category $i")
                 }
 
-                switchPreference {
+                SwitchPreference {
                     key("my_switch_$i")
                     title("Switch")
                     summary("Nice a switch")
                 }
 
+                val switchDependency =
+                    PreferenceDependency("my_switch_$i", true)
+
                 if (context.getOrDefault("my_switch_$i", false)) {
-                    editTextPreference {
+                    EditTextListPreference {
                         key("my_edit_text_$i")
-                        title("Edit text")
-                        summary("Edit text")
+                        title("Edit Text")
+                        summary("Edit Text")
                         dialogHint("Hello lets type something")
                     }
                 }
 
-                preference {
+                Preference {
                     key("my_key_$i")
                     title("Title")
                     summary("This is a summary.")
-                    dependency("my_switch_$i", true)
-                    onClickUrl { "https://www.google.de/" }
+                    onClick {
+
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Hello", Toast.LENGTH_SHORT
+                        ).show()
+                        return@onClick true
+                    }
                 }
 
-                checkboxPreference {
+                CheckboxPreference {
                     key("my_checkbox_$i")
                     title("CheckBox")
-                    dependency("my_switch_$i", true)
-                    summary("Oh a checkbox")
+                    dependencies(switchDependency)
                     defaultValue(nonPersistentState)
-                    persistent(false)
-                    onChange { newValue ->
-                        nonPersistentState = newValue
+                    isPersistent(false)
+                    onChange {
+                        nonPersistentState = it
                         requestModelBuild()
                         return@onChange true
                     }
                 }
 
-                radioButtonPreference {
+                RadioButtonPreference {
                     key("my_radio_$i")
                     title("Radio")
-                    dependency("my_switch_$i", true)
+                    dependencies(switchDependency)
                     summary("A radio button")
                 }
 
-                seekBarPreference {
+                SeekBarListPreference {
                     key("my_seekbar_$i")
                     title("SeekBar")
                     max(100)
-                    summary("Hey there im a seekbar")
-                    dependency("my_switch_$i", true)
+                    summary("He there im a seekbar")
+                    dependencies(switchDependency)
                 }
 
-                singleItemListPreference {
-                    key("single_item_list_$i")
-                    title("Single item list")
-                    entries(arrayOf("1", "2", "3"))
-                    entryValues(arrayOf("1", "2", "3"))
-                    defaultValue("2")
-                    dependency("my_switch_$i", true)
-                }
-
-                multiSelectListPreference {
+                MultiSelectListPreference {
                     key("multi_select_list_$i")
                     title("Multi select list")
                     entries(arrayOf("A", "B", "C"))
                     entryValues(arrayOf("A", "B", "C"))
                     defaultValue(setOf("B", "C"))
-                    dependency("my_switch_$i", true)
+                    dependencies(switchDependency)
                 }
 
-                preference {
+                Preference {
                     key("my_key1_$i")
                     title("Another Title")
                     summary("This is another summary.")
-                    dependency("my_switch_$i", true)
+                    dependencies(switchDependency)
                 }
             }
         }

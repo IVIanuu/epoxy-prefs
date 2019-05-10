@@ -21,20 +21,29 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.airbnb.epoxy.EpoxyController
 
+fun EpoxyController.EditTextListPreference(
+    body: EditTextPreferenceModel.Builder.() -> Unit
+): EditTextPreferenceModel = EditTextPreferenceModel.Builder()
+    .apply(body)
+    .build()
+    .also { it.addTo(this) }
+
 /**
- * A edit text preference
+ * A edit text Preference
  */
 open class EditTextPreferenceModel(builder: Builder) : DialogPreferenceModel<String>(builder) {
 
     val dialogHint = builder.dialogHint
+    val dialogHintRes = builder.dialogHintRes
 
-    override fun showDialog() {
+    override fun showDialog(context: Context) {
         val prefill = value ?: ""
 
         MaterialDialog(context)
             .applyDialogSettings()
             .input(
-                hint = dialogHint ?: "",
+                hintRes = dialogHintRes,
+                hint = dialogHint,
                 prefill = prefill
             ) { _, input -> persistValue(input.toString()) }
             .show()
@@ -46,6 +55,7 @@ open class EditTextPreferenceModel(builder: Builder) : DialogPreferenceModel<Str
         if (!super.equals(other)) return false
 
         if (dialogHint != other.dialogHint) return false
+        if (dialogHintRes != other.dialogHintRes) return false
 
         return true
     }
@@ -53,37 +63,25 @@ open class EditTextPreferenceModel(builder: Builder) : DialogPreferenceModel<Str
     override fun hashCode(): Int {
         var result = super.hashCode()
         result = 31 * result + (dialogHint?.hashCode() ?: 0)
+        result = 31 * result + dialogHintRes
         return result
     }
 
-    open class Builder(context: Context) : DialogPreferenceModel.Builder<String>(context) {
-
+    open class Builder : DialogPreferenceModel.Builder<String>() {
         var dialogHint: String? = null
             private set
-
+        var dialogHintRes: Int = 0
+            private set
 
         fun dialogHint(dialogHint: String?) {
             this.dialogHint = dialogHint
         }
 
-        override fun build(): EditTextPreferenceModel = EditTextPreferenceModel(this)
+        fun dialogHintRes(dialogHintRes: Int) {
+            this.dialogHintRes = dialogHintRes
+        }
+
+        override fun build() = EditTextPreferenceModel(this)
     }
-}
 
-inline fun EpoxyController.editTextPreference(
-    context: Context,
-    init: EditTextPreferenceModel.Builder.() -> Unit
-): EditTextPreferenceModel {
-    return EditTextPreferenceModel.Builder(context)
-        .apply(init)
-        .build()
-        .also { it.addTo(this) }
-}
-
-inline fun PreferenceEpoxyController.editTextPreference(
-    init: EditTextPreferenceModel.Builder.() -> Unit
-): EditTextPreferenceModel = editTextPreference(context, init)
-
-fun EditTextPreferenceModel.Builder.dialogHint(dialogHintRes: Int) {
-    dialogHint(context.getString(dialogHintRes))
 }

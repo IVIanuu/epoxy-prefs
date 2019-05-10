@@ -16,22 +16,27 @@
 
 package com.ivianuu.epoxyprefs
 
-import android.content.Context
 import android.widget.SeekBar
 import com.airbnb.epoxy.EpoxyController
 import kotlinx.android.synthetic.main.item_preference_seekbar.seekbar
 import kotlinx.android.synthetic.main.item_preference_seekbar.seekbar_value
 import kotlin.math.round
 
+fun EpoxyController.SeekBarListPreference(
+    body: SeekBarPreferenceModel.Builder.() -> Unit
+): SeekBarPreferenceModel = SeekBarPreferenceModel.Builder()
+    .apply(body)
+    .build()
+    .also { it.addTo(this) }
+
 /**
- * Abstract seek bar preference model
+ * Abstract seek bar Preference model
  */
 open class SeekBarPreferenceModel(builder: Builder) : AbstractPreferenceModel<Int>(builder) {
 
     val min = builder.min
     val max = builder.max
     val incValue = builder.incValue
-
     val valueTextProvider = builder.valueTextProvider
 
     private var internalValue = 0
@@ -78,7 +83,7 @@ open class SeekBarPreferenceModel(builder: Builder) : AbstractPreferenceModel<In
         val provider = valueTextProvider
 
         val text = provider?.invoke(internalValue)
-                ?: internalValue.toString() // fallback
+            ?: internalValue.toString() // fallback
 
         holder.seekbar.progress = internalValue - min
         holder.seekbar_value.text = text
@@ -92,8 +97,6 @@ open class SeekBarPreferenceModel(builder: Builder) : AbstractPreferenceModel<In
         if (min != other.min) return false
         if (max != other.max) return false
         if (incValue != other.incValue) return false
-        if (valueTextProvider != other.valueTextProvider) return false
-        if (internalValue != other.internalValue) return false
 
         return true
     }
@@ -103,16 +106,13 @@ open class SeekBarPreferenceModel(builder: Builder) : AbstractPreferenceModel<In
         result = 31 * result + min
         result = 31 * result + max
         result = 31 * result + incValue
-        result = 31 * result + (valueTextProvider?.hashCode() ?: 0)
-        result = 31 * result + internalValue
         return result
     }
 
-    open class Builder(context: Context) : AbstractPreferenceModel.Builder<Int>(context) {
-
+    open class Builder : AbstractPreferenceModel.Builder<Int>() {
         var min: Int = 0
             private set
-        var max: Int = 0
+        var max: Int = 100
             private set
         var incValue: Int = 1
             private set
@@ -135,24 +135,10 @@ open class SeekBarPreferenceModel(builder: Builder) : AbstractPreferenceModel<In
             this.incValue = incValue
         }
 
-        fun valueTextProvider(valueTextProvider: (Int) -> String) {
+        fun valueTextProvider(valueTextProvider: ((Int) -> String)?) {
             this.valueTextProvider = valueTextProvider
         }
 
-        override fun build(): SeekBarPreferenceModel = SeekBarPreferenceModel(this)
+        override fun build() = SeekBarPreferenceModel(this)
     }
 }
-
-inline fun EpoxyController.seekBarPreference(
-    context: Context,
-    init: SeekBarPreferenceModel.Builder.() -> Unit
-): SeekBarPreferenceModel {
-    return SeekBarPreferenceModel.Builder(context)
-        .apply(init)
-        .build()
-        .also { it.addTo(this) }
-}
-
-inline fun PreferenceEpoxyController.seekBarPreference(
-    init: SeekBarPreferenceModel.Builder.() -> Unit
-): SeekBarPreferenceModel = seekBarPreference(context, init)

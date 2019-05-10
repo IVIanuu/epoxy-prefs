@@ -1,27 +1,24 @@
 package com.ivianuu.epoxyprefs
 
-import android.content.Context
 import android.widget.CompoundButton
 import com.airbnb.epoxy.EpoxyController
 import kotlinx.android.synthetic.main.widget_preference_radio.radio
 
+fun EpoxyController.RadioButtonPreference(
+    body: RadioButtonPreferenceModel.Builder.() -> Unit
+): RadioButtonPreferenceModel = RadioButtonPreferenceModel.Builder()
+    .apply(body)
+    .build()
+    .also { it.addTo(this) }
+
 /**
- * A radio button preference
+ * A check box Preference
  */
-open class RadioButtonPreferenceModel(builder: Builder) : CompoundButtonPreferenceModel(builder) {
+open class RadioButtonPreferenceModel(builder: CompoundButtonPreferenceModel.Builder) :
+    CompoundButtonPreferenceModel(builder) {
 
     override val Holder.compoundButton: CompoundButton?
         get() = radio
-
-    open class Builder(context: Context) : CompoundButtonPreferenceModel.Builder(context) {
-
-        init {
-            widgetLayoutRes(R.layout.widget_preference_radio)
-        }
-
-        override fun build(): RadioButtonPreferenceModel = RadioButtonPreferenceModel(this)
-
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -30,18 +27,15 @@ open class RadioButtonPreferenceModel(builder: Builder) : CompoundButtonPreferen
         return true
     }
 
-}
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
 
-inline fun EpoxyController.radioButtonPreference(
-    context: Context,
-    init: RadioButtonPreferenceModel.Builder.() -> Unit
-): RadioButtonPreferenceModel {
-    return RadioButtonPreferenceModel.Builder(context)
-        .apply(init)
-        .build()
-        .also { it.addTo(this) }
-}
+    open class Builder : CompoundButtonPreferenceModel.Builder() {
+        init {
+            widgetLayoutRes(R.layout.widget_preference_radio)
+        }
 
-inline fun PreferenceEpoxyController.radioButtonPreference(
-    init: RadioButtonPreferenceModel.Builder.() -> Unit
-): RadioButtonPreferenceModel = radioButtonPreference(context, init)
+        override fun build() = RadioButtonPreferenceModel(this)
+    }
+}

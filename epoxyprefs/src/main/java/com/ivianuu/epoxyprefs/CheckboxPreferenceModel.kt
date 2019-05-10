@@ -16,26 +16,25 @@
 
 package com.ivianuu.epoxyprefs
 
-import android.content.Context
 import android.widget.CompoundButton
 import com.airbnb.epoxy.EpoxyController
 import kotlinx.android.synthetic.main.widget_preference_checkbox.checkbox
 
+fun EpoxyController.CheckboxPreference(
+    body: CheckboxPreferenceModel.Builder.() -> Unit
+): CheckboxPreferenceModel = CheckboxPreferenceModel.Builder()
+    .apply(body)
+    .build()
+    .also { it.addTo(this) }
+
 /**
- * A check box preference
+ * A check box Preference
  */
-open class CheckboxPreferenceModel(builder: Builder) : CompoundButtonPreferenceModel(builder) {
+open class CheckboxPreferenceModel(builder: CompoundButtonPreferenceModel.Builder) :
+    CompoundButtonPreferenceModel(builder) {
 
     override val Holder.compoundButton: CompoundButton?
         get() = checkbox
-
-    open class Builder(context: Context) : CompoundButtonPreferenceModel.Builder(context) {
-        init {
-            widgetLayoutRes(R.layout.widget_preference_checkbox)
-        }
-
-        override fun build(): CheckboxPreferenceModel = CheckboxPreferenceModel(this)
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -44,18 +43,15 @@ open class CheckboxPreferenceModel(builder: Builder) : CompoundButtonPreferenceM
         return true
     }
 
-}
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
 
-inline fun EpoxyController.checkboxPreference(
-    context: Context,
-    init: CheckboxPreferenceModel.Builder.() -> Unit
-): CheckboxPreferenceModel {
-    return CheckboxPreferenceModel.Builder(context)
-        .apply(init)
-        .build()
-        .also { it.addTo(this) }
-}
+    open class Builder : CompoundButtonPreferenceModel.Builder() {
+        init {
+            widgetLayoutRes(R.layout.widget_preference_checkbox)
+        }
 
-inline fun PreferenceEpoxyController.checkboxPreference(
-    init: CheckboxPreferenceModel.Builder.() -> Unit
-): CheckboxPreferenceModel = checkboxPreference(context, init)
+        override fun build() = CheckboxPreferenceModel(this)
+    }
+}

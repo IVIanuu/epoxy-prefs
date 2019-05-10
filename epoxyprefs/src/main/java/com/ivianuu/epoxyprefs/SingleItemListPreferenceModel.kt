@@ -21,12 +21,20 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.airbnb.epoxy.EpoxyController
 
+fun EpoxyController.SingleItemListPreference(
+    body: SingleItemListPreferenceModel.Builder.() -> Unit
+): SingleItemListPreferenceModel = SingleItemListPreferenceModel.Builder()
+    .apply(body)
+    .build()
+    .also { it.addTo(this) }
+
+
 /**
- * A single item preference
+ * A single item Preference
  */
 open class SingleItemListPreferenceModel(builder: Builder) : ListPreferenceModel<String>(builder) {
 
-    override fun showDialog() {
+    override fun showDialog(context: Context) {
         val entries = entries ?: emptyArray()
         val entryValues = entryValues ?: emptyArray()
 
@@ -54,21 +62,11 @@ open class SingleItemListPreferenceModel(builder: Builder) : ListPreferenceModel
         return true
     }
 
-    open class Builder(context: Context) : ListPreferenceModel.Builder<String>(context) {
-        override fun build(): SingleItemListPreferenceModel = SingleItemListPreferenceModel(this)
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+
+    open class Builder : ListPreferenceModel.Builder<String>() {
+        override fun build() = SingleItemListPreferenceModel(this)
     }
 }
-
-inline fun EpoxyController.singleItemListPreference(
-    context: Context,
-    init: SingleItemListPreferenceModel.Builder.() -> Unit
-): SingleItemListPreferenceModel {
-    return SingleItemListPreferenceModel.Builder(context)
-        .apply(init)
-        .build()
-        .also { it.addTo(this) }
-}
-
-inline fun PreferenceEpoxyController.singleItemListPreference(
-    init: SingleItemListPreferenceModel.Builder.() -> Unit
-): SingleItemListPreferenceModel = singleItemListPreference(context, init)

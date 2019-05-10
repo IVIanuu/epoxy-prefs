@@ -36,6 +36,7 @@ object EpoxyPrefsPlugins {
             false
         ).also { defaultContext = it }
     }
+
     /**
      * Sets the default [SharedPreferences]
      */

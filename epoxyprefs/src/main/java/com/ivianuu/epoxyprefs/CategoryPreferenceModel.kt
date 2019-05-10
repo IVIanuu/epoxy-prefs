@@ -16,24 +16,19 @@
 
 package com.ivianuu.epoxyprefs
 
-import android.content.Context
 import com.airbnb.epoxy.EpoxyController
 
+fun EpoxyController.CategoryPreference(
+    body: CategoryPreferenceModel.Builder.() -> Unit
+): CategoryPreferenceModel = CategoryPreferenceModel.Builder()
+    .apply(body)
+    .build()
+    .also { it.addTo(this) }
+
 /**
- * A category preference
+ * A category Preference
  */
 open class CategoryPreferenceModel(builder: Builder) : AbstractPreferenceModel<Nothing>(builder) {
-
-    open class Builder(context: Context) : AbstractPreferenceModel.Builder<Nothing>(context) {
-
-        init {
-            clickable(false)
-            layoutRes(R.layout.item_preference_category)
-        }
-
-        override fun build(): CategoryPreferenceModel = CategoryPreferenceModel(this)
-    }
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is CategoryPreferenceModel) return false
@@ -41,18 +36,15 @@ open class CategoryPreferenceModel(builder: Builder) : AbstractPreferenceModel<N
         return true
     }
 
-}
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
 
-inline fun EpoxyController.categoryPreference(
-    context: Context,
-    init: CategoryPreferenceModel.Builder.() -> Unit
-): CategoryPreferenceModel {
-    return CategoryPreferenceModel.Builder(context)
-        .apply(init)
-        .build()
-        .also { it.addTo(this) }
-}
+    open class Builder : AbstractPreferenceModel.Builder<Nothing>() {
+        init {
+            layoutRes(R.layout.item_preference_category)
+        }
 
-inline fun PreferenceEpoxyController.categoryPreference(
-    init: CategoryPreferenceModel.Builder.() -> Unit
-): CategoryPreferenceModel = categoryPreference(context, init)
+        override fun build() = CategoryPreferenceModel(this)
+    }
+}
