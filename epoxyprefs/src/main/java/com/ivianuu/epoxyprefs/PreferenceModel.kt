@@ -5,6 +5,7 @@ import com.airbnb.epoxy.EpoxyController
 fun EpoxyController.Preference(
     body: PreferenceModel.Builder.() -> Unit
 ): PreferenceModel = PreferenceModel.Builder()
+    .injectContextIfPossible(this)
     .apply(body)
     .build()
     .also { it.addTo(this) }

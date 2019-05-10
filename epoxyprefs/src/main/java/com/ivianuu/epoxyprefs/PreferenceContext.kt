@@ -12,7 +12,6 @@ interface PreferenceContext {
     fun addChangeListener(listener: (String) -> Unit)
 
     fun removeChangeListener(listener: (String) -> Unit)
-
 }
 
 fun PreferenceContext(

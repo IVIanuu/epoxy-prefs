@@ -24,6 +24,7 @@ import com.airbnb.epoxy.EpoxyController
 fun EpoxyController.EditTextListPreference(
     body: EditTextPreferenceModel.Builder.() -> Unit
 ): EditTextPreferenceModel = EditTextPreferenceModel.Builder()
+    .injectContextIfPossible(this)
     .apply(body)
     .build()
     .also { it.addTo(this) }

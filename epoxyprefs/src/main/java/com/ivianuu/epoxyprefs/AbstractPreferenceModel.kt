@@ -17,7 +17,6 @@
 package com.ivianuu.epoxyprefs
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
@@ -28,20 +27,6 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_preference.*
 import kotlin.properties.Delegates
-
-data class PreferenceDependency<T : Any>(
-    val key: String,
-    val value: T,
-    val defaultValue: T? = value.tryToResolveDefaultValue() as? T
-) {
-    fun isOk(context: PreferenceContext): Boolean {
-        return (if (defaultValue != null) {
-            context.getOrDefault(key, defaultValue)
-        } else {
-            context.get<Any>(key)
-        }) ?: value.tryToResolveDefaultValue() == value
-    }
-}
 
 /**
  * Base Preference
@@ -59,41 +44,31 @@ abstract class AbstractPreferenceModel<T : Any>(
     val iconRes = builder.iconRes
     val preserveIconSpace = builder.preserveIconSpace
     val defaultValue = builder.defaultValue
-    val enabled = builder.isEnabled
+    val isEnabled = builder.isEnabled
     val isClickable = builder.isClickable
-    val dependencies: List<PreferenceDependency<*>> = builder.dependencies
+    val dependencies: List<Dependency<*>> = builder.dependencies
     val onClick = builder.onClick
     val onChange = builder.onChange
-    val persistent = builder.isPersistent
+    val isPersistent = builder.isPersistent
     val layoutRes = builder.layoutRes
     val widgetLayoutRes = builder.widgetLayoutRes
     val context = builder.context
 
-    private lateinit var androidContext: Context
+    val allowedByDependencies = dependencies.all { it.isOk(context) }
 
-    val _context by lazy(LazyThreadSafetyMode.NONE) {
-        context ?: EpoxyPrefsPlugins.getDefaultContext(androidContext)
-    }
-
-    val allowedByDependencies by lazy(LazyThreadSafetyMode.NONE) {
-        dependencies.all { it.isOk(_context) }
-    }
-
-    val value by lazy(LazyThreadSafetyMode.NONE) {
-        if (persistent) {
-            if (defaultValue != null) {
-                _context.getOrDefault(key, defaultValue)
-            } else {
-                _context.get<T>(key)
-            }
-        } else if (!persistent) {
-            defaultValue
+    val value = if (isPersistent) {
+        if (defaultValue != null) {
+            context.getOrDefault(key, defaultValue)
         } else {
-            null
+            context.get<T>(key)
         }
+    } else if (!isPersistent) {
+        defaultValue
+    } else {
+        null
     }
 
-    protected val viewsShouldBeEnabled: Boolean get() = enabled && allowedByDependencies
+    protected val viewsShouldBeEnabled: Boolean get() = isEnabled && allowedByDependencies
 
     init {
         id(key)
@@ -102,7 +77,6 @@ abstract class AbstractPreferenceModel<T : Any>(
 
     @CallSuper
     override fun bind(holder: Holder) {
-        androidContext = holder.containerView.context
         super.bind(holder)
 
         holder.title?.let {
@@ -178,8 +152,8 @@ abstract class AbstractPreferenceModel<T : Any>(
     @Suppress("UNCHECKED_CAST")
     @SuppressLint("ApplySharedPref")
     protected fun persistValue(value: T) {
-        if (onChange?.invoke(value) != false && persistent) {
-            _context.set(key, value)
+        if (onChange?.invoke(value) != false && isPersistent) {
+            context.set(key, value)
         }
     }
 
@@ -197,12 +171,14 @@ abstract class AbstractPreferenceModel<T : Any>(
         if (iconRes != other.iconRes) return false
         if (preserveIconSpace != other.preserveIconSpace) return false
         if (defaultValue != other.defaultValue) return false
-        if (enabled != other.enabled) return false
+        if (isEnabled != other.isEnabled) return false
         if (isClickable != other.isClickable) return false
         if (dependencies != other.dependencies) return false
-        if (persistent != other.persistent) return false
+        if (isPersistent != other.isPersistent) return false
         if (layoutRes != other.layoutRes) return false
         if (widgetLayoutRes != other.widgetLayoutRes) return false
+        if (allowedByDependencies != other.allowedByDependencies) return false
+        if (value != other.value) return false
 
         return true
     }
@@ -218,12 +194,14 @@ abstract class AbstractPreferenceModel<T : Any>(
         result = 31 * result + iconRes
         result = 31 * result + preserveIconSpace.hashCode()
         result = 31 * result + (defaultValue?.hashCode() ?: 0)
-        result = 31 * result + enabled.hashCode()
+        result = 31 * result + isEnabled.hashCode()
         result = 31 * result + isClickable.hashCode()
         result = 31 * result + dependencies.hashCode()
-        result = 31 * result + persistent.hashCode()
+        result = 31 * result + isPersistent.hashCode()
         result = 31 * result + layoutRes
         result = 31 * result + widgetLayoutRes
+        result = 31 * result + allowedByDependencies.hashCode()
+        result = 31 * result + (value?.hashCode() ?: 0)
         return result
     }
 
@@ -237,6 +215,20 @@ abstract class AbstractPreferenceModel<T : Any>(
         @CallSuper
         override fun bindView(view: View) {
             containerView = view
+        }
+    }
+
+    data class Dependency<T : Any>(
+        val key: String,
+        val value: T,
+        val defaultValue: T? = value.tryToResolveDefaultValue() as? T
+    ) {
+        fun isOk(context: PreferenceContext): Boolean {
+            return (if (defaultValue != null) {
+                context.getOrDefault(key, defaultValue)
+            } else {
+                context.get<Any>(key)
+            }) ?: value.tryToResolveDefaultValue() == value
         }
     }
 
@@ -264,7 +256,7 @@ abstract class AbstractPreferenceModel<T : Any>(
             private set
         var isClickable: Boolean = true
             private set
-        val dependencies = mutableListOf<PreferenceDependency<*>>()
+        val dependencies = mutableListOf<Dependency<*>>()
         var onClick: (() -> Boolean)? = null
             private set
         var onChange: ((newValue: T) -> Boolean)? = null
@@ -275,7 +267,7 @@ abstract class AbstractPreferenceModel<T : Any>(
             private set
         var widgetLayoutRes: Int = 0
             private set
-        var context: PreferenceContext? = null
+        var context: PreferenceContext by Delegates.notNull()
             private set
 
         fun key(key: String) {
@@ -322,11 +314,11 @@ abstract class AbstractPreferenceModel<T : Any>(
             this.isClickable = isClickable
         }
 
-        fun dependencies(vararg dependencies: PreferenceDependency<*>) {
+        fun dependencies(vararg dependencies: Dependency<*>) {
             this.dependencies.addAll(dependencies)
         }
 
-        fun dependencies(dependencies: Iterable<PreferenceDependency<*>>) {
+        fun dependencies(dependencies: Iterable<Dependency<*>>) {
             this.dependencies.addAll(dependencies)
         }
 
@@ -342,7 +334,7 @@ abstract class AbstractPreferenceModel<T : Any>(
             this.isPersistent = isPersistent
         }
 
-        fun context(context: PreferenceContext?) {
+        fun context(context: PreferenceContext) {
             this.context = context
         }
 
@@ -364,5 +356,5 @@ fun <T : Any> AbstractPreferenceModel.Builder<*>.dependency(
     value: T,
     defaultValue: T? = value.tryToResolveDefaultValue() as? T
 ) {
-    dependencies(PreferenceDependency(key, value, defaultValue))
+    dependencies(AbstractPreferenceModel.Dependency(key, value, defaultValue))
 }

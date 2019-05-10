@@ -7,6 +7,7 @@ import kotlinx.android.synthetic.main.widget_preference_radio.radio
 fun EpoxyController.RadioButtonPreference(
     body: RadioButtonPreferenceModel.Builder.() -> Unit
 ): RadioButtonPreferenceModel = RadioButtonPreferenceModel.Builder()
+    .injectContextIfPossible(this)
     .apply(body)
     .build()
     .also { it.addTo(this) }

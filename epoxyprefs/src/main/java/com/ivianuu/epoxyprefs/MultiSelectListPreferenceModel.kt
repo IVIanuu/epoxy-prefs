@@ -24,6 +24,7 @@ import com.airbnb.epoxy.EpoxyController
 fun EpoxyController.MultiSelectListPreference(
     body: MultiSelectListPreferenceModel.Builder.() -> Unit
 ): MultiSelectListPreferenceModel = MultiSelectListPreferenceModel.Builder()
+    .injectContextIfPossible(this)
     .apply(body)
     .build()
     .also { it.addTo(this) }

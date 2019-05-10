@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 val switchDependency =
-                    PreferenceDependency("my_switch_$i", true)
+                    AbstractPreferenceModel.Dependency("my_switch_$i", true)
 
                 if (context.getOrDefault("my_switch_$i", false)) {
                     EditTextListPreference {

@@ -1,5 +1,6 @@
 package com.ivianuu.epoxyprefs
 
+import com.airbnb.epoxy.EpoxyController
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -14,6 +15,13 @@ internal fun Any?.tryToResolveDefaultValue(): Any? = when (this) {
 }
 
 private object UNINITIALIZED
+
+internal fun <T : AbstractPreferenceModel.Builder<*>> T.injectContextIfPossible(
+    controller: EpoxyController
+): T {
+    (controller as? PreferenceEpoxyController)?.let { context(it.context) }
+    return this
+}
 
 internal fun <T> lazyVar(block: () -> T) = object : ReadWriteProperty<Any, T> {
 

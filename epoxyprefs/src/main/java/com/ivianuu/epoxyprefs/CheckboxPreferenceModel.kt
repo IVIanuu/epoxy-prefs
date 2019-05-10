@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.widget_preference_checkbox.checkbox
 fun EpoxyController.CheckboxPreference(
     body: CheckboxPreferenceModel.Builder.() -> Unit
 ): CheckboxPreferenceModel = CheckboxPreferenceModel.Builder()
+    .injectContextIfPossible(this)
     .apply(body)
     .build()
     .also { it.addTo(this) }

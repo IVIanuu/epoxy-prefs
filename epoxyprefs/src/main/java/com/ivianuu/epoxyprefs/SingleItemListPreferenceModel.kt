@@ -24,6 +24,7 @@ import com.airbnb.epoxy.EpoxyController
 fun EpoxyController.SingleItemListPreference(
     body: SingleItemListPreferenceModel.Builder.() -> Unit
 ): SingleItemListPreferenceModel = SingleItemListPreferenceModel.Builder()
+    .injectContextIfPossible(this)
     .apply(body)
     .build()
     .also { it.addTo(this) }

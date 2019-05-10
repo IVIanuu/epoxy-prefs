@@ -25,6 +25,7 @@ import kotlin.math.round
 fun EpoxyController.SeekBarListPreference(
     body: SeekBarPreferenceModel.Builder.() -> Unit
 ): SeekBarPreferenceModel = SeekBarPreferenceModel.Builder()
+    .injectContextIfPossible(this)
     .apply(body)
     .build()
     .also { it.addTo(this) }

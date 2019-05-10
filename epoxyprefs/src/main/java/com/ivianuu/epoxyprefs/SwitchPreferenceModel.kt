@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.widget_preference_switch.switchWidget
 fun EpoxyController.SwitchPreference(
     body: SwitchPreferenceModel.Builder.() -> Unit
 ): SwitchPreferenceModel = SwitchPreferenceModel.Builder()
+    .injectContextIfPossible(this)
     .apply(body)
     .build()
     .also { it.addTo(this) }

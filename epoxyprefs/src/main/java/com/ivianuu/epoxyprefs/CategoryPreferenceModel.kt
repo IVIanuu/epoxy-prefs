@@ -21,6 +21,7 @@ import com.airbnb.epoxy.EpoxyController
 fun EpoxyController.CategoryPreference(
     body: CategoryPreferenceModel.Builder.() -> Unit
 ): CategoryPreferenceModel = CategoryPreferenceModel.Builder()
+    .injectContextIfPossible(this)
     .apply(body)
     .build()
     .also { it.addTo(this) }
