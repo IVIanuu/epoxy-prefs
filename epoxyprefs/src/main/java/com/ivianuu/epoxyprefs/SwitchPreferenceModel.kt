@@ -28,10 +28,9 @@ fun EpoxyController.SwitchPreference(
     .also { it.addTo(this) }
 
 /**
- * A check box Preference
+ * A switch Preference
  */
-open class SwitchPreferenceModel(builder: CompoundButtonPreferenceModel.Builder) :
-    CompoundButtonPreferenceModel(builder) {
+open class SwitchPreferenceModel(builder: Builder) : CompoundButtonPreferenceModel(builder) {
 
     override val Holder.compoundButton: CompoundButton?
         get() = switchWidget

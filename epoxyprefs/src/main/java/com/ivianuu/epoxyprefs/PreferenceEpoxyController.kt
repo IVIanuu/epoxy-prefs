@@ -1,7 +1,6 @@
 package com.ivianuu.epoxyprefs
 
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 
@@ -13,19 +12,16 @@ abstract class PreferenceEpoxyController(
     val context: PreferenceContext
 ) : EpoxyController() {
 
-    private val prefsChangeListener =
-        SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
-            requestModelBuild()
-        }
+    private val prefsChangeListener: (String) -> Unit = { requestModelBuild() }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
-        //context.sharedPreferences.registerOnSharedPreferenceChangeListener(prefsChangeListener)
+        context.addChangeListener(prefsChangeListener)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
-        //context.sharedPreferences.unregisterOnSharedPreferenceChangeListener(prefsChangeListener)
+        context.removeChangeListener(prefsChangeListener)
     }
 }
 

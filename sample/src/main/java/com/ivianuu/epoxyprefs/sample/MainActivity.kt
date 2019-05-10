@@ -46,13 +46,13 @@ class MainActivity : AppCompatActivity() {
                     title("Title")
                     summary("This is a summary.")
                     onClick {
-
                         Toast.makeText(
                             this@MainActivity,
                             "Hello", Toast.LENGTH_SHORT
                         ).show()
                         return@onClick true
                     }
+                    dependencies(switchDependency)
                 }
 
                 CheckboxPreference {
