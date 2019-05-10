@@ -80,24 +80,39 @@ abstract class AbstractPreferenceModel<T : Any>(
         super.bind(holder)
 
         holder.title?.let {
-            it.text = title
-            it.visibility = if (title != null) View.VISIBLE else View.GONE
+            when {
+                title != null -> it.text = title
+                titleRes != 0 -> it.setText(titleRes)
+                else -> it.text = null
+            }
+            it.visibility = if (title != null || titleRes != 0) View.VISIBLE else View.GONE
             it.isEnabled = viewsShouldBeEnabled
         }
 
         holder.summary?.let {
-            it.text = summary
-            it.visibility = if (summary != null) View.VISIBLE else View.GONE
+            when {
+                summary != null -> it.text = summary
+                summaryRes != 0 -> it.setText(summaryRes)
+                else -> it.text = null
+            }
+            it.visibility = if (summary != null || summaryRes != 0) View.VISIBLE else View.GONE
             it.isEnabled = viewsShouldBeEnabled
         }
 
         holder.icon?.let {
-            it.setImageDrawable(icon)
+            when {
+                icon != null -> it.setImageDrawable(icon)
+                iconRes != 0 -> it.setImageResource(iconRes)
+                else -> it.setImageDrawable(null)
+            }
+
             it.isEnabled = viewsShouldBeEnabled
         }
 
         holder.icon_frame?.let {
-            it.visibility = if (icon != null || preserveIconSpace) View.VISIBLE else View.GONE
+            it.visibility = if (icon != null || iconRes != 0
+                || preserveIconSpace
+            ) View.VISIBLE else View.GONE
             it.isEnabled = viewsShouldBeEnabled
         }
 
