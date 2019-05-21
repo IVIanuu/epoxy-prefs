@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
                     AbstractPreferenceModel.Dependency("my_switch_$i", true)
 
                 if (context.getOrDefault("my_switch_$i", false)) {
-                    EditTextListPreference {
+                    EditTextPreference {
                         key("my_edit_text_$i")
                         title("Edit Text")
                         summary("Edit Text")
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                     summary("A radio button")
                 }
 
-                SeekBarListPreference {
+                SeekBarPreference {
                     key("my_seekbar_$i")
                     title("SeekBar")
                     max(100)

@@ -21,7 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.airbnb.epoxy.EpoxyController
 
-fun EpoxyController.EditTextListPreference(
+fun EpoxyController.EditTextPreference(
     body: EditTextPreferenceModel.Builder.() -> Unit
 ): EditTextPreferenceModel = EditTextPreferenceModel.Builder()
     .injectContextIfPossible(this)

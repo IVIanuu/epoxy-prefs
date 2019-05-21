@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.item_preference_seekbar.seekbar
 import kotlinx.android.synthetic.main.item_preference_seekbar.seekbar_value
 import kotlin.math.round
 
-fun EpoxyController.SeekBarListPreference(
+fun EpoxyController.SeekBarPreference(
     body: SeekBarPreferenceModel.Builder.() -> Unit
 ): SeekBarPreferenceModel = SeekBarPreferenceModel.Builder()
     .injectContextIfPossible(this)
