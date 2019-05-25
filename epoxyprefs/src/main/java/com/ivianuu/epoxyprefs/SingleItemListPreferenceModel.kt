@@ -36,8 +36,21 @@ fun EpoxyController.SingleItemListPreference(
 open class SingleItemListPreferenceModel(builder: Builder) : ListPreferenceModel<String>(builder) {
 
     override fun showDialog(context: Context) {
-        val entries = entries ?: emptyArray()
-        val entryValues = entryValues ?: emptyArray()
+        var entries = entries
+        if (entries == null && entriesRes != 0) {
+            entries = context.resources.getStringArray(entriesRes)
+        }
+        if (entries == null) {
+            entries = emptyArray()
+        }
+
+        var entryValues = entryValues
+        if (entryValues == null && entryValuesRes != 0) {
+            entryValues = context.resources.getStringArray(entryValuesRes)
+        }
+        if (entryValues == null) {
+            entryValues = emptyArray()
+        }
 
         val currentValue = value ?: ""
         val selectedIndex = entryValues.indexOf(currentValue)

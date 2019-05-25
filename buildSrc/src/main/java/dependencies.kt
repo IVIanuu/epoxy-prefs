@@ -14,7 +14,7 @@ object Build {
 object Publishing {
     const val groupId = "com.ivianuu.epoxyprefs"
     const val vcsUrl = "https://github.com/IVIanuu/epoxy-prefs"
-    const val version = "${Build.versionName}-dev-11"
+    const val version = "${Build.versionName}-dev-13"
 }
 
 object Versions {
