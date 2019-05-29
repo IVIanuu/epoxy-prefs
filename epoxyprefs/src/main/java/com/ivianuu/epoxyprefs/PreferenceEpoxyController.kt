@@ -13,36 +13,7 @@ abstract class PreferenceEpoxyController(
     val context: PreferenceContext
 ) : EpoxyController() {
 
-    private val prefsChangeListener: (String) -> Unit = {
-        println("key changed $it")
-        requestModelBuild()
-    }
-
-    init {
-        addModelBuildListener {
-            println("models build done $it")
-
-            println("changes--start")
-            it.dispatchTo(object : ListUpdateCallback {
-                override fun onChanged(position: Int, count: Int, payload: Any?) {
-                    println("on changed pos $position c $count")
-                }
-
-                override fun onInserted(position: Int, count: Int) {
-                    println("on inserted pos $position c $count")
-                }
-
-                override fun onMoved(fromPosition: Int, toPosition: Int) {
-                    println("on moved from $fromPosition to $toPosition")
-                }
-
-                override fun onRemoved(position: Int, count: Int) {
-                    println("on removed pos $position c $count")
-                }
-            })
-            println("changes--end")
-        }
-    }
+    private val prefsChangeListener: (String) -> Unit = { requestModelBuild() }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -72,7 +43,6 @@ fun preferenceEpoxyController(
 ): PreferenceEpoxyController {
     return object : PreferenceEpoxyController(context) {
         override fun buildModels() {
-            println("build models ")
             buildModels.invoke(this)
         }
     }
