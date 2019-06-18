@@ -14,8 +14,6 @@ internal fun Any?.tryToResolveDefaultValue(): Any? = when (this) {
     else -> null
 }
 
-private object UNINITIALIZED
-
 internal fun <T : AbstractPreferenceModel.Builder<*>> T.injectContextIfPossible(
     controller: EpoxyController
 ): T {
@@ -25,10 +23,10 @@ internal fun <T : AbstractPreferenceModel.Builder<*>> T.injectContextIfPossible(
 
 internal fun <T> lazyVar(block: () -> T) = object : ReadWriteProperty<Any, T> {
 
-    private var _value: Any? = UNINITIALIZED
+    private var _value: Any? = this
 
     override fun getValue(thisRef: Any, property: KProperty<*>): T {
-        if (_value === UNINITIALIZED) {
+        if (_value === this) {
             _value = block()
         }
 

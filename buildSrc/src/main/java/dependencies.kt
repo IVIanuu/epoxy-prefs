@@ -23,7 +23,7 @@ object Versions {
     const val bintray = "1.8.4"
     const val epoxy = "3.4.2"
     const val kotlin = "1.3.31"
-    const val materialComponents = "1.1.0-alpha06"
+    const val materialComponents = "1.1.0-alpha07"
     const val materialDialogs = "2.0.3"
     const val mavenGradle = "2.1"
 }
@@ -48,5 +48,6 @@ object Deps {
     const val materialDialogsInput =
         "com.afollestad.material-dialogs:input:${Versions.materialDialogs}"
 
-    const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"
+    const val mavenGradlePlugin =
+        "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradle}"
 }

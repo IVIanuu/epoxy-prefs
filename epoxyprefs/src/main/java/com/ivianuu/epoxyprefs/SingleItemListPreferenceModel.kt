@@ -29,7 +29,6 @@ fun EpoxyController.SingleItemListPreference(
     .build()
     .also { it.addTo(this) }
 
-
 /**
  * A single item Preference
  */

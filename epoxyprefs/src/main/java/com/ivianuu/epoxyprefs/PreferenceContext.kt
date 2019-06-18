@@ -7,6 +7,7 @@ interface PreferenceContext {
     fun <T : Any> get(key: String): T?
     fun <T : Any> getOrDefault(key: String, defaultValue: T): T =
         get(key) ?: defaultValue
+
     fun <T : Any> set(key: String, value: T)
 
     fun addChangeListener(listener: (String) -> Unit)
