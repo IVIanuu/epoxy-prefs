@@ -34,15 +34,10 @@ class MainActivity : AppCompatActivity() {
                 iconRes(R.drawable.abc_ic_clear_material)
             }
 
-            Preference {
-                key("preserve icon space")
-                title("Preserve icon space")
-                preserveIconSpace(true)
-            }
-
             SeekBarPreference {
                 key("single line seek bar")
                 title("Single line seek bar")
+                showSeekBarValue(false)
             }
 
             SeekBarPreference {
@@ -57,24 +52,16 @@ class MainActivity : AppCompatActivity() {
                 iconRes(R.drawable.abc_ic_clear_material)
             }
 
-            SeekBarPreference {
-                key("seek bar with preserve icon space")
-                title("Seek bar with preserve icon space")
-                preserveIconSpace(true)
-            }
-
             for (i in 0..100) {
                 CategoryPreference {
                     key("category_$i")
                     title("Category $i")
-                    preserveIconSpace(true)
                 }
 
                 SwitchPreference {
                     key("my_switch_$i")
-                    summary("Nice a switch")
                     title("Switch")
-                    preserveIconSpace(true)
+                    summary("Nice a switch")
                 }
 
                 val switchDependency =
@@ -86,7 +73,6 @@ class MainActivity : AppCompatActivity() {
                         title("Edit Text")
                         summary("Edit Text")
                         dialogHint("Hello lets type something")
-                        preserveIconSpace(true)
                     }
                 }
 
@@ -102,7 +88,6 @@ class MainActivity : AppCompatActivity() {
                         return@onClick true
                     }
                     dependencies(switchDependency)
-                    preserveIconSpace(true)
                 }
 
                 CheckBoxPreference {
@@ -116,7 +101,6 @@ class MainActivity : AppCompatActivity() {
                         requestModelBuild()
                         return@onChange true
                     }
-                    preserveIconSpace(true)
                 }
 
                 RadioButtonPreference {
@@ -124,7 +108,6 @@ class MainActivity : AppCompatActivity() {
                     title("Radio")
                     summary("A radio button")
                     dependencies(switchDependency)
-                    preserveIconSpace(true)
                 }
 
                 SeekBarPreference {
@@ -133,7 +116,6 @@ class MainActivity : AppCompatActivity() {
                     summary("He there im a seekbar")
                     max(100)
                     dependencies(switchDependency)
-                    preserveIconSpace(true)
                 }
 
                 MultiSelectListPreference {
@@ -143,7 +125,6 @@ class MainActivity : AppCompatActivity() {
                     entryValues(arrayOf("A", "B", "C"))
                     defaultValue(setOf("B", "C"))
                     dependencies(switchDependency)
-                    preserveIconSpace(true)
                 }
 
                 Preference {
@@ -151,7 +132,6 @@ class MainActivity : AppCompatActivity() {
                     title("Another Title")
                     summary("This is another summary.")
                     dependencies(switchDependency)
-                    preserveIconSpace(true)
                 }
             }
         }

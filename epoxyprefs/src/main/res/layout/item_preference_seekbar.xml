@@ -96,6 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="36dp"
+                android:visibility="gone"
                 android:gravity="end|center_vertical"
                 android:fontFamily="sans-serif-condensed"
                 android:singleLine="true"

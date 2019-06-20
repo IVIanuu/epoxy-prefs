@@ -16,6 +16,7 @@
 
 package com.ivianuu.epoxyprefs
 
+import android.view.View
 import android.widget.SeekBar
 import com.airbnb.epoxy.EpoxyController
 import kotlinx.android.synthetic.main.item_preference_seekbar.*
@@ -81,13 +82,19 @@ open class SeekBarPreferenceModel(builder: Builder) : AbstractPreferenceModel<In
 
         internalValue = (round((progress / incValue).toDouble()) * incValue).toInt()
 
-        val provider = valueTextProvider
-
-        val text = provider?.invoke(internalValue)
-            ?: internalValue.toString() // fallback
-
         holder.seekbar.progress = internalValue - min
-        holder.seekbar_value.text = text
+
+        if (showSeekBarValue) {
+            val provider = valueTextProvider
+
+            val text = provider?.invoke(internalValue)
+                ?: internalValue.toString() // fallback
+            holder.seekbar_value.visibility = View.VISIBLE
+            holder.seekbar_value.text = text
+        } else {
+            holder.seekbar_value.visibility = View.GONE
+            holder.seekbar_value.text = null
+        }
     }
 
     override fun equals(other: Any?): Boolean {
@@ -97,6 +104,7 @@ open class SeekBarPreferenceModel(builder: Builder) : AbstractPreferenceModel<In
 
         if (min != other.min) return false
         if (max != other.max) return false
+        if (showSeekBarValue != other.showSeekBarValue) return false
         if (incValue != other.incValue) return false
 
         return true
@@ -106,6 +114,7 @@ open class SeekBarPreferenceModel(builder: Builder) : AbstractPreferenceModel<In
         var result = super.hashCode()
         result = 31 * result + min
         result = 31 * result + max
+        result = 31 * result + showSeekBarValue.hashCode()
         result = 31 * result + incValue
         return result
     }
@@ -136,6 +145,10 @@ open class SeekBarPreferenceModel(builder: Builder) : AbstractPreferenceModel<In
 
         fun incValue(incValue: Int) {
             this.incValue = incValue
+        }
+
+        fun showSeekBarValue(showSeekBarValue: Boolean) {
+            this.showSeekBarValue = showSeekBarValue
         }
 
         fun valueTextProvider(valueTextProvider: ((Int) -> String)?) {
