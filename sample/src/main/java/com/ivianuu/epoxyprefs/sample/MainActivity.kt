@@ -118,6 +118,15 @@ class MainActivity : AppCompatActivity() {
                     dependencies(switchDependency)
                 }
 
+                SingleItemListPreference {
+                    key("single_item_list_$i")
+                    title("Single item list")
+                    entries(arrayOf("A", "B", "C"))
+                    entryValues(arrayOf("A", "B", "C"))
+                    defaultValue("A")
+                    dependencies(switchDependency)
+                }
+
                 MultiSelectListPreference {
                     key("multi_select_list_$i")
                     title("Multi select list")
