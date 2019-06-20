@@ -36,6 +36,13 @@ class MainActivity : AppCompatActivity() {
                 iconRes(R.drawable.abc_ic_clear_material)
             }
 
+            Preference {
+                key("long pref")
+                title("Loooong pref")
+                iconRes(R.drawable.abc_ic_clear_material)
+                summary("Lololololloodvnvjkfnxkjvnkcnfjbknjfckbnkjfb fxkbkjse jgk grskjefnengsrog srjg josr grjk rggr kjcf kbxfj bjkd bk jxkf b jjxfk bjkf xkkx ake ks kjves")
+            }
+
             SeekBarPreference {
                 key("single line seek bar")
                 title("Single line seek bar")
@@ -149,6 +156,7 @@ class MainActivity : AppCompatActivity() {
                     ExpandPreference {
                         key("expand_$i")
                         title("Show more")
+                        summary("Multi select, single list, another pref")
                         dependencies(switchDependency)
                         onClick {
                             expandedPositions.add(i)
