@@ -18,32 +18,22 @@ package com.ivianuu.epoxyprefs
 
 import com.airbnb.epoxy.EpoxyController
 
-fun EpoxyController.CategoryPreference(
-    body: CategoryPreferenceModel.Builder.() -> Unit
-): CategoryPreferenceModel = CategoryPreferenceModel.Builder()
+fun EpoxyController.ExpandPreference(
+    body: ExpandPreferenceModel.Builder.() -> Unit
+): ExpandPreferenceModel = ExpandPreferenceModel.Builder()
     .injectContextIfPossible(this)
     .apply(body)
     .build()
     .also { it.addTo(this) }
 
-open class CategoryPreferenceModel(builder: Builder) : AbstractPreferenceModel<Nothing>(builder) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is CategoryPreferenceModel) return false
-        if (!super.equals(other)) return false
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
-    }
+open class ExpandPreferenceModel(builder: Builder) : AbstractPreferenceModel<Nothing>(builder) {
 
     open class Builder : AbstractPreferenceModel.Builder<Nothing>() {
+
         init {
-            layoutRes(R.layout.item_preference_category)
-            isClickable(false)
+            widgetLayoutRes(R.layout.widget_preference_expand_button)
         }
 
-        override fun build() = CategoryPreferenceModel(this)
+        override fun build() = ExpandPreferenceModel(this)
     }
 }

@@ -10,6 +10,8 @@ class MainActivity : AppCompatActivity() {
 
     private var nonPersistentState = false
 
+    private val expandedPositions = mutableSetOf<Int>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -118,29 +120,42 @@ class MainActivity : AppCompatActivity() {
                     dependencies(switchDependency)
                 }
 
-                SingleItemListPreference {
-                    key("single_item_list_$i")
-                    title("Single item list")
-                    entries(arrayOf("A", "B", "C"))
-                    entryValues(arrayOf("A", "B", "C"))
-                    defaultValue("A")
-                    dependencies(switchDependency)
-                }
+                if (expandedPositions.contains(i)) {
+                    SingleItemListPreference {
+                        key("single_item_list_$i")
+                        title("Single item list")
+                        entries(arrayOf("A", "B", "C"))
+                        entryValues(arrayOf("A", "B", "C"))
+                        defaultValue("A")
+                        dependencies(switchDependency)
+                    }
 
-                MultiSelectListPreference {
-                    key("multi_select_list_$i")
-                    title("Multi select list")
-                    entries(arrayOf("A", "B", "C"))
-                    entryValues(arrayOf("A", "B", "C"))
-                    defaultValue(setOf("B", "C"))
-                    dependencies(switchDependency)
-                }
+                    MultiSelectListPreference {
+                        key("multi_select_list_$i")
+                        title("Multi select list")
+                        entries(arrayOf("A", "B", "C"))
+                        entryValues(arrayOf("A", "B", "C"))
+                        defaultValue(setOf("B", "C"))
+                        dependencies(switchDependency)
+                    }
 
-                Preference {
-                    key("my_key1_$i")
-                    title("Another Title")
-                    summary("This is another summary.")
-                    dependencies(switchDependency)
+                    Preference {
+                        key("my_key1_$i")
+                        title("Another Title")
+                        summary("This is another summary.")
+                        dependencies(switchDependency)
+                    }
+                } else {
+                    ExpandPreference {
+                        key("expand_$i")
+                        title("Show more")
+                        dependencies(switchDependency)
+                        onClick {
+                            expandedPositions.add(i)
+                            requestModelBuild()
+                            return@onClick true
+                        }
+                    }
                 }
             }
         }

@@ -1,13 +1,9 @@
 package com.ivianuu.epoxyprefs
 
 import android.content.Context
-import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 
-/**
- * Preference epoxy controller
- */
 // todo remove once we came up with a better solution
 abstract class PreferenceEpoxyController(
     val context: PreferenceContext

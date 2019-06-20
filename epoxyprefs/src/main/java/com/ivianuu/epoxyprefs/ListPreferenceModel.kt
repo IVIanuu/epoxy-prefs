@@ -16,9 +16,6 @@
 
 package com.ivianuu.epoxyprefs
 
-/**
- * A list Preference model
- */
 abstract class ListPreferenceModel<T : Any>(builder: Builder<T>) :
     DialogPreferenceModel<T>(builder) {
 

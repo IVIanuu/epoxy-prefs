@@ -28,9 +28,6 @@ fun EpoxyController.CheckBoxPreference(
     .build()
     .also { it.addTo(this) }
 
-/**
- * A check box Preference
- */
 open class CheckBoxPreferenceModel(builder: CompoundButtonPreferenceModel.Builder) :
     CompoundButtonPreferenceModel(builder) {
 

@@ -18,9 +18,6 @@ package com.ivianuu.epoxyprefs
 
 import android.widget.CompoundButton
 
-/**
- * A Preference for compound buttons
- */
 abstract class CompoundButtonPreferenceModel(builder: Builder) :
     AbstractPreferenceModel<Boolean>(builder) {
 

@@ -28,9 +28,6 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_preference.*
 import kotlin.properties.Delegates
 
-/**
- * Base Preference
- */
 abstract class AbstractPreferenceModel<T : Any>(
     builder: Builder<T>
 ) : EpoxyModelWithHolder<AbstractPreferenceModel.Holder>() {

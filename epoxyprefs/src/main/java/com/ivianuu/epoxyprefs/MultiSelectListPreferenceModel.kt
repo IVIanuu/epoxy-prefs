@@ -29,9 +29,6 @@ fun EpoxyController.MultiSelectListPreference(
     .build()
     .also { it.addTo(this) }
 
-/**
- * A multi select list Preference
- */
 open class MultiSelectListPreferenceModel(builder: Builder) :
     ListPreferenceModel<Set<String>>(builder) {
 

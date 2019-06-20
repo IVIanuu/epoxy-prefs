@@ -29,9 +29,6 @@ fun EpoxyController.SingleItemListPreference(
     .build()
     .also { it.addTo(this) }
 
-/**
- * A single item Preference
- */
 open class SingleItemListPreferenceModel(builder: Builder) : ListPreferenceModel<String>(builder) {
 
     override fun showDialog(context: Context) {

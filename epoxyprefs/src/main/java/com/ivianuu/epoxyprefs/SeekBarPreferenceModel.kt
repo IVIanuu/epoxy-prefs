@@ -30,9 +30,6 @@ fun EpoxyController.SeekBarPreference(
     .build()
     .also { it.addTo(this) }
 
-/**
- * Abstract seek bar Preference model
- */
 open class SeekBarPreferenceModel(builder: Builder) : AbstractPreferenceModel<Int>(builder) {
 
     val min = builder.min

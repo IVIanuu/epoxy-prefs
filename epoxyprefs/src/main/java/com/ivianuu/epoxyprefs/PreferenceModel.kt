@@ -10,9 +10,6 @@ fun EpoxyController.Preference(
     .build()
     .also { it.addTo(this) }
 
-/**
- * Simple Preference
- */
 open class PreferenceModel(builder: Builder) : AbstractPreferenceModel<Nothing>(builder) {
 
     override fun equals(other: Any?): Boolean {

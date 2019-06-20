@@ -18,7 +18,7 @@ package com.ivianuu.epoxyprefs
 
 import android.widget.CompoundButton
 import com.airbnb.epoxy.EpoxyController
-import kotlinx.android.synthetic.main.widget_preference_switch.switchWidget
+import kotlinx.android.synthetic.main.widget_preference_switch.*
 
 fun EpoxyController.SwitchPreference(
     body: SwitchPreferenceModel.Builder.() -> Unit
@@ -28,9 +28,6 @@ fun EpoxyController.SwitchPreference(
     .build()
     .also { it.addTo(this) }
 
-/**
- * A switch Preference
- */
 open class SwitchPreferenceModel(builder: Builder) : CompoundButtonPreferenceModel(builder) {
 
     override val Holder.compoundButton: CompoundButton?

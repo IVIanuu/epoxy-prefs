@@ -2,7 +2,7 @@ package com.ivianuu.epoxyprefs
 
 import android.widget.CompoundButton
 import com.airbnb.epoxy.EpoxyController
-import kotlinx.android.synthetic.main.widget_preference_radio.radio
+import kotlinx.android.synthetic.main.widget_preference_radio.*
 
 fun EpoxyController.RadioButtonPreference(
     body: RadioButtonPreferenceModel.Builder.() -> Unit
@@ -12,9 +12,6 @@ fun EpoxyController.RadioButtonPreference(
     .build()
     .also { it.addTo(this) }
 
-/**
- * A check box Preference
- */
 open class RadioButtonPreferenceModel(builder: CompoundButtonPreferenceModel.Builder) :
     CompoundButtonPreferenceModel(builder) {
 

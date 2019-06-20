@@ -17,19 +17,12 @@
 package com.ivianuu.epoxyprefs
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.preference.PreferenceManager
 
-/**
- * Global config
- */
 object EpoxyPrefsPlugins {
 
     private var defaultContext: PreferenceContext? = null
 
-    /**
-     * Returns the default [SharedPreferences]
-     */
     fun getDefaultContext(context: Context): PreferenceContext {
         return defaultContext ?: PreferenceContext(
             PreferenceManager.getDefaultSharedPreferences(context),
@@ -37,9 +30,6 @@ object EpoxyPrefsPlugins {
         ).also { defaultContext = it }
     }
 
-    /**
-     * Sets the default [SharedPreferences]
-     */
     fun setDefaultContext(context: PreferenceContext) {
         this.defaultContext = context
     }

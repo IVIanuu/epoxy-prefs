@@ -8,9 +8,6 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyViewHolder
 
-/**
- * Divider decoration for preferences
- */
 class PreferenceDividerDecoration(context: Context) : RecyclerView.ItemDecoration() {
 
     var style = Style.CATEGORIES

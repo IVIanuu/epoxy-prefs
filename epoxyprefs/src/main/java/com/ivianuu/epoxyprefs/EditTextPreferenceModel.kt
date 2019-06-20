@@ -29,9 +29,6 @@ fun EpoxyController.EditTextPreference(
     .build()
     .also { it.addTo(this) }
 
-/**
- * A edit text Preference
- */
 open class EditTextPreferenceModel(builder: Builder) : DialogPreferenceModel<String>(builder) {
 
     val dialogHint = builder.dialogHint

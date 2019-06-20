@@ -20,9 +20,6 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import com.afollestad.materialdialogs.MaterialDialog
 
-/**
- * A dialog Preference
- */
 abstract class DialogPreferenceModel<T : Any>(builder: Builder<T>) :
     AbstractPreferenceModel<T>(builder) {
 
