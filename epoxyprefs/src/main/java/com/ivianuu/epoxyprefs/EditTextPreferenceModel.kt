@@ -69,9 +69,9 @@ open class EditTextPreferenceModel(builder: Builder) : DialogPreferenceModel<Str
     }
 
     open class Builder : DialogPreferenceModel.Builder<String>() {
-        var dialogHint: String? = null
+        internal var dialogHint: String? = null
             private set
-        var dialogHintRes: Int = 0
+        internal var dialogHintRes: Int = 0
             private set
 
         fun dialogHint(dialogHint: String?) {

@@ -57,13 +57,13 @@ abstract class ListPreferenceModel<T : Any>(builder: Builder<T>) :
 
     abstract class Builder<T : Any> : DialogPreferenceModel.Builder<T>() {
 
-        var entries: Array<String>? = null
+        internal var entries: Array<String>? = null
             private set
-        var entriesRes: Int = 0
+        internal var entriesRes: Int = 0
             private set
-        var entryValues: Array<String>? = null
+        internal var entryValues: Array<String>? = null
             private set
-        var entryValuesRes: Int = 0
+        internal var entryValuesRes: Int = 0
             private set
 
         fun entries(entries: Array<String>?) {

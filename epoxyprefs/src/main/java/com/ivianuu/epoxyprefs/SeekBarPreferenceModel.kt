@@ -18,8 +18,7 @@ package com.ivianuu.epoxyprefs
 
 import android.widget.SeekBar
 import com.airbnb.epoxy.EpoxyController
-import kotlinx.android.synthetic.main.item_preference_seekbar.seekbar
-import kotlinx.android.synthetic.main.item_preference_seekbar.seekbar_value
+import kotlinx.android.synthetic.main.item_preference_seekbar.*
 import kotlin.math.round
 
 fun EpoxyController.SeekBarPreference(
@@ -38,6 +37,7 @@ open class SeekBarPreferenceModel(builder: Builder) : AbstractPreferenceModel<In
     val min = builder.min
     val max = builder.max
     val incValue = builder.incValue
+    val showSeekBarValue = builder.showSeekBarValue
     val valueTextProvider = builder.valueTextProvider
 
     private var internalValue = 0
@@ -111,13 +111,15 @@ open class SeekBarPreferenceModel(builder: Builder) : AbstractPreferenceModel<In
     }
 
     open class Builder : AbstractPreferenceModel.Builder<Int>() {
-        var min: Int = 0
+        internal var min: Int = 0
             private set
-        var max: Int = 100
+        internal var max: Int = 100
             private set
-        var incValue: Int = 1
+        internal var incValue: Int = 1
             private set
-        var valueTextProvider: ((Int) -> String)? = null
+        internal var showSeekBarValue: Boolean = true
+            private set
+        internal var valueTextProvider: ((Int) -> String)? = null
             private set
 
         init {

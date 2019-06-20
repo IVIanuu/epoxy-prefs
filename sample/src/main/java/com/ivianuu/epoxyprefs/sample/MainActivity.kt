@@ -17,16 +17,64 @@ class MainActivity : AppCompatActivity() {
         list.addItemDecoration(PreferenceDividerDecoration(this))
 
         val epoxyController = preferenceEpoxyController {
+            Preference {
+                key("single_line")
+                title("Single line")
+            }
+
+            Preference {
+                key("with summary")
+                title("With summary")
+                summary("Lolo")
+            }
+
+            Preference {
+                key("with icon")
+                title("With icon")
+                iconRes(R.drawable.abc_ic_clear_material)
+            }
+
+            Preference {
+                key("preserve icon space")
+                title("Preserve icon space")
+                preserveIconSpace(true)
+            }
+
+            SeekBarPreference {
+                key("single line seek bar")
+                title("Single line seek bar")
+            }
+
+            SeekBarPreference {
+                key("seek bar with summary")
+                title("Seek bar with summary")
+                summary("This is a summary")
+            }
+
+            SeekBarPreference {
+                key("seek bar with icon")
+                title("Seek bar with icon")
+                iconRes(R.drawable.abc_ic_clear_material)
+            }
+
+            SeekBarPreference {
+                key("seek bar with preserve icon space")
+                title("Seek bar with preserve icon space")
+                preserveIconSpace(true)
+            }
+
             for (i in 0..100) {
                 CategoryPreference {
                     key("category_$i")
                     title("Category $i")
+                    preserveIconSpace(true)
                 }
 
                 SwitchPreference {
                     key("my_switch_$i")
-                    title("Switch")
                     summary("Nice a switch")
+                    title("Switch")
+                    preserveIconSpace(true)
                 }
 
                 val switchDependency =
@@ -38,6 +86,7 @@ class MainActivity : AppCompatActivity() {
                         title("Edit Text")
                         summary("Edit Text")
                         dialogHint("Hello lets type something")
+                        preserveIconSpace(true)
                     }
                 }
 
@@ -53,6 +102,7 @@ class MainActivity : AppCompatActivity() {
                         return@onClick true
                     }
                     dependencies(switchDependency)
+                    preserveIconSpace(true)
                 }
 
                 CheckBoxPreference {
@@ -66,21 +116,24 @@ class MainActivity : AppCompatActivity() {
                         requestModelBuild()
                         return@onChange true
                     }
+                    preserveIconSpace(true)
                 }
 
                 RadioButtonPreference {
                     key("my_radio_$i")
                     title("Radio")
-                    dependencies(switchDependency)
                     summary("A radio button")
+                    dependencies(switchDependency)
+                    preserveIconSpace(true)
                 }
 
                 SeekBarPreference {
                     key("my_seekbar_$i")
                     title("SeekBar")
-                    max(100)
                     summary("He there im a seekbar")
+                    max(100)
                     dependencies(switchDependency)
+                    preserveIconSpace(true)
                 }
 
                 MultiSelectListPreference {
@@ -90,6 +143,7 @@ class MainActivity : AppCompatActivity() {
                     entryValues(arrayOf("A", "B", "C"))
                     defaultValue(setOf("B", "C"))
                     dependencies(switchDependency)
+                    preserveIconSpace(true)
                 }
 
                 Preference {
@@ -97,6 +151,7 @@ class MainActivity : AppCompatActivity() {
                     title("Another Title")
                     summary("This is another summary.")
                     dependencies(switchDependency)
+                    preserveIconSpace(true)
                 }
             }
         }

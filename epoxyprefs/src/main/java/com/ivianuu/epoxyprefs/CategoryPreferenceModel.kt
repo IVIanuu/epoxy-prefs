@@ -44,6 +44,7 @@ open class CategoryPreferenceModel(builder: Builder) : AbstractPreferenceModel<N
     open class Builder : AbstractPreferenceModel.Builder<Nothing>() {
         init {
             layoutRes(R.layout.item_preference_category)
+            isClickable(false)
         }
 
         override fun build() = CategoryPreferenceModel(this)

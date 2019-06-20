@@ -249,40 +249,40 @@ abstract class AbstractPreferenceModel<T : Any>(
 
     abstract class Builder<T : Any> {
 
-        var key: String by Delegates.notNull()
+        internal var key: String by Delegates.notNull()
             private set
-        var title: String? = null
+        internal var title: String? = null
             private set
-        var titleRes: Int = 0
+        internal var titleRes: Int = 0
             private set
-        var summary: String? = null
+        internal var summary: String? = null
             private set
-        var summaryRes: Int = 0
+        internal var summaryRes: Int = 0
             private set
-        var icon: Drawable? = null
+        internal var icon: Drawable? = null
             private set
-        var iconRes: Int = 0
+        internal var iconRes: Int = 0
             private set
-        var preserveIconSpace: Boolean = false
+        internal var preserveIconSpace: Boolean = false
             private set
-        var defaultValue: T? = null
+        internal var defaultValue: T? = null
             private set
-        var isEnabled: Boolean = true
+        internal var isEnabled: Boolean = true
             private set
-        var isClickable: Boolean = true
+        internal var isClickable: Boolean = true
             private set
         val dependencies = mutableListOf<Dependency<*>>()
-        var onClick: (() -> Boolean)? = null
+        internal var onClick: (() -> Boolean)? = null
             private set
-        var onChange: ((newValue: T) -> Boolean)? = null
+        internal var onChange: ((newValue: T) -> Boolean)? = null
             private set
-        var isPersistent: Boolean = true
+        internal var isPersistent: Boolean = true
             private set
-        var layoutRes: Int = R.layout.item_preference
+        internal var layoutRes: Int = R.layout.item_preference
             private set
-        var widgetLayoutRes: Int = 0
+        internal var widgetLayoutRes: Int = 0
             private set
-        var context: PreferenceContext by Delegates.notNull()
+        internal var context: PreferenceContext by Delegates.notNull()
             private set
 
         fun key(key: String) {

@@ -116,25 +116,25 @@ abstract class DialogPreferenceModel<T : Any>(builder: Builder<T>) :
 
     abstract class Builder<T : Any> : AbstractPreferenceModel.Builder<T>() {
 
-        var dialogTitle: String? by lazyVar { title }
+        internal var dialogTitle: String? by lazyVar { title }
             private set
-        var dialogTitleRes: Int by lazyVar { titleRes }
+        internal var dialogTitleRes: Int by lazyVar { titleRes }
             private set
-        var dialogMessage: String? = null
+        internal var dialogMessage: String? = null
             private set
-        var dialogMessageRes: Int = 0
+        internal var dialogMessageRes: Int = 0
             private set
-        var dialogIcon: Drawable? = null
+        internal var dialogIcon: Drawable? = null
             private set
-        var dialogIconRes: Int = 0
+        internal var dialogIconRes: Int = 0
             private set
-        var positiveButtonText: String? = null
+        internal var positiveButtonText: String? = null
             private set
-        var positiveButtonTextRes: Int = android.R.string.ok
+        internal var positiveButtonTextRes: Int = android.R.string.ok
             private set
-        var negativeButtonText: String? = null
+        internal var negativeButtonText: String? = null
             private set
-        var negativeButtonTextRes: Int = android.R.string.cancel
+        internal var negativeButtonTextRes: Int = android.R.string.cancel
             private set
 
         fun dialogTitle(dialogTitle: String?) {
