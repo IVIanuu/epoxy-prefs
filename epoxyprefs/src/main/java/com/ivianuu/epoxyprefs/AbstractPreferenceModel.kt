@@ -263,7 +263,7 @@ abstract class AbstractPreferenceModel<T : Any>(
             private set
         internal var iconRes: Int = 0
             private set
-        internal var preserveIconSpace: Boolean = false
+        internal var preserveIconSpace: Boolean = true
             private set
         internal var defaultValue: T? = null
             private set
