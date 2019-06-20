@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ivianuu.epoxyprefs.*
-import kotlinx.android.synthetic.main.activity_main.list
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                     dependencies(switchDependency)
                 }
 
-                CheckboxPreference {
+                CheckBoxPreference {
                     key("my_checkbox_$i")
                     title("CheckBox")
                     dependencies(switchDependency)

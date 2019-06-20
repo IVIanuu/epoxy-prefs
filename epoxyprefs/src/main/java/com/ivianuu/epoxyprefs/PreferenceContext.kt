@@ -17,7 +17,7 @@ interface PreferenceContext {
 
 fun PreferenceContext(
     sharedPreferences: SharedPreferences,
-    useCommit: Boolean
+    useCommit: Boolean = false
 ): PreferenceContext = DefaultPreferenceContext(sharedPreferences, useCommit)
 
 private class DefaultPreferenceContext(
