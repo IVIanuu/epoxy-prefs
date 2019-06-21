@@ -61,6 +61,12 @@ class MainActivity : AppCompatActivity() {
                 iconRes(R.drawable.abc_ic_clear_material)
             }
 
+            SwitchPreference {
+                key("no preserve switch")
+                title("No Preserve Switch")
+                preserveIconSpace(false)
+            }
+
             for (i in 0..100) {
                 CategoryPreference {
                     key("category_$i")
