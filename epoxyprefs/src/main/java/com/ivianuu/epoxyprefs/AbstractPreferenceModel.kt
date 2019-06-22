@@ -260,7 +260,9 @@ abstract class AbstractPreferenceModel<T : Any>(
             private set
         internal var iconRes: Int = 0
             private set
-        internal var preserveIconSpace: Boolean = true
+        internal var preserveIconSpace: Boolean by lazyVar {
+            resolveBoolean(context.androidContext, R.attr.ep_preserve_icon_space, true)
+        }
             private set
         internal var defaultValue: T? = null
             private set

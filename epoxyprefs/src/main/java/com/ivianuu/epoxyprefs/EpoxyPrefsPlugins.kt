@@ -25,6 +25,7 @@ object EpoxyPrefsPlugins {
 
     fun getDefaultContext(context: Context): PreferenceContext {
         return defaultContext ?: PreferenceContext(
+            context,
             PreferenceManager.getDefaultSharedPreferences(context),
             false
         ).also { defaultContext = it }

@@ -1,9 +1,13 @@
 package com.ivianuu.epoxyprefs
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.SharedPreferences
 
 interface PreferenceContext {
+
+    val androidContext: Context
+
     fun <T : Any> get(key: String): T?
     fun <T : Any> getOrDefault(key: String, defaultValue: T): T =
         get(key) ?: defaultValue
@@ -16,11 +20,13 @@ interface PreferenceContext {
 }
 
 fun PreferenceContext(
+    context: Context,
     sharedPreferences: SharedPreferences,
     useCommit: Boolean = false
-): PreferenceContext = DefaultPreferenceContext(sharedPreferences, useCommit)
+): PreferenceContext = DefaultPreferenceContext(context, sharedPreferences, useCommit)
 
 private class DefaultPreferenceContext(
+    override val androidContext: Context,
     val sharedPreferences: SharedPreferences,
     val useCommit: Boolean
 ) : PreferenceContext {

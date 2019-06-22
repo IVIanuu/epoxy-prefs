@@ -1,5 +1,6 @@
 package com.ivianuu.epoxyprefs
 
+import android.content.Context
 import com.airbnb.epoxy.EpoxyController
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -19,6 +20,19 @@ internal fun <T : AbstractPreferenceModel.Builder<*>> T.injectContextIfPossible(
 ): T {
     (controller as? PreferenceEpoxyController)?.let { context(it.context) }
     return this
+}
+
+internal fun resolveBoolean(
+    context: Context,
+    attr: Int,
+    defaultValue: Boolean
+): Boolean {
+    val a = context.theme.obtainStyledAttributes(intArrayOf(attr))
+    try {
+        return a.getBoolean(0, defaultValue)
+    } finally {
+        a.recycle()
+    }
 }
 
 internal fun <T> lazyVar(block: () -> T) = object : ReadWriteProperty<Any, T> {
