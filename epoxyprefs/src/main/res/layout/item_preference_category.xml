@@ -30,13 +30,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
         android:layout_toEndOf="@id/icon_frame"
         android:gravity="start|center_vertical"
-        android:orientation="vertical"
-        android:paddingTop="24dp"
-        android:paddingBottom="8dp">
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
 
         <TextView
             android:id="@android:id/title"
@@ -53,6 +53,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?textAppearanceBody2"
             android:textColor="?android:attr/textColorSecondary"
+            tools:text="This is a summary"
             tools:visibility="gone" />
 
     </LinearLayout>
