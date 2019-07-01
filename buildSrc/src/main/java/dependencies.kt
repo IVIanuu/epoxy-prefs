@@ -18,13 +18,13 @@ object Publishing {
 }
 
 object Versions {
-    const val androidGradlePlugin = "3.4.0"
-    const val androidxAppCompat = "1.1.0-alpha04"
+    const val androidGradlePlugin = "3.5.0-beta05"
+    const val androidxAppCompat = "1.1.0-beta01"
     const val bintray = "1.8.4"
-    const val epoxy = "3.4.2"
+    const val epoxy = "3.7.0"
     const val kotlin = "1.3.40"
     const val materialComponents = "1.1.0-alpha07"
-    const val materialDialogs = "2.0.3"
+    const val materialDialogs = "3.0.2"
     const val mavenGradle = "2.1"
 }
 
